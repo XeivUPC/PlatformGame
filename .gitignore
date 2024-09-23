@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.vcpkg_installed
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -32,6 +31,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+vcpkg_installed/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -397,3 +397,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/build
+/vcpkg
