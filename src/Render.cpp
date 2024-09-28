@@ -28,7 +28,6 @@ bool Render::Awake()
 
 	flags |= SDL_RENDERER_PRESENTVSYNC;
 	LOG("Using vsync");
-	int scale = Engine::GetInstance().window.get()->GetScale();
 
 	SDL_Window* window = Engine::GetInstance().window.get()->window;
 	renderer = SDL_CreateRenderer(window, -1, flags);
@@ -40,10 +39,26 @@ bool Render::Awake()
 	}
 	else
 	{
-		camera.w = Engine::GetInstance().window.get()->width * scale;
-		camera.h = Engine::GetInstance().window.get()->height * scale;
 		camera.x = 0;
 		camera.y = 0;
+
+		// Obtener la resolución actual de la pantalla
+		SDL_DisplayMode displayMode;
+		if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0) {
+			SDL_Log("No se pudo obtener el modo de pantalla: %s", SDL_GetError());
+		}
+
+		int scale = Engine::GetInstance().window.get()->GetScale();
+
+		// Mantener la proporción de la ventana original
+		int windowWidth = Engine::GetInstance().window.get()->width;  // Ancho de la ventana original
+		int windowHeight = Engine::GetInstance().window.get()->height; // Alto de la ventana original
+
+		// Escalar el contenido renderizado
+		
+		SDL_RenderSetLogicalSize(renderer, windowWidth * scale, windowHeight * scale);
+
+
 	}
 
 	return ret;

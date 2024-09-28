@@ -29,12 +29,10 @@ bool Window::Awake()
 
 		// Create window
 		Uint32 flags = SDL_WINDOW_SHOWN;
-		if(fullscreen == true) flags |= SDL_WINDOW_FULLSCREEN;
-		if(borderless == true) flags |= SDL_WINDOW_BORDERLESS;
-		if(resizable == true) flags |= SDL_WINDOW_RESIZABLE;
+
 		if(fullscreen_window == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width * GetScale(), height * GetScale(), flags);
 
 		if(window == NULL)
 		{
@@ -76,6 +74,8 @@ void Window::GetWindowSize(int& width, int& height) const
 
 int Window::GetScale() const
 {
+	if (fullscreen_window)
+		return 1;
 	return scale;
 }
 
@@ -86,9 +86,7 @@ bool Window::LoadParameters(xml_node parameters)
 	// Load all required configurations from config.xml
 	// Tip: get the name of the child and the attribute value
 	// Get values of fullscreen, borderless, resizable,fullscreen_window, width, height and scale from config files
-	fullscreen = parameters.child("fullscreen").attribute("value").as_bool(false);
-	borderless = parameters.child("borderless").attribute("value").as_bool(false);
-	resizable = parameters.child("resizable").attribute("value").as_bool(false);
+	
 	fullscreen_window = parameters.child("fullscreen_window").attribute("value").as_bool(false);
 
 	width = parameters.child("resolution").attribute("width").as_int(1280);

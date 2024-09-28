@@ -41,8 +41,5 @@ public:
 	int width = 1280;
 	int height = 720;
 	int scale = 1;
-	bool fullscreen = false;
-	bool borderless = false;
-	bool resizable = false;
 	bool fullscreen_window = false;
 };
