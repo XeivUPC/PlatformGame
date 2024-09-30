@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "Player.h"
+#include <box2d/box2d.h>
 
 class Scene : public Module
 {
@@ -36,4 +37,6 @@ public:
 private:
 	Player* player;
 	xml_node configParameters;
+public:
+	b2World* world;
 };
