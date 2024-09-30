@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Engine.h"
 #include "Textures.h"
+#include "Box2DCreator.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
@@ -21,24 +22,7 @@ bool Player::Awake() {
 	//Initialize Player parameters
 	position = Vector2D(0, 0);
 
-
-	b2BodyDef boxBodyDef;
-	b2MassData* boxMassData = new b2MassData();
-	boxMassData->mass = 100;
-
-	boxBodyDef.type = b2_dynamicBody;
-	boxBodyDef.position.Set(PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()));
-	body = Engine::GetInstance().scene->world->CreateBody(&boxBodyDef);
-	body->SetMassData(boxMassData);
-
-	b2CircleShape boxShape;
-	boxShape.m_radius = PIXEL_TO_METERS(10);
-
-	b2FixtureDef boxFixtureDef;
-	boxFixtureDef.shape = &boxShape;
-	boxFixtureDef.density = 1.0f;
-	boxFixtureDef.friction = 0;
-	body->CreateFixture(&boxFixtureDef);
+	InitColliders();
 
 	return true;
 }
@@ -49,10 +33,22 @@ bool Player::Start() {
 	return true;
 }
 
+void Player::InitColliders() {
+
+	b2World* world = Engine::GetInstance().scene.get()->world;
+	b2Vec2 postion{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
+	playerCollider = Engine::GetInstance().box2DCreator.get()->CreateCapsule(world, postion, PIXEL_TO_METERS(10), PIXEL_TO_METERS(30), PIXEL_TO_METERS(5.5f));
+	playerCollider->SetFixedRotation(true);
+
+}
+
+
+
+
 bool Player::Update(float dt)
 {
 	//Render the player texture and modify the position of the player using WSAD keys and render the texture
-	b2Vec2 velocity{ 0, body->GetLinearVelocity().y};
+	b2Vec2 velocity{ 0, playerCollider->GetLinearVelocity().y};
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		velocity.x =(-speed);
@@ -62,33 +58,47 @@ bool Player::Update(float dt)
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		velocity.y = 0;
-		body->SetLinearVelocity(velocity);
-		body->ApplyForceToCenter(b2Vec2{ 0,-25 }, true);
+		playerCollider->SetLinearVelocity(velocity);
+		playerCollider->ApplyForceToCenter(b2Vec2{ 0,-45 }, true);
 	}
 	else
-		body->SetLinearVelocity(velocity);
+		playerCollider->SetLinearVelocity(velocity);
 
-	if (body->GetLinearVelocity().y > 0) {
-		body->SetGravityScale(2.0f);
+	if (playerCollider->GetLinearVelocity().y > 0) {
+		playerCollider->SetGravityScale(2.5f);
 	}
 	else {
-		body->SetGravityScale(1);
+		playerCollider->SetGravityScale(1);
+	}
+
+	if (velocity.x != 0)
+	{
+		if (velocity.x > 0)
+			isFlipped = false;
+		else
+			isFlipped = true;
 	}
 
 
+	position.setX(playerCollider->GetPosition().x);
+	position.setY(playerCollider->GetPosition().y);
 
 
-	position.setX(body->GetPosition().x);
-	position.setY(body->GetPosition().y);
 
-	Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()), METERS_TO_PIXELS(position.getY()));
+	Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
+
+	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+
 	return true;
 }
 
 bool Player::CleanUp()
 {
 	LOG("Cleanup player");
-	Engine::GetInstance().scene->world->DestroyBody(body);
+	Engine::GetInstance().scene->world->DestroyBody(playerCollider);
+	//Engine::GetInstance().scene->world->DestroyBody(groundCheck);
 	Engine::GetInstance().textures.get()->UnLoad(texture);
 	return true;
 }
+
+

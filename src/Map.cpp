@@ -2,6 +2,8 @@
 #include "Engine.h"
 #include "Render.h"
 #include "Textures.h"
+#include "Box2DCreator.h"
+#include "Scene.h"
 #include "Map.h"
 #include "Log.h"
 
@@ -22,6 +24,8 @@ bool Map::Awake(pugi::xml_node config)
     LOG("Loading Map Parser");
     bool ret = true;
 
+    
+
     return ret;
 }
 
@@ -29,6 +33,11 @@ bool Map::Start() {
 
     //Calls the function to load the map. The name of the map is assigned in teh scene
     Load(mapPath + mapName);
+
+    b2World* world = Engine::GetInstance().scene.get()->world;
+    b2Vec2 position{ PIXEL_TO_METERS(200), PIXEL_TO_METERS(240) };
+    groundCollider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(400), PIXEL_TO_METERS(20));
+    groundCollider->SetType(b2_staticBody);
 
     return true;
 }
@@ -54,11 +63,13 @@ bool Map::Update(float dt)
                 Vector2D mapCoord = MapToWorld(i, j);
 
                 // Complete the draw function
-                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX(), mapCoord.getY(), &tileRect);
+                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX(), mapCoord.getY(),SDL_FLIP_NONE, &tileRect);
 
             }
         }
     }
+
+    Engine::GetInstance().box2DCreator.get()->RenderBody(groundCollider, b2Color{ 0,255,0,255 });
     return ret;
 }
 

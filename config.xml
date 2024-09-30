@@ -11,7 +11,7 @@
 
   <window>
     <resolution width="400" height="240" scale="3"/>
-    <fullscreen_window value="true"/>
+    <fullscreen_window value="false"/>
   </window>
 
   <scene>

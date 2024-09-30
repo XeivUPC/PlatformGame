@@ -3,8 +3,8 @@
 #include <sstream>
 #include <iomanip>
 #include "Log.h"
-
 #include "Window.h"
+#include "Box2DCreator.h"
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
@@ -35,6 +35,8 @@ Engine::Engine() {
     scene = std::make_shared<Scene>();
     map = std::make_shared<Map>();
     entityManager = std::make_shared<EntityManager>();
+
+    box2DCreator = std::make_shared<Box2DCreator>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp

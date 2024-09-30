@@ -28,5 +28,21 @@ public:
 	std::string textureName; 
 	SDL_Texture* texture = NULL;
 
-	b2Body* body;
+private:
+
+	bool isGrouded = true;
+	bool isFlipped;
+	
+	//// Texture
+		b2Vec2 textureOffset{-33/2.f,-31/2.f};
+
+
+	//// Colliders
+		void InitColliders();
+		///// GroundCollider
+			b2Body* groundCheck;
+			b2Vec2 groundCheckOffset;
+
+		///// GroundCollider
+			b2Body* playerCollider;
 };

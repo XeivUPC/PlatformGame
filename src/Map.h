@@ -2,6 +2,8 @@
 
 #include "Module.h"
 #include <list>
+#include <box2d/box2d.h>
+
 
 // Create a struct needed to hold the information to Map node
 struct TileSet
@@ -98,4 +100,6 @@ private:
     // L05: DONE 1: Declare a variable data of the struct MapData
     MapData mapData;
     bool mapLoaded;
+
+    b2Body* groundCollider;
 };
