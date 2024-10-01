@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Box2DCreator.cpp" />
+    <ClCompile Include="src\Box2DSensorController.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Box2DCreator.h" />
+    <ClInclude Include="src\Box2DSensorController.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />

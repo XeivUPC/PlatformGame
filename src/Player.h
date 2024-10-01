@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
+#include "Box2DSensorController.h"
 
 class Player : public Entity
 {
@@ -30,7 +31,7 @@ public:
 
 private:
 
-	bool isGrouded = true;
+	bool isGrounded = true;
 	bool isFlipped;
 	
 	//// Texture
@@ -42,6 +43,7 @@ private:
 		///// GroundCollider
 			b2Body* groundCheck;
 			b2Vec2 groundCheckOffset;
+			Box2DSensorController groundCheckController;
 
 		///// GroundCollider
 			b2Body* playerCollider;

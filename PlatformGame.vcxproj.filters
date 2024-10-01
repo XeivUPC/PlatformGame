@@ -78,6 +78,9 @@
     <ClCompile Include="src\Box2DCreator.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Box2DSensorController.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -129,6 +132,9 @@
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Box2DCreator.h">
+      <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Box2DSensorController.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
