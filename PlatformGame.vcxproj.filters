@@ -78,10 +78,10 @@
     <ClCompile Include="src\Box2DCreator.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Box2DSensorController.cpp">
+    <ClCompile Include="src\ColliderHandler.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Box2DSensorsManager.cpp">
+    <ClCompile Include="src\CollidersManager.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,10 +137,10 @@
     <ClInclude Include="src\Box2DCreator.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Box2DSensorController.h">
+    <ClInclude Include="src\ColliderHandler.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Box2DSensorsManager.h">
+    <ClInclude Include="src\CollidersManager.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>

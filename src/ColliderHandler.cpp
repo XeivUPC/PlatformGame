@@ -1,21 +1,21 @@
-#include "Box2DSensorController.h"
+#include "ColliderHandler.h"
 
-void Box2DSensorController::SetSensor(b2Fixture* bodyToTrack)
+void ColliderHandler::SetSensor(b2Fixture* bodyToTrack)
 {
     this->bodyToTrack = bodyToTrack;
 }
 
-bool Box2DSensorController::IsBeingTriggered()
+bool ColliderHandler::IsBeingTriggered()
 {
     return bodiesInside!=0;
 }
 
-void Box2DSensorController::AcceptOnlyTriggers(bool acceptOnlyTriggers)
+void ColliderHandler::AcceptOnlyTriggers(bool acceptOnlyTriggers)
 {
     onlyTriggers = acceptOnlyTriggers;
 }
 
-bool Box2DSensorController::OnTriggerEnter()
+bool ColliderHandler::OnTriggerEnter()
 {
     if (lastBodyEnter != nullptr) {
         lastBodyEnter = nullptr;
@@ -24,7 +24,7 @@ bool Box2DSensorController::OnTriggerEnter()
     return false;
 }
 
-bool Box2DSensorController::OnTriggerExit()
+bool ColliderHandler::OnTriggerExit()
 {
     if (lastBodyExit != nullptr) {
         lastBodyExit = nullptr;
@@ -33,7 +33,7 @@ bool Box2DSensorController::OnTriggerExit()
     return false;
 }
 
-void Box2DSensorController::BeginContact(b2Contact* contact)
+void ColliderHandler::BeginContact(b2Contact* contact)
 {
     // Get the two fixtures involved in the contact
     b2Fixture* fixtureA = contact->GetFixtureA();
@@ -53,7 +53,7 @@ void Box2DSensorController::BeginContact(b2Contact* contact)
     }
 }
 
-void Box2DSensorController::EndContact(b2Contact* contact)
+void ColliderHandler::EndContact(b2Contact* contact)
 {
     b2Fixture* fixtureA = contact->GetFixtureA();
     b2Fixture* fixtureB = contact->GetFixtureB();
@@ -70,7 +70,7 @@ void Box2DSensorController::EndContact(b2Contact* contact)
     }
 }
 
-b2Body* Box2DSensorController::GetDifferentBody(b2Body* body1, b2Body* body2, b2Body* bodyToBeDifferentFrom)
+b2Body* ColliderHandler::GetDifferentBody(b2Body* body1, b2Body* body2, b2Body* bodyToBeDifferentFrom)
 {
     if (body1 != bodyToBeDifferentFrom)
         return body1;

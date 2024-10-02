@@ -18,9 +18,10 @@ public:
 	b2Fixture* AddCapsule(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height, float radius);
 
 	void RenderBody(b2Body* body, b2Color color);
+	void RenderFixture(b2Fixture* body, b2Color color);
 
 private:
-	b2CircleShape CreateCircleShape(float radius);
-	b2PolygonShape CreateBoxShape(float width, float height);
+	b2CircleShape CreateCircleShape(float radius, b2Vec2 offset = b2Vec2_zero);
+	b2PolygonShape CreateBoxShape(float width, float height, b2Vec2 offset = b2Vec2_zero);
 };
 

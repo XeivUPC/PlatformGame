@@ -9,7 +9,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Box2DCreator.h"
-#include "Box2DSensorsManager.h"
+#include "CollidersManager.h"
 #include "Player.h"
 #include "Map.h"
 

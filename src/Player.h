@@ -4,7 +4,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
-#include "Box2DSensorController.h"
+#include "ColliderHandler.h"
 #include "Timer.h"
 
 class Player : public Entity
@@ -85,7 +85,7 @@ private:
 	void InitColliders();
 		///// GroundCollider
 		b2Fixture* groundCheck;
-		Box2DSensorController groundCheckController;
+		ColliderHandler groundCheckController;
 
 
 		///// Player Collider

@@ -19,7 +19,7 @@ class Scene;
 class EntityManager;
 class Map;
 class Box2DCreator;
-class Box2DSensorsManager;
+class CollidersManager;
 
 
 #define GRAVITY_X 0.0f
@@ -117,7 +117,7 @@ public:
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Box2DCreator> box2DCreator;
-	std::shared_ptr<Box2DSensorsManager> box2DSensors;
+	std::shared_ptr<CollidersManager> box2DSensors;
 
 private: 
 
