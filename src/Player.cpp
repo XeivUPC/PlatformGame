@@ -41,27 +41,32 @@ bool Player::Start() {
 
 	texture = Engine::GetInstance().textures.get()->Load(textureName.c_str());
 
+	InitAnimations();
 
+	return true;
+}
+
+void Player::InitAnimations() {
 	AnimationData idle = AnimationData("Player_Idle");
-	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
+	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {50, 40.0f}, {20.0f, 20.0f} });
 
 
 	AnimationData move = AnimationData("Player_Move");
-	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
-	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
-	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
-	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
-	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
-	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
+	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
+	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
+	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
+	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
+	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
+	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
 
 	AnimationData jump_rise = AnimationData("Player_Jump_Rise");
-	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
+	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {50, 40.0f}, {20.0f, 20.0f} });
 
 	AnimationData jump_fall = AnimationData("Player_Jump_Fall");
-	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
+	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {50, 40.0f}, {20.0f, 20.0f} });
 
 	AnimationData fall_attack = AnimationData("Player_Fall_Attack");
-	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {40.0f, 40.0f}, {20.0f, 20.0f} });
+	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {50, 40.0f}, {20.0f, 20.0f} });
 
 
 	animator.AddAnimation(idle);
@@ -72,8 +77,6 @@ bool Player::Start() {
 	animator.SelectAnimation("Player_Idle", true);
 
 	animator.SetSpeed(100);
-
-	return true;
 }
 
 void Player::InitColliders() {
@@ -197,8 +200,8 @@ bool Player::Update(float dt)
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
-	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Engine::GetInstance().box2DCreator.get()->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	/*Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+	Engine::GetInstance().box2DCreator.get()->RenderFixture(groundCheck, b2Color{0,0,255,255});*/
 
 
 	return true;

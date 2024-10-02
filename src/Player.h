@@ -32,7 +32,7 @@ public:
 
 	
 	std::string textureName; 
-	Animator animator;
+	
 	SDL_Texture* texture = NULL;
 
 private:
@@ -80,7 +80,11 @@ private:
 	Timer jumpRecoverTimer;
 	
 	//// Texture
-	b2Vec2 textureOffset{-20,-20};
+	b2Vec2 textureOffset{-25,-24};
+
+	/// Animator
+	Animator animator;
+	void InitAnimations();
 
 
 	//// Colliders
