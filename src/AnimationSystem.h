@@ -45,38 +45,3 @@ public:
 	void Update(float dt);
 	void Animate(int x, int y, SDL_RendererFlip flip);
 };
-
-//class Animation
-//{
-//private:
-//	const char* index;
-//	std::vector<Sprite> sprites;
-//	int count = 0;
-//	
-//public:
-//	Animation(const char* name, SDL_Texture* t, std::vector<Sprite> s);
-//	bool IsSame(const char* name);
-//	int GetCount();
-//	SDL_Texture* GetTexture();
-//};
-//
-//class Animator
-//{
-//private:
-//	std::vector<Animation> animations;
-//	int currentSpriteIndex = 0;
-//	int currentAnimationIndex = 0;
-//	float animationSpeed = 1;
-//	float timer = 0;
-//	bool loop = false;
-//	int GetAnimation(const char* name);
-//	void NextStep();
-//public:
-//	Animator(std::vector<Animation> anims, float speed);
-//	void Update(float dt);
-//	int GetActualSprite();
-//	int SetAnimationSpeed(float speed);
-//	void SelectAnimation(const char* name, bool l);
-//	void ModifyIndex(int i);
-//	void Animate(Vector2D position, SDL_RendererFlip flip);
-//};
