@@ -77,7 +77,6 @@ bool Player::Update(float dt)
 	if (TryShovelAttack())
 		isDoingShovelAttack = false;
 
-	printf("%d\n", isGrounded);
 
 	b2Vec2 velocity{ GetMoveInput().x, playerCollider->GetLinearVelocity().y};
 
