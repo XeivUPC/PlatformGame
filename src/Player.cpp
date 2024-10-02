@@ -105,15 +105,6 @@ bool Player::Update(float dt)
 
 	playerCollider->SetLinearVelocity(velocity);
 
-	float gravityValue = defaultGravity;
-
-	if (isDoingFallAttack)
-		gravityValue = fallAttackGravity;
-	else if (playerCollider->GetLinearVelocity().y > 0) {
-		gravityValue = fallGravity;
-	}
-	playerCollider->SetGravityScale(gravityValue);
-
 	SetGravityValue(playerCollider->GetLinearVelocity().y);
 
 	if (playerCollider->GetLinearVelocity().y > MAX_FALL_SPEED)
