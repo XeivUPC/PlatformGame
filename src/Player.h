@@ -61,7 +61,7 @@ private:
 	/// Gravity Values
 	float defaultGravity = 1.0f;
 	float fallGravity = 2.5f;
-	float fallAttackGravity = 3.5f;
+	float fallAttackGravity = 2.75f;
 
 	/// Attack Values
 	int attackDamage=1;
@@ -93,6 +93,9 @@ private:
 		b2Fixture* groundCheck;
 		ColliderHandler groundCheckController;
 
+		//// EnemyCollider
+		b2Fixture* enemyCheck;
+		ColliderHandler enemyCheckController;
 
 		///// Player Collider
 		b2Body* playerCollider;

@@ -25,6 +25,7 @@ bool Player::Awake() {
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
+	enemyCheckController.SetSensor(enemyCheck);
 
 	attackRecoverTimer = Timer();
 	jumpRecoverTimer = Timer();
@@ -88,25 +89,35 @@ void Player::InitColliders() {
 
 	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
+	b2Filter playerCollidersFilter;
+	playerCollidersFilter.categoryBits = Engine::GetInstance().PLAYER_LAYER;
+	playerCollidersFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
+
+	b2Filter enemyCollidersFilter;
+	enemyCollidersFilter.categoryBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
+	enemyCollidersFilter.maskBits = Engine::GetInstance().ENEMY_LAYER;
+
 	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(15), PIXEL_TO_METERS(29));
 	playerCollider->SetFixedRotation(true);
-
-	b2Filter filter;
-	filter.categoryBits = Engine::GetInstance().PLAYER_LAYER; 
-	filter.maskBits = Engine::GetInstance().GROUND_LAYER;
-
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
-			fixture->SetFriction(0);
-			fixture->SetFilterData(filter);
+		fixture->SetFriction(0);
+		fixture->SetFilterData(playerCollidersFilter);
 	}
-
 	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
 	groundCheck->SetSensor(true);
-	groundCheck->SetFilterData(filter);
+	groundCheck->SetFilterData(playerCollidersFilter);
+
+
+	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
+	//enemyCheck->SetSensor(true);
+	enemyCheck->SetFilterData(enemyCollidersFilter);
+	enemyCheck->SetFriction(0);
+	enemyCheckController.AcceptOnlyTriggers(false);
 
 
 	Engine::GetInstance().box2DSensors.get()->AddSensor(&groundCheckController);
+	Engine::GetInstance().box2DSensors.get()->AddSensor(&enemyCheckController);
 
 	
 }
@@ -128,6 +139,14 @@ bool Player::Update(float dt)
 
 	b2Vec2 velocity{ GetMoveInput().x, playerCollider->GetLinearVelocity().y};
 
+	if (enemyCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
+	{
+		velocity.y = 0;
+		playerCollider->SetLinearVelocity(velocity);
+
+		DoJump(-jumpForce*2.3f);
+	}
+
 
 
 	if (Engine::GetInstance().input.get()->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
@@ -137,6 +156,7 @@ bool Player::Update(float dt)
 	}
 	if (isDoingShovelAttack && isGrounded)
 		velocity.x = 0;
+
 
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
@@ -153,8 +173,8 @@ bool Player::Update(float dt)
 		}
 	}
 
-	playerCollider->SetLinearVelocity(velocity);
 
+	playerCollider->SetLinearVelocity(velocity);
 	SetGravityValue(playerCollider->GetLinearVelocity().y);
 
 	if (!isGrounded && playerCollider->GetLinearVelocity().y > MAX_FALL_SPEED)
@@ -173,7 +193,6 @@ bool Player::Update(float dt)
 		else
 			isFlipped = true;
 	}
-	
 
 	//Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
 
@@ -194,14 +213,14 @@ bool Player::Update(float dt)
 				animator.SelectAnimation("Player_Jump_Rise", true);
 		}
 	}
-	
-
 
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
-	/*Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Engine::GetInstance().box2DCreator.get()->RenderFixture(groundCheck, b2Color{0,0,255,255});*/
+	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+	Engine::GetInstance().box2DCreator.get()->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	if(isDoingFallAttack)
+		Engine::GetInstance().box2DCreator.get()->RenderFixture(enemyCheck, b2Color{0,255,0,255});
 
 
 	return true;

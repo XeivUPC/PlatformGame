@@ -44,7 +44,7 @@ bool Map::Start() {
     filter.maskBits = Engine::GetInstance().PLAYER_LAYER;
 
     groundCollider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(400), PIXEL_TO_METERS(20));
-    enemyTest = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position3, PIXEL_TO_METERS(20), PIXEL_TO_METERS(20));
+    enemyTest = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position3, PIXEL_TO_METERS(20), PIXEL_TO_METERS(5));
     groundCollider2 = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position2, PIXEL_TO_METERS(50), PIXEL_TO_METERS(20));
     groundCollider->SetType(b2_staticBody);
     groundCollider2->SetType(b2_staticBody);
