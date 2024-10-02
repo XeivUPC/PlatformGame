@@ -63,7 +63,7 @@ bool Scene::LoadParameters(xml_node parameters) {
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	world->Step(1.0f / 60.0f, 6, 2);
+	world->Step(1.0f / 60.0f, 8, 3);
 	return true;
 }
 
@@ -87,7 +87,6 @@ bool Scene::PostUpdate()
 	// Detects if the player wants to exit the game with ESC key
 	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
-
 	return ret;
 }
 

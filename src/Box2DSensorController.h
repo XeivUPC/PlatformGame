@@ -5,7 +5,7 @@ class Box2DSensorController
 {
 public:
 
-    void SetSensor(b2Body* bodyToTrack);
+    void SetSensor(b2Fixture* bodyToTrack);
     bool IsBeingTriggered();
     void AcceptOnlyTriggers(bool acceptOnlyTriggers);
     bool OnTriggerEnter();
@@ -17,7 +17,7 @@ private:
     b2Body* GetDifferentBody(b2Body* body1, b2Body* body2, b2Body* bodyToBeDifferentFrom);
     
 
-    b2Body* bodyToTrack;
+    b2Fixture* bodyToTrack;
     int bodiesInside = 0;
     bool onlyTriggers = true;
 

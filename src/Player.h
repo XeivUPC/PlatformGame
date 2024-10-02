@@ -84,12 +84,9 @@ private:
 	//// Colliders
 	void InitColliders();
 		///// GroundCollider
-		b2Body* groundCheck;
+		b2Fixture* groundCheck;
 		Box2DSensorController groundCheckController;
 
-		///// GroundCollider
-		b2Body* fallAttackCheck;
-		Box2DSensorController fallAttackCheckController;
 
 		///// Player Collider
 		b2Body* playerCollider;

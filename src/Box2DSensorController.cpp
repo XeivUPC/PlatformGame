@@ -1,6 +1,6 @@
 #include "Box2DSensorController.h"
 
-void Box2DSensorController::SetSensor(b2Body* bodyToTrack)
+void Box2DSensorController::SetSensor(b2Fixture* bodyToTrack)
 {
     this->bodyToTrack = bodyToTrack;
 }
@@ -44,11 +44,11 @@ void Box2DSensorController::BeginContact(b2Contact* contact)
     b2Body* bodyB = fixtureB->GetBody();
 
     // Check if the tracked body is involved
-    if (bodyA == bodyToTrack || bodyB == bodyToTrack) {
+    if (fixtureA == bodyToTrack || fixtureB == bodyToTrack) {
         // Determine which fixture is the sensor (if any)
         if (!onlyTriggers || fixtureA->IsSensor() || fixtureB->IsSensor()) {
             bodiesInside++;
-            lastBodyEnter = GetDifferentBody(bodyA, bodyB, bodyToTrack);
+            lastBodyEnter = GetDifferentBody(bodyA, bodyB, bodyToTrack->GetBody());
         }
     }
 }
@@ -61,11 +61,11 @@ void Box2DSensorController::EndContact(b2Contact* contact)
     b2Body* bodyB = fixtureB->GetBody();
 
     // Check if the tracked body is involved
-    if (bodyA == bodyToTrack || bodyB == bodyToTrack) {
+    if (fixtureA == bodyToTrack || fixtureB == bodyToTrack) {
         // Determine which fixture is the sensor (if any)
         if (!onlyTriggers || fixtureA->IsSensor() || fixtureB->IsSensor()) {
             bodiesInside--;
-            lastBodyExit = GetDifferentBody(bodyA, bodyB, bodyToTrack);
+            lastBodyExit = GetDifferentBody(bodyA, bodyB, bodyToTrack->GetBody());
         }
     }
 }

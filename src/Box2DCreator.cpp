@@ -13,11 +13,11 @@ b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius
 
 	b2CircleShape circleShape = CreateCircleShape(radius);
 
-	b2FixtureDef topCircleFixtureDef;
-	topCircleFixtureDef.shape = &circleShape;
-	topCircleFixtureDef.density = 1.0f;
-	topCircleFixtureDef.friction = 0.3f;
-	body->CreateFixture(&topCircleFixtureDef);
+	b2FixtureDef circleFixtureDef;
+	circleFixtureDef.shape = &circleShape;
+	circleFixtureDef.density = 1.0f;
+	circleFixtureDef.friction = 0.3f;
+	body->CreateFixture(&circleFixtureDef);
 
 	return body;
 }
@@ -31,11 +31,11 @@ b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, fl
 
 	b2PolygonShape boxShape = CreateBoxShape(width, height);
 
-	b2FixtureDef topCircleFixtureDef;
-	topCircleFixtureDef.shape = &boxShape;
-	topCircleFixtureDef.density = 1.0f;
-	topCircleFixtureDef.friction = 0.3f;
-	body->CreateFixture(&topCircleFixtureDef);
+	b2FixtureDef boxFixtureDef;
+	boxFixtureDef.shape = &boxShape;
+	boxFixtureDef.density = 1.0f;
+	boxFixtureDef.friction = 0.3f;
+	body->CreateFixture(&boxFixtureDef);
 
 	return body;
 }
@@ -78,6 +78,49 @@ b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width
 
 	return body;
 
+}
+
+b2Fixture* Box2DCreator::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float radius)
+{
+	b2CircleShape circleShape = CreateCircleShape(radius);
+
+	b2FixtureDef circleFixtureDef;
+	circleFixtureDef.shape = &circleShape;
+	circleFixtureDef.density = 1.0f;
+	circleFixtureDef.friction = 0.3f;
+
+	circleShape.m_p.Set(offset.x, offset.y);
+
+	
+
+	return bodyToAddTo->CreateFixture(&circleFixtureDef);;
+}
+
+b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height)
+{
+
+	b2PolygonShape boxShape = CreateBoxShape(width, height);
+
+	b2FixtureDef boxFixtureDef;
+	boxFixtureDef.shape = &boxShape;
+	boxFixtureDef.density = 1.0f;
+	boxFixtureDef.friction = 0.3f;
+	
+	for (size_t i = 0; i < boxShape.m_vertices->LengthSquared(); i++)
+	{
+		boxShape.m_vertices[i] += offset;
+	}
+	
+	return bodyToAddTo->CreateFixture(&boxFixtureDef);
+
+}
+
+b2Fixture* Box2DCreator::AddCapsule(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height, float radius)
+{
+
+
+
+	return nullptr;
 }
 
 void Box2DCreator::RenderBody(b2Body* body, b2Color color)

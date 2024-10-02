@@ -25,7 +25,6 @@ bool Player::Awake() {
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
-	fallAttackCheckController.SetSensor(fallAttackCheck);
 
 	attackRecoverTimer = Timer();
 	jumpRecoverTimer = Timer();
@@ -58,43 +57,14 @@ void Player::InitColliders() {
 			fixture->SetFilterData(filter);
 	}
 
-	groundCheck = colliderCreator->CreateBox(world, postion, PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
-	groundCheck->SetFixedRotation(true);
-	groundCheck->GetFixtureList()[0].SetSensor(true);
-	groundCheck->GetFixtureList()[0].SetFilterData(filter);
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(-10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
+	groundCheck->SetSensor(true);
+	groundCheck->SetFilterData(d);
+
 
 	Engine::GetInstance().box2DSensors.get()->AddSensor(&groundCheckController);
 
 	
-	b2WeldJointDef weldJointDef;
-	weldJointDef.bodyA = playerCollider; 
-	weldJointDef.bodyB = groundCheck; 
-
-	weldJointDef.localAnchorA.Set(0.0f, 0.0f); 
-	weldJointDef.localAnchorB.Set(0.0f, PIXEL_TO_METERS(-10.5f));
-
-	world->CreateJoint(&weldJointDef);
-	
-
-	filter.categoryBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
-	filter.maskBits = Engine::GetInstance().ENEMY_LAYER;
-
-	fallAttackCheck = colliderCreator->CreateBox(world, postion, PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
-	fallAttackCheck->SetFixedRotation(true);
-	fallAttackCheck->GetFixtureList()[0].SetSensor(true);
-	fallAttackCheck->GetFixtureList()[0].SetFilterData(filter);
-	fallAttackCheck->GetFixtureList()[0].SetFriction(0);
-
-	b2WeldJointDef weldJointDef2;
-
-	weldJointDef2.bodyA = playerCollider;
-	weldJointDef2.bodyB = fallAttackCheck;
-
-	weldJointDef2.localAnchorA.Set(0.0f, 0.0f);
-	weldJointDef2.localAnchorB.Set(0.0f, PIXEL_TO_METERS(-10.5f));
-
-	world->CreateJoint(&weldJointDef2);
-	Engine::GetInstance().box2DSensors.get()->AddSensor(&fallAttackCheckController);
 }
 
 
@@ -139,13 +109,6 @@ bool Player::Update(float dt)
 		}
 	}
 
-
-	if (isDoingFallAttack && fallAttackCheckController.IsBeingTriggered()) {
-		velocity.y = 0;
-		playerCollider->SetLinearVelocity(velocity);
-		DoJump(-jumpForce*1.5f);
-	}
-
 	playerCollider->SetLinearVelocity(velocity);
 
 	SetGravityValue(playerCollider->GetLinearVelocity().y);
@@ -171,10 +134,7 @@ bool Player::Update(float dt)
 	Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
 
 	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Engine::GetInstance().box2DCreator.get()->RenderBody(groundCheck, b2Color{ 0,0,255,255 });
-
-	if (isDoingFallAttack)
-		Engine::GetInstance().box2DCreator.get()->RenderBody(groundCheck, b2Color{ 0,255,0,255 });
+	Engine::GetInstance().box2DCreator.get()->RenderBody(groundCheck->GetBody(), b2Color{0,0,255,255});
 
 
 	return true;
@@ -237,8 +197,6 @@ bool Player::CleanUp()
 {
 	LOG("Cleanup player");
 	Engine::GetInstance().scene->world->DestroyBody(playerCollider);
-	Engine::GetInstance().scene->world->DestroyBody(groundCheck);
-	Engine::GetInstance().scene->world->DestroyBody(fallAttackCheck);
 	Engine::GetInstance().textures.get()->UnLoad(texture);
 	return true;
 }
