@@ -6,6 +6,7 @@
 #include <box2d/box2d.h>
 #include "Box2DSensorController.h"
 #include "HealthSystem.h"
+#include "AnimationSystem.h"
 
 class Player : public Entity
 {

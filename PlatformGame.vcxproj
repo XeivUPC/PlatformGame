@@ -145,6 +145,7 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Box2DCreator.cpp" />
     <ClCompile Include="src\Box2DSensorController.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AnimationSystem.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Box2DCreator.h" />
     <ClInclude Include="src\Box2DSensorController.h" />
