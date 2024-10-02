@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Textures.h"
 #include "Box2DCreator.h"
+
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
@@ -21,7 +22,6 @@ bool Player::Awake() {
 
 	//Initialize Player parameters
 	position = Vector2D(0, 0);
-
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
 
@@ -103,13 +103,12 @@ bool Player::Update(float dt)
 			isFlipped = true;
 	}
 
-
 	position.setX(playerCollider->GetPosition().x);
 	position.setY(playerCollider->GetPosition().y);
 
 
-
-	Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
+	if(PlayerHealth.IsAlive())
+		Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
 
 	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
 	Engine::GetInstance().box2DCreator.get()->RenderBody(groundCheck, b2Color{ 0,0,255,255 });

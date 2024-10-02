@@ -5,6 +5,7 @@
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
 #include "Box2DSensorController.h"
+#include "HealthSystem.h"
 
 class Player : public Entity
 {
