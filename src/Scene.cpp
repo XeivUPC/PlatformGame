@@ -9,6 +9,7 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Box2DCreator.h"
+#include "Box2DSensorsManager.h"
 #include "Player.h"
 #include "Map.h"
 
@@ -33,7 +34,7 @@ bool Scene::Awake()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
-	
+	world->SetContactListener(Engine::GetInstance().box2DSensors.get());
 
 	//Get the map name from the config file and assigns the value
 	Engine::GetInstance().map.get()->mapName = configParameters.child("map").attribute("name").as_string();

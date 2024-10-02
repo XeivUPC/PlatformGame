@@ -19,6 +19,7 @@ class Scene;
 class EntityManager;
 class Map;
 class Box2DCreator;
+class Box2DSensorsManager;
 
 
 #define GRAVITY_X 0.0f
@@ -32,9 +33,18 @@ class Box2DCreator;
 
 
 
+
+
+
+
 class Engine
 {
 public:
+
+	const uint16_t PLAYER_LAYER = 0x0001;
+	const uint16_t PLAYER_ATTACK_LAYER= 0x0002;
+	const uint16_t GROUND_LAYER =0x0003;
+	const uint16_t ENEMY_LAYER =0x0004;
 
 	// Public method to get the instance of the Singleton
 	static Engine& GetInstance();
@@ -107,6 +117,7 @@ public:
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<Map> map;
 	std::shared_ptr<Box2DCreator> box2DCreator;
+	std::shared_ptr<Box2DSensorsManager> box2DSensors;
 
 private: 
 

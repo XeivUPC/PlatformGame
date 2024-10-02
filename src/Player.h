@@ -36,7 +36,7 @@ public:
 private:
 
 	bool TryJump();
-	void DoJump();
+	void DoJump(float force);
 
 	bool TryShovelAttack();
 	void DoShovelAttack();
@@ -63,6 +63,10 @@ private:
 
 	/// Attack Values
 	int attackDamage=1;
+
+	/// Coyote Time
+	Timer coyoteTimer;
+	float coyoteReactionMS = 100;
 	
 
 	/// Delays
@@ -81,9 +85,12 @@ private:
 	void InitColliders();
 		///// GroundCollider
 		b2Body* groundCheck;
-		b2Vec2 groundCheckOffset;
 		Box2DSensorController groundCheckController;
 
 		///// GroundCollider
+		b2Body* fallAttackCheck;
+		Box2DSensorController fallAttackCheckController;
+
+		///// Player Collider
 		b2Body* playerCollider;
 };

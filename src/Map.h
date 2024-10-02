@@ -103,4 +103,5 @@ private:
 
     b2Body* groundCollider;
     b2Body* groundCollider2;
+    b2Body* enemyTest;
 };

@@ -10,20 +10,23 @@ bool Box2DSensorController::IsBeingTriggered()
     return bodiesInside!=0;
 }
 
-bool Box2DSensorController::OnTriggerEnter(b2Body& bodyToEnter)
+void Box2DSensorController::AcceptOnlyTriggers(bool acceptOnlyTriggers)
+{
+    onlyTriggers = acceptOnlyTriggers;
+}
+
+bool Box2DSensorController::OnTriggerEnter()
 {
     if (lastBodyEnter != nullptr) {
-        bodyToEnter = *lastBodyEnter;
         lastBodyEnter = nullptr;
         return true;
     }
     return false;
 }
 
-bool Box2DSensorController::OnTriggerExit(b2Body& bodyToExit)
+bool Box2DSensorController::OnTriggerExit()
 {
     if (lastBodyExit != nullptr) {
-        bodyToExit = *lastBodyExit;
         lastBodyExit = nullptr;
         return true;
     }
@@ -43,7 +46,7 @@ void Box2DSensorController::BeginContact(b2Contact* contact)
     // Check if the tracked body is involved
     if (bodyA == bodyToTrack || bodyB == bodyToTrack) {
         // Determine which fixture is the sensor (if any)
-        if (fixtureA->IsSensor() || fixtureB->IsSensor()) {
+        if (!onlyTriggers || fixtureA->IsSensor() || fixtureB->IsSensor()) {
             bodiesInside++;
             lastBodyEnter = GetDifferentBody(bodyA, bodyB, bodyToTrack);
         }
@@ -60,7 +63,7 @@ void Box2DSensorController::EndContact(b2Contact* contact)
     // Check if the tracked body is involved
     if (bodyA == bodyToTrack || bodyB == bodyToTrack) {
         // Determine which fixture is the sensor (if any)
-        if (fixtureA->IsSensor() || fixtureB->IsSensor()) {
+        if (!onlyTriggers || fixtureA->IsSensor() || fixtureB->IsSensor()) {
             bodiesInside--;
             lastBodyExit = GetDifferentBody(bodyA, bodyB, bodyToTrack);
         }

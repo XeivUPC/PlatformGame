@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "Window.h"
 #include "Box2DCreator.h"
+#include "Box2DSensorsManager.h"
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
@@ -12,6 +13,8 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "Map.h"
+
+
 
 
 // Constructor
@@ -37,6 +40,7 @@ Engine::Engine() {
     entityManager = std::make_shared<EntityManager>();
 
     box2DCreator = std::make_shared<Box2DCreator>();
+    box2DSensors = std::make_shared<Box2DSensorsManager>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
