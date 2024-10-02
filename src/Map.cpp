@@ -36,8 +36,13 @@ bool Map::Start() {
 
     b2World* world = Engine::GetInstance().scene.get()->world;
     b2Vec2 position{ PIXEL_TO_METERS(200), PIXEL_TO_METERS(240) };
+    b2Vec2 position2{ PIXEL_TO_METERS(100), PIXEL_TO_METERS(220) };
+
     groundCollider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(400), PIXEL_TO_METERS(20));
+
+    groundCollider2 = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position2, PIXEL_TO_METERS(50), PIXEL_TO_METERS(20));
     groundCollider->SetType(b2_staticBody);
+    groundCollider2->SetType(b2_staticBody);
 
     return true;
 }
@@ -70,6 +75,7 @@ bool Map::Update(float dt)
     }
 
     Engine::GetInstance().box2DCreator.get()->RenderBody(groundCollider, b2Color{ 0,255,0,255 });
+    Engine::GetInstance().box2DCreator.get()->RenderBody(groundCollider2, b2Color{ 0,255,0,255 });
     return ret;
 }
 

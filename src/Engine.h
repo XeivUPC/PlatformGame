@@ -22,7 +22,7 @@ class Box2DCreator;
 
 
 #define GRAVITY_X 0.0f
-#define GRAVITY_Y -10.0f
+#define GRAVITY_Y -15.0f
 
 #define PIXELS_PER_METER 50.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 1/PIXELS_PER_METER // this is 1 / PIXELS_PER_METER !

@@ -102,4 +102,5 @@ private:
     bool mapLoaded;
 
     b2Body* groundCollider;
+    b2Body* groundCollider2;
 };

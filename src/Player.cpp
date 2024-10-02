@@ -25,6 +25,9 @@ bool Player::Awake() {
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
 
+	attackRecoverTimer = Timer();
+	jumpRecoverTimer = Timer();
+
 	return true;
 }
 
@@ -40,23 +43,24 @@ void Player::InitColliders() {
 
 	b2World* world = Engine::GetInstance().scene.get()->world;
 	b2Vec2 postion{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
-	playerCollider = colliderCreator->CreateCapsule(world, postion, PIXEL_TO_METERS(10), PIXEL_TO_METERS(30), PIXEL_TO_METERS(5.5f));
+	playerCollider = colliderCreator->CreateBox(world, postion, PIXEL_TO_METERS(15), PIXEL_TO_METERS(29));
 	playerCollider->SetFixedRotation(true);
+	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
+	{
+			fixture->SetFriction(0);
+	}
 
-	groundCheck = colliderCreator->CreateBox(world, postion, PIXEL_TO_METERS(15), PIXEL_TO_METERS(10));
+	groundCheck = colliderCreator->CreateBox(world, postion, PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
 	groundCheck->SetFixedRotation(true);
 	groundCheck->GetFixtureList()[0].SetSensor(true);
 	
 	b2WeldJointDef weldJointDef;
-	weldJointDef.bodyA = playerCollider;  // Primer cuerpo
-	weldJointDef.bodyB = groundCheck;  // Segundo cuerpo
+	weldJointDef.bodyA = playerCollider; 
+	weldJointDef.bodyB = groundCheck; 
 
-	// Punto de anclaje donde los cuerpos estarán unidos
-	// Puedes usar el centro de uno de los cuerpos, por ejemplo:
-	weldJointDef.localAnchorA.Set(0.0f, 0.0f);  // Centro de body1
-	weldJointDef.localAnchorB.Set(0.0f, PIXEL_TO_METERS(-10));  // Centro de body2
+	weldJointDef.localAnchorA.Set(0.0f, 0.0f); 
+	weldJointDef.localAnchorB.Set(0.0f, PIXEL_TO_METERS(-10.5f));
 
-	// Crear el joint en el mundo de Box2D
 	b2WeldJoint* weldJoint = (b2WeldJoint*)world->CreateJoint(&weldJointDef);
 
 
@@ -64,36 +68,63 @@ void Player::InitColliders() {
 }
 
 
-
-
 bool Player::Update(float dt)
 {
 
 	isGrounded = groundCheckController.IsBeingTriggered();
+	if (isGrounded)
+		isDoingFallAttack = false;
+	if (TryShovelAttack())
+		isDoingShovelAttack = false;
 
-	//Render the player texture and modify the position of the player using WSAD keys and render the texture
-	b2Vec2 velocity{ 0, playerCollider->GetLinearVelocity().y};
+	printf("%d\n", isGrounded);
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		velocity.x =(-speed);
+	b2Vec2 velocity{ GetMoveInput().x, playerCollider->GetLinearVelocity().y};
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		velocity.x =(speed);
+	if (Engine::GetInstance().input.get()->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
+		if (TryShovelAttack()) {
+			DoShovelAttack();
+		}
+	}
+	if (isDoingShovelAttack && isGrounded)
+		velocity.x = 0;
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isGrounded) {
-		velocity.y = 0;
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+		if (TryFallAttack()) {
+			DoFallAttack();
+		}
+	}
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+		if (TryJump()) {
+			velocity.y = 0;
+			playerCollider->SetLinearVelocity(velocity);
+			DoJump();
+		}
+	}
+
+	playerCollider->SetLinearVelocity(velocity);
+
+	float gravityValue = defaultGravity;
+
+	if (isDoingFallAttack)
+		gravityValue = fallAttackGravity;
+	else if (playerCollider->GetLinearVelocity().y > 0) {
+		gravityValue = fallGravity;
+	}
+	playerCollider->SetGravityScale(gravityValue);
+
+	SetGravityValue(playerCollider->GetLinearVelocity().y);
+
+	if (playerCollider->GetLinearVelocity().y > MAX_FALL_SPEED)
+	{
+		velocity.y = MAX_FALL_SPEED;
 		playerCollider->SetLinearVelocity(velocity);
-		playerCollider->ApplyForceToCenter(b2Vec2{ 0,-45 }, true);
 	}
-	else
-		playerCollider->SetLinearVelocity(velocity);
 
-	if (playerCollider->GetLinearVelocity().y > 0) {
-		playerCollider->SetGravityScale(2.5f);
-	}
-	else {
-		playerCollider->SetGravityScale(1);
-	}
+	position.setX(playerCollider->GetPosition().x);
+	position.setY(playerCollider->GetPosition().y);
 
 	if (velocity.x != 0)
 	{
@@ -102,12 +133,7 @@ bool Player::Update(float dt)
 		else
 			isFlipped = true;
 	}
-
-
-	position.setX(playerCollider->GetPosition().x);
-	position.setY(playerCollider->GetPosition().y);
-
-
+	
 
 	Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
 
@@ -115,6 +141,58 @@ bool Player::Update(float dt)
 	Engine::GetInstance().box2DCreator.get()->RenderBody(groundCheck, b2Color{ 0,0,255,255 });
 
 	return true;
+}
+
+b2Vec2 Player::GetMoveInput() {
+	b2Vec2 velocity{ 0,0 };
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		velocity.x = (-speed);
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		velocity.x = (speed);
+	return velocity;
+
+}
+bool Player::TryShovelAttack() {
+	if (attackRecoverTimer.ReadMSec() >= attackRecoverMS)
+		return true;
+	return false;
+}
+void Player::DoShovelAttack() {
+	attackRecoverTimer.Start();
+	isDoingShovelAttack = true;
+}
+
+bool Player::TryFallAttack() {
+	if (!isGrounded && !isDoingFallAttack)
+		return true;
+	return false;
+}
+void Player::DoFallAttack() {
+	isDoingFallAttack = true;
+}
+
+
+bool Player::TryJump() {
+	if (isGrounded && !isDoingShovelAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
+		return true;
+	return false;
+}
+
+void Player::DoJump() {
+	playerCollider->ApplyForceToCenter(b2Vec2{ 0,-jumpForce }, true);
+	jumpRecoverTimer.Start();
+}
+
+void Player::SetGravityValue(float verticalVelocity) {
+	float gravityValue = defaultGravity;
+
+	if (isDoingFallAttack)
+		gravityValue = fallAttackGravity;
+	else if (verticalVelocity > 0) {
+		gravityValue = fallGravity;
+	}
+	playerCollider->SetGravityScale(gravityValue);
 }
 
 bool Player::CleanUp()
