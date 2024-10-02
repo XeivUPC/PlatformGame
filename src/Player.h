@@ -5,6 +5,7 @@
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
 #include "ColliderHandler.h"
+#include "AnimationSystem.h"
 #include "Timer.h"
 
 class Player : public Entity
@@ -31,6 +32,7 @@ public:
 
 	
 	std::string textureName; 
+	Animator animator;
 	SDL_Texture* texture = NULL;
 
 private:
@@ -78,7 +80,7 @@ private:
 	Timer jumpRecoverTimer;
 	
 	//// Texture
-	b2Vec2 textureOffset{-33/2.f,-31/2.f};
+	b2Vec2 textureOffset{-20,-20};
 
 
 	//// Colliders

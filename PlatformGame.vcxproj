@@ -145,12 +145,14 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Box2DCreator.cpp" />
     <ClCompile Include="src\ColliderHandler.cpp" />
     <ClCompile Include="src\CollidersManager.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\HealthSystem.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Map.cpp" />
@@ -165,6 +167,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AnimationSystem.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Box2DCreator.h" />
     <ClInclude Include="src\ColliderHandler.h" />
@@ -172,6 +175,7 @@
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
+    <ClInclude Include="src\HealthSystem.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Map.h" />
