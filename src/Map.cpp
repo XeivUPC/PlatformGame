@@ -48,7 +48,6 @@ bool Map::Start() {
     groundCollider2 = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position2, PIXEL_TO_METERS(50), PIXEL_TO_METERS(20));
     groundCollider->SetType(b2_staticBody);
     groundCollider2->SetType(b2_staticBody);
-
     enemyTest->SetType(b2_staticBody);
 
     groundCollider->GetFixtureList()[0].SetFilterData(filter);

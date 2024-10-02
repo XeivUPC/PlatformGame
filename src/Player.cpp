@@ -238,6 +238,7 @@ bool Player::CleanUp()
 	LOG("Cleanup player");
 	Engine::GetInstance().scene->world->DestroyBody(playerCollider);
 	Engine::GetInstance().scene->world->DestroyBody(groundCheck);
+	Engine::GetInstance().scene->world->DestroyBody(fallAttackCheck);
 	Engine::GetInstance().textures.get()->UnLoad(texture);
 	return true;
 }
