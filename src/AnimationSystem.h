@@ -9,7 +9,6 @@ struct Sprite
 	SDL_Texture* texture;
 	Vector2D index;
 	Vector2D size;
-	Vector2D pivot;
 };
 
 class AnimationData

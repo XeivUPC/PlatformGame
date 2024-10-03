@@ -49,30 +49,30 @@ bool Player::Start() {
 
 void Player::InitAnimations() {
 	AnimationData idle = AnimationData("Player_Idle");
-	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {50, 40.0f}, {0, 0} });
+	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
 
 	AnimationData move = AnimationData("Player_Move");
-	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {50, 40.0f}, {0, 0} });
-	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {50, 40.0f}, {0, 0} });
-	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {50, 40.0f}, {0, 0} });
-	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {50, 40.0f}, {0, 0} });
-	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {50, 40.0f}, {0, 0} });
-	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {50, 40.0f}, {0, 0} });
+	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {70, 70}});
+	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {70, 70}});
+	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {70, 70}});
+	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {70, 70}});
+	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {70, 70}});
+	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {70, 70}});
 
 	AnimationData jump_rise = AnimationData("Player_Jump_Rise");
-	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {50, 40.0f}, {0, 0} });
+	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {70, 70}});
 
 	AnimationData jump_fall = AnimationData("Player_Jump_Fall");
-	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {50, 40.0f}, {0, 0} });
+	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {70, 70}});
 
 	AnimationData fall_attack = AnimationData("Player_Fall_Attack");
-	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {50, 40.0f}, {0, 0} });
+	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {70, 70}});
 
 	AnimationData attack = AnimationData("Player_Attack");
-	attack.AddSprite(Sprite{ texture,{0.0f, 5.0f}, {50, 40.0f}, {0, 0} });
-	attack.AddSprite(Sprite{ texture,{1.0f, 5.0f}, {50, 40.0f}, {0, 0} });
-	attack.AddSprite(Sprite{ texture,{2.0f, 5.0f}, {50, 40.0f}, {0, 0} });
-	attack.AddSprite(Sprite{ texture,{3.0f, 5.0f}, {50, 40.0f}, {0, 0} });
+	attack.AddSprite(Sprite{ texture,{0.0f, 5.0f}, {70, 70} });
+	attack.AddSprite(Sprite{ texture,{1.0f, 5.0f}, {70, 70}});
+	attack.AddSprite(Sprite{ texture,{2.0f, 5.0f}, {70, 70}});
+	attack.AddSprite(Sprite{ texture,{3.0f, 5.0f}, {70, 70}});
 
 
 	animator.AddAnimation(idle);
