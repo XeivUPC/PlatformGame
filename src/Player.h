@@ -80,7 +80,7 @@ private:
 	Timer jumpRecoverTimer;
 	
 	//// Texture
-	b2Vec2 textureOffset{-35,-29};
+	b2Vec2 textureOffset{-35,-35};
 
 	/// Animator
 	Animator animator;
