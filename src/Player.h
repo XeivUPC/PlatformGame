@@ -28,7 +28,7 @@ public:
 
 	//Player Exposed Stats
 	float speed = 2.5f;
-	float jumpForce = 85.0f;
+	float jumpForce = 95.0f;
 
 	
 	std::string textureName; 
@@ -73,7 +73,7 @@ private:
 
 	/// Delays
 
-	float attackRecoverMS=300;
+	float attackRecoverMS=400;
 	Timer attackRecoverTimer;
 
 	float jumpRecoverMS= 150;
