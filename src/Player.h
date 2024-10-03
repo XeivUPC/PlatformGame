@@ -7,6 +7,7 @@
 #include "ColliderHandler.h"
 #include "AnimationSystem.h"
 #include "Timer.h"
+#include "HealthSystem.h"
 
 class Player : public Entity
 {
@@ -27,13 +28,15 @@ public:
 public:
 
 	//Player Exposed Stats
-	float speed = 2.5f;
+	float speed = 150.0f;
 	float jumpForce = 95.0f;
 
 	
 	std::string textureName; 
 	
 	SDL_Texture* texture = NULL;
+
+	Health playerHealth = Health(3);
 
 private:
 

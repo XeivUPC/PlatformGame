@@ -149,7 +149,7 @@ bool Player::Update(float dt)
 		isDoingShovelAttack = false;
 
 
-	b2Vec2 velocity{ GetMoveInput().x, playerCollider->GetLinearVelocity().y};
+	b2Vec2 velocity{ GetMoveInput().x * dt/1000, playerCollider->GetLinearVelocity().y};
 
 	if (enemyCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
 	{
