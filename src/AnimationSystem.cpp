@@ -137,8 +137,22 @@ void Animator::Update(float dt)
 }
 
 void Animator::Animate(int x, int y, SDL_RendererFlip flip)
-{
-	
+{	
 	SDL_Rect rect = animations[currentAnimation].GetSpriteRect(currentSprite);
-	Engine::GetInstance().render.get()->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect, 1, 0, animations[currentAnimation].sprites[currentSprite].pivot.getX(), animations[currentAnimation].sprites[currentSprite].pivot.getY());
+	Engine::GetInstance().render.get()->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect, 1, 0);
+}
+
+const char* Animator::GetCurrentAnimationName()
+{
+	return currentAnimation;
+}
+
+AnimationData Animator::GetCurrentAnimation()
+{
+	return animations[GetCurrentAnimationName()];
+}
+
+Sprite Animator::GetCurrentAnimationSprite()
+{
+	return GetCurrentAnimation().sprites[currentSprite];
 }

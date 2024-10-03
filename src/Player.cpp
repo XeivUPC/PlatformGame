@@ -49,25 +49,30 @@ bool Player::Start() {
 
 void Player::InitAnimations() {
 	AnimationData idle = AnimationData("Player_Idle");
-	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {50, 40.0f}, {20.0f, 20.0f} });
-
+	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {50, 40.0f}, {0, 0} });
 
 	AnimationData move = AnimationData("Player_Move");
-	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
-	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
-	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
-	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
-	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
-	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {50, 40.0f}, {22, 20.0f} });
+	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {50, 40.0f}, {0, 0} });
+	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {50, 40.0f}, {0, 0} });
+	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {50, 40.0f}, {0, 0} });
+	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {50, 40.0f}, {0, 0} });
+	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {50, 40.0f}, {0, 0} });
+	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {50, 40.0f}, {0, 0} });
 
 	AnimationData jump_rise = AnimationData("Player_Jump_Rise");
-	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {50, 40.0f}, {20.0f, 20.0f} });
+	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {50, 40.0f}, {0, 0} });
 
 	AnimationData jump_fall = AnimationData("Player_Jump_Fall");
-	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {50, 40.0f}, {20.0f, 20.0f} });
+	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {50, 40.0f}, {0, 0} });
 
 	AnimationData fall_attack = AnimationData("Player_Fall_Attack");
-	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {50, 40.0f}, {20.0f, 20.0f} });
+	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {50, 40.0f}, {0, 0} });
+
+	AnimationData attack = AnimationData("Player_Attack");
+	attack.AddSprite(Sprite{ texture,{0.0f, 5.0f}, {50, 40.0f}, {0, 0} });
+	attack.AddSprite(Sprite{ texture,{1.0f, 5.0f}, {50, 40.0f}, {0, 0} });
+	attack.AddSprite(Sprite{ texture,{2.0f, 5.0f}, {50, 40.0f}, {0, 0} });
+	attack.AddSprite(Sprite{ texture,{3.0f, 5.0f}, {50, 40.0f}, {0, 0} });
 
 
 	animator.AddAnimation(idle);
@@ -75,6 +80,7 @@ void Player::InitAnimations() {
 	animator.AddAnimation(jump_rise);
 	animator.AddAnimation(jump_fall);
 	animator.AddAnimation(fall_attack);
+	animator.AddAnimation(attack);
 	animator.SelectAnimation("Player_Idle", true);
 
 	animator.SetSpeed(100);
@@ -144,7 +150,7 @@ bool Player::Update(float dt)
 		velocity.y = 0;
 		playerCollider->SetLinearVelocity(velocity);
 
-		DoJump(-jumpForce*2.3f);
+		DoJump(-jumpForce *2);
 	}
 
 
@@ -196,7 +202,9 @@ bool Player::Update(float dt)
 
 	//Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
 
-	if (isGrounded) {
+	if(isDoingShovelAttack)
+		animator.SelectAnimation("Player_Attack", true);
+	else if (isGrounded) {
 		if (velocity.x == 0)
 			animator.SelectAnimation("Player_Idle", true);
 		else
@@ -213,6 +221,7 @@ bool Player::Update(float dt)
 				animator.SelectAnimation("Player_Jump_Rise", true);
 		}
 	}
+
 
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);

@@ -27,6 +27,7 @@ public:
 	AnimationData(const char* n, std::vector<Sprite> s);
 	AnimationData(const char* n);
 	AnimationData() {};
+
 };
 
 class Animator
@@ -50,4 +51,7 @@ public:
 	void SetSpeed(float s);
 	void Update(float dt);
 	void Animate(int x, int y, SDL_RendererFlip flip);
+	const char* GetCurrentAnimationName();
+	AnimationData GetCurrentAnimation();
+	Sprite GetCurrentAnimationSprite();
 };
