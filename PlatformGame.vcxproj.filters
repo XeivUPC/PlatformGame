@@ -96,12 +96,6 @@
     <ClCompile Include="src\CollidersManager.cpp">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Level.cpp">
-      <Filter>Source Files\Game\LevelRelated</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LevelSection.cpp">
-      <Filter>Source Files\Game\LevelRelated</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -166,12 +160,6 @@
     </ClInclude>
     <ClInclude Include="src\CollidersManager.h">
       <Filter>Source Files\Box2D_Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Level.h">
-      <Filter>Source Files\Game\LevelRelated</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LevelSection.h">
-      <Filter>Source Files\Game\LevelRelated</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

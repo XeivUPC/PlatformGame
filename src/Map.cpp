@@ -34,9 +34,6 @@ bool Map::Start() {
     //Calls the function to load the map. The name of the map is assigned in teh scene
     Load(mapPath + mapName);
 
-    currentLevel = new Level(0, 0);
-    currentLevel->Start();
-
     b2World* world = Engine::GetInstance().scene.get()->world;
     b2Vec2 position{ PIXEL_TO_METERS(200), PIXEL_TO_METERS(240) };
     b2Vec2 position2{ PIXEL_TO_METERS(100), PIXEL_TO_METERS(220) };
@@ -72,8 +69,6 @@ bool Map::Update(float dt)
     if(mapLoaded == false)
         return false;
 
-    currentLevel->Update(dt);
-
     // Prepare the loop to draw all tiles in a layer + DrawTexture()
     // iterate all tiles in a layer
     for (const auto& mapLayer : mapData.layers) {
@@ -104,8 +99,6 @@ bool Map::Update(float dt)
 bool Map::CleanUp()
 {
     LOG("Unloading map");
-
-    currentLevel->CleanUp();
 
     // Make sure you clean up any memory allocated from tilesets/map
     for (const auto& tileset : mapData.tilesets) {

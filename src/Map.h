@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Module.h"
-#include "Level.h"
 #include <list>
 #include <box2d/box2d.h>
 
@@ -105,6 +104,4 @@ private:
     b2Body* groundCollider;
     b2Body* groundCollider2;
     b2Body* enemyTest;
-
-    Level* currentLevel;
 };
