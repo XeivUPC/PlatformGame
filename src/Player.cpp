@@ -51,6 +51,11 @@ void Player::InitAnimations() {
 	AnimationData idle = AnimationData("Player_Idle");
 	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
 
+	AnimationData idle2 = AnimationData("Player_Idle_2");
+	idle2.AddSprite(Sprite{ texture,{1.0f, 0.0f}, {70, 70}});
+	idle2.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {70, 70}});
+	idle2.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {70, 70}});
+
 	AnimationData move = AnimationData("Player_Move");
 	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {70, 70}});
 	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {70, 70}});
@@ -76,6 +81,7 @@ void Player::InitAnimations() {
 
 
 	animator.AddAnimation(idle);
+	animator.AddAnimation(idle2);
 	animator.AddAnimation(move);
 	animator.AddAnimation(jump_rise);
 	animator.AddAnimation(jump_fall);
@@ -143,14 +149,14 @@ bool Player::Update(float dt)
 		isDoingShovelAttack = false;
 
 
-	b2Vec2 velocity{ GetMoveInput().x, playerCollider->GetLinearVelocity().y};
+	b2Vec2 velocity{ GetMoveInput().x * dt/1000, playerCollider->GetLinearVelocity().y};
 
 	if (enemyCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
 	{
 		velocity.y = 0;
 		playerCollider->SetLinearVelocity(velocity);
 
-		DoJump(-jumpForce *2);
+		DoJump(-jumpForce*1.25f);
 	}
 
 
@@ -206,7 +212,9 @@ bool Player::Update(float dt)
 		animator.SelectAnimation("Player_Attack", true);
 	else if (isGrounded) {
 		if (velocity.x == 0)
+		{
 			animator.SelectAnimation("Player_Idle", true);
+		}
 		else
 			animator.SelectAnimation("Player_Move", true);
 	}
@@ -280,10 +288,11 @@ void Player::DoJump(float force) {
 void Player::SetGravityValue(float verticalVelocity) {
 	float gravityValue = defaultGravity;
 
-	if (isDoingFallAttack)
-		gravityValue = fallAttackGravity;
-	else if (verticalVelocity > 0) {
+	
+	if (verticalVelocity > 0) {
 		gravityValue = fallGravity;
+		if (isDoingFallAttack)
+			gravityValue = fallAttackGravity;
 	}
 	playerCollider->SetGravityScale(gravityValue);
 }
