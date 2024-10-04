@@ -17,6 +17,12 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{eaf9226b-488a-4c6a-9d1a-2222fdb48e0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Box2D_Utils">
+      <UniqueIdentifier>{d7de7739-ae42-4682-81e2-0a96331c6076}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\LevelRelated">
+      <UniqueIdentifier>{05b53d04-9388-4513-9e7a-423d49839857}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -75,20 +81,26 @@
     <ClCompile Include="src\Map.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Box2DCreator.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ColliderHandler.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CollidersManager.cpp">
-      <Filter>Source Files\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\AnimationSystem.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\HealthSystem.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box2DCreator.cpp">
+      <Filter>Source Files\Box2D_Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ColliderHandler.cpp">
+      <Filter>Source Files\Box2D_Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CollidersManager.cpp">
+      <Filter>Source Files\Box2D_Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Level.cpp">
+      <Filter>Source Files\Game\LevelRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelSection.cpp">
+      <Filter>Source Files\Game\LevelRelated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -140,20 +152,26 @@
     <ClInclude Include="src\Map.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Box2DCreator.h">
-      <Filter>Source Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ColliderHandler.h">
-      <Filter>Source Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CollidersManager.h">
-      <Filter>Source Files\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\AnimationSystem.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\HealthSystem.h">
       <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Box2DCreator.h">
+      <Filter>Source Files\Box2D_Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ColliderHandler.h">
+      <Filter>Source Files\Box2D_Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CollidersManager.h">
+      <Filter>Source Files\Box2D_Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level.h">
+      <Filter>Source Files\Game\LevelRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelSection.h">
+      <Filter>Source Files\Game\LevelRelated</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

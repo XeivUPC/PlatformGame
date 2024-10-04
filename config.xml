@@ -1,22 +1,21 @@
 <!-- Config file for the game -->
 <config>
-  <app>
-    <title>Shovel Knight</title>
-    <maxFrameDuration value="16"/>
-  </app>
+    <app>
+        <title>Shovel Knight</title>
+        <maxFrameDuration value="16"/>
+    </app>
 
-  <render>
-    <vsync value="false"/>
-  </render>
+     <render>
+        <vsync value="false"/>
+    </render>
 
-  <window>
-    <resolution width="400" height="240" scale="3"/>
-    <fullscreen_window value="false"/>
-  </window>
+    <window>
+        <resolution width="400" height="240" scale="3"/>
+        <fullscreen_window value="false"/>
+    </window>
 
-  <scene>
-    <player x="100" y="100" texturePath="Assets/Textures/ShovelKnight_Atlas2.png"/>
-    <map path="Assets/Maps/" name="MapTemplate.tmx"/>
-  </scene>
-  
+    <scene>
+        <player x="100" y="100" texturePath="Assets/Textures/ShovelKnight_Atlas2.png"/>
+        <map path="Assets/Maps/" name="MapTemplate.tmx"/>
+     </scene>
 </config>
