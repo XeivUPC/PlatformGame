@@ -4,6 +4,7 @@
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
+#include "LevelManager.h"
 #include "Scene.h"
 #include "Log.h"
 #include "Entity.h"
@@ -11,7 +12,7 @@
 #include "Box2DCreator.h"
 #include "CollidersManager.h"
 #include "Player.h"
-#include "Map.h"
+
 
 Scene::Scene() : Module()
 {
@@ -35,10 +36,6 @@ bool Scene::Awake()
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
 	world->SetContactListener(Engine::GetInstance().box2DSensors.get());
-
-	//Get the map name from the config file and assigns the value
-	Engine::GetInstance().map.get()->mapName = configParameters.child("map").attribute("name").as_string();
-	Engine::GetInstance().map.get()->mapPath = configParameters.child("map").attribute("path").as_string();
 
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
@@ -94,5 +91,6 @@ bool Scene::PostUpdate()
 bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
+
 	return true;
 }

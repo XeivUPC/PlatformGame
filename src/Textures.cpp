@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Log.h"
 
+
 Textures::Textures() : Module()
 {
 	name = "textures";

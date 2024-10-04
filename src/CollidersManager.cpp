@@ -1,6 +1,16 @@
 #include "CollidersManager.h"
 #include "ColliderHandler.h"
 
+CollidersManager::CollidersManager()
+{
+
+}
+
+CollidersManager::~CollidersManager()
+{
+    sensors.clear();
+}
+
 void CollidersManager::AddSensor(ColliderHandler* sensor)
 {
     sensors.push_back(sensor);

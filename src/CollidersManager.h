@@ -6,6 +6,8 @@ class ColliderHandler;
 
 class CollidersManager : public b2ContactListener {
 public:
+    CollidersManager();
+    ~CollidersManager();
     void AddSensor(ColliderHandler* sensor);
     void RemoveSensor(ColliderHandler* sensor);
     

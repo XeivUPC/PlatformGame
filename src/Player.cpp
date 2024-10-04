@@ -9,6 +9,8 @@
 #include "Scene.h"
 #include "Log.h"
 
+
+
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name = "Player";
@@ -21,7 +23,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(0, 0);
+	position = Vector2D(16, 16*8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
@@ -48,6 +50,8 @@ bool Player::Start() {
 }
 
 void Player::InitAnimations() {
+
+
 	AnimationData idle = AnimationData("Player_Idle");
 	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
 
@@ -246,10 +250,10 @@ bool Player::Update(float dt)
 b2Vec2 Player::GetMoveInput() {
 	b2Vec2 velocity{ 0,0 };
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		velocity.x = (-speed);
+		velocity.x -= (speed);
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		velocity.x = (speed);
+		velocity.x += (speed);
 	return velocity;
 
 }

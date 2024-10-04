@@ -4,10 +4,12 @@
 #include <iostream>
 #include "Engine.h"
 #include "Log.h"
+#include "MemLeaks.h"
 
 int main(int argc, char* argv[]) {
 
 	LOG("Engine starting ...");
+	ReportMemoryLeaks();
 
 	//Initializes the engine state
 	Engine::EngineState state = Engine::EngineState::CREATE;

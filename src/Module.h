@@ -10,7 +10,9 @@ class Module
 public:
 
 	Module() : active(false)
-	{}
+	{
+	
+	}
 
 	void Init()
 	{
