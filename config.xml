@@ -15,7 +15,7 @@
     </window>
 
     <scene>
-        <player x="100" y="100" texturePath="Assets/Textures/ShovelKnight_Atlas2.png"/>
+        <player x="100" y="100" texturePath="Assets/Textures/Player/ShovelKnight_Atlas2.png"/>
         <map path="Assets/Maps/" name="MapTemplate.tmx"/>
     </scene>
 

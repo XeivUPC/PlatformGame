@@ -75,6 +75,13 @@ public:
 private:
 
     Vector2D MapToWorld(int x, int y) const;
+
+    TileSet* CreateTileset(xml_node* node, std::string texturePath);
+    MapLayer* CreateMapLayer(xml_node* node);
+    void CreateMapData(xml_document* document);
+    b2Body* CreateColliders(xml_node* node);
+
+    void AddLayers(uint16* container, std::string layersInput);
     MapData mapData;
 
     std::list<b2Body*> colliders;

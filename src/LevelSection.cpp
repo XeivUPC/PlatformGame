@@ -89,100 +89,22 @@ bool LevelSection::Load(std::string fileName, std::string texturePath)
         ret = false;
     }
     else {
-
-        //Fill mapData variable
-        mapData.width = mapFileXML.child("map").attribute("width").as_int();
-        mapData.height = mapFileXML.child("map").attribute("height").as_int();
-        mapData.tilewidth = mapFileXML.child("map").attribute("tilewidth").as_int();
-        mapData.tileheight = mapFileXML.child("map").attribute("tileheight").as_int();
-
+        CreateMapData(&mapFileXML);
         for (pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode != NULL; tilesetNode = tilesetNode.next_sibling("tileset")) {
-            TileSet* tileset = new TileSet();
-
-            std::string tsxFileName = tilesetNode.attribute("source").as_string();
-            tsxFileName = tsxFileName.substr(3);
-
-            std::string tsxFilePath = texturePath + tsxFileName;
-            pugi::xml_document tsxXML;
-            pugi::xml_parse_result result2 = tsxXML.load_file(tsxFilePath.c_str());
-
-
-            tileset->name = tsxXML.child("tileset").attribute("name").as_string();
-            tileset->firstgid = tsxXML.child("tileset").attribute("firstgid").as_int();
-            tileset->tilewidth = tsxXML.child("tileset").attribute("tilewidth").as_int();
-            tileset->tileheight = tsxXML.child("tileset").attribute("tileheight").as_int();
-            tileset->columns = tsxXML.child("tileset").attribute("columns").as_int();
-
-            std::string mapTex = texturePath;
-            mapTex += tsxXML.child("tileset").child("image").attribute("source").as_string();
-            tileset->texture = Engine::GetInstance().textures.get()->Load(mapTex.c_str());
-
+            TileSet* tileset = CreateTileset(&tilesetNode, texturePath);
             mapData.tilesets.push_back(tileset);
         }
-
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
-
-            // L06: DONE 4: Implement a function that loads a single layer layer
-            //Load the attributes and saved in a new MapLayer
-            MapLayer* mapLayer = new MapLayer();
-            mapLayer->id = layerNode.attribute("id").as_int();
-            mapLayer->name = layerNode.attribute("name").as_string();
-            mapLayer->width = layerNode.attribute("width").as_int();
-            mapLayer->height = layerNode.attribute("height").as_int();
-
-            //Reserve the memory for the data 
-            mapLayer->tiles = new unsigned int[mapLayer->width * mapLayer->height];
-            memset(mapLayer->tiles, 0, mapLayer->width * mapLayer->height);
-
-            //Iterate over all the tiles and assign the values in the data array
-
-            std::string tileData = layerNode.child("data").text().as_string();
-            std::stringstream ss(tileData);
-            std::string item;
-
-            int i = 0;
-            while (std::getline(ss, item, ',')) {
-                // Convert string to integer and store in the vector
-                mapLayer->tiles[i] = std::stoi(item);
-                i++;
-            }
-
-            //add the layer to the map
+            MapLayer* mapLayer = CreateMapLayer(&layerNode);
             mapData.layers.push_back(mapLayer);
         }
+        for (pugi::xml_node colliderNode = mapFileXML.child("map").find_child_by_attribute("objectgroup", "name", "Colliders").child("object"); colliderNode != NULL; colliderNode = colliderNode.next_sibling("object")) {
 
-        b2World* world = Engine::GetInstance().scene.get()->world;
-        for (pugi::xml_node colliderNode = mapFileXML.child("map").child("objectgroup").child("object"); colliderNode != NULL; colliderNode = colliderNode.next_sibling("object")) {
-
-            int x = colliderNode.attribute("x").as_int();
-            int y = colliderNode.attribute("y").as_int();
-
-            int width = colliderNode.attribute("width").as_int();
-            int height = colliderNode.attribute("height").as_int();
-
-            x += width / 2;
-            y += height / 2;
-
-            b2Vec2 position{ PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)};
-
-            b2Filter filter;
-            filter.categoryBits = Engine::GetInstance().GROUND_LAYER;
-            filter.maskBits = Engine::GetInstance().PLAYER_LAYER;
-
-            b2Body* collider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(width), PIXEL_TO_METERS(height));
-
-            collider->SetType(b2_staticBody);
-            collider->GetFixtureList()[0].SetFilterData(filter);
-
+            b2Body* collider = CreateColliders(&colliderNode);
             colliders.push_back(collider);
         }
-
-
-        
-
         if (mapFileXML) mapFileXML.reset();
     }
-
     return ret;
 }
 
@@ -196,3 +118,121 @@ Vector2D LevelSection::MapToWorld(int x, int y) const
 
     return ret;
 }
+
+TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
+{
+    TileSet* tileset = new TileSet();
+
+    std::string tsxFileName = node->attribute("source").as_string();
+    tsxFileName = tsxFileName.substr(3);
+
+    std::string tsxFilePath = texturePath + tsxFileName;
+    pugi::xml_document document;
+    pugi::xml_parse_result result2 = document.load_file(tsxFilePath.c_str());
+
+    tileset->name = document.child("tileset").attribute("name").as_string();
+    tileset->firstgid = document.child("tileset").attribute("firstgid").as_int();
+    tileset->tilewidth = document.child("tileset").attribute("tilewidth").as_int();
+    tileset->tileheight = document.child("tileset").attribute("tileheight").as_int();
+    tileset->columns = document.child("tileset").attribute("columns").as_int();
+
+    std::string mapTex = texturePath;
+    mapTex += document.child("tileset").child("image").attribute("source").as_string();
+    tileset->texture = Engine::GetInstance().textures.get()->Load(mapTex.c_str());
+    return tileset;
+}
+
+MapLayer* LevelSection::CreateMapLayer(xml_node* node)
+{
+    MapLayer* mapLayer = new MapLayer();
+
+    mapLayer->id = node->attribute("id").as_int();
+    mapLayer->name = node->attribute("name").as_string();
+    mapLayer->width = node->attribute("width").as_int();
+    mapLayer->height = node->attribute("height").as_int();
+
+    //Reserve the memory for the data 
+    mapLayer->tiles = new unsigned int[mapLayer->width * mapLayer->height];
+    memset(mapLayer->tiles, 0, mapLayer->width * mapLayer->height);
+
+    //Iterate over all the tiles and assign the values in the data array
+
+    std::string tileData = node->child("data").text().as_string();
+    std::stringstream ss(tileData);
+    std::string item;
+
+    int i = 0;
+    while (std::getline(ss, item, ',')) {
+        // Convert string to integer and store in the vector
+        mapLayer->tiles[i] = std::stoi(item);
+        i++;
+    }
+    return mapLayer;
+}
+
+void LevelSection::CreateMapData(xml_document* document)
+{
+
+    mapData.width = document->child("map").attribute("width").as_int();
+    mapData.height = document->child("map").attribute("height").as_int();
+    mapData.tilewidth = document->child("map").attribute("tilewidth").as_int();
+    mapData.tileheight = document->child("map").attribute("tileheight").as_int();
+}
+
+b2Body* LevelSection::CreateColliders(xml_node* node)
+{
+    b2World* world = Engine::GetInstance().scene.get()->world;
+
+    int x = node->attribute("x").as_int();
+    int y = node->attribute("y").as_int();
+
+    int width = node->attribute("width").as_int();
+    int height = node->attribute("height").as_int();
+
+    x += width / 2;
+    y += height / 2;
+
+    b2Vec2 position{ PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
+
+    b2Filter filter;
+    for (pugi::xml_node colliderProperties = node->child("properties"); colliderProperties != NULL; colliderProperties = colliderProperties.next_sibling("properties"))
+    {
+
+        pugi::xml_node layersObjectProperty = colliderProperties.find_child_by_attribute("property", "name", "OBJECT_LAYERS");
+        std::string value = layersObjectProperty.attribute("value").as_string();
+        AddLayers(&filter.categoryBits, value);
+
+        pugi::xml_node layersAffectingProperty = colliderProperties.find_child_by_attribute("property", "name", "AFFECTING_LAYERS");
+        value = layersAffectingProperty.attribute("value").as_string();
+        AddLayers(&filter.maskBits, value);
+
+
+    }
+    b2Body* collider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(width), PIXEL_TO_METERS(height));
+
+    collider->SetType(b2_staticBody);
+    collider->GetFixtureList()[0].SetFilterData(filter);
+
+    return collider;
+}
+
+void LevelSection::AddLayers(uint16* container, std::string layersInput)
+{
+    std::istringstream stream(layersInput);
+    std::string line;
+    uint16 layersToAdd = 0;
+    while (std::getline(stream, line)) {
+
+        if (line == "PLAYER_LAYER")
+            layersToAdd |= Engine::GetInstance().PLAYER_LAYER;
+        if(line == "GROUND_LAYER")
+            layersToAdd |= Engine::GetInstance().GROUND_LAYER;
+        if (line == "ENEMY_LAYER")
+            layersToAdd |= Engine::GetInstance().ENEMY_LAYER;
+        if (line == "PLAYER_ATTACK_LAYER")
+            layersToAdd |= Engine::GetInstance().PLAYER_ATTACK_LAYER;
+    }
+    *container = layersToAdd;
+}
+
+
