@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="29">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="41">
  <properties>
   <property name="BottomSection" type="int" value="3"/>
   <property name="LeftSection" type="int" value="-1"/>
@@ -148,6 +148,30 @@
    </properties>
   </object>
   <object id="28" x="304" y="80" width="96" height="128">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="29" x="288" y="176" width="16" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+  <object id="30" x="32" y="16" width="16" height="160">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+  <object id="34" x="80" y="96" width="112" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="40" x="244.667" y="84.6667" width="24.3333" height="9.33333">
    <properties>
     <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
     <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>

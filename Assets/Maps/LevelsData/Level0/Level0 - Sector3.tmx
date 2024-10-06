@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="26">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="28">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="2"/>
@@ -169,6 +169,12 @@
    <properties>
     <property name="AFFECTING_LAYERS" value="PLAYER_ATTACK_LAYER"/>
     <property name="OBJECT_LAYERS" value="ENEMY_LAYER"/>
+   </properties>
+  </object>
+  <object id="27" x="288" y="0" width="16" height="96">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
    </properties>
   </object>
  </objectgroup>

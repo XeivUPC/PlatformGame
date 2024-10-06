@@ -28,6 +28,7 @@ bool Player::Awake() {
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
 	enemyCheckController.SetSensor(enemyCheck);
+	ladderCheckController.SetSensor(ladderCheck);
 
 	attackRecoverTimer = Timer();
 	jumpRecoverTimer = Timer();
@@ -122,9 +123,13 @@ void Player::InitColliders() {
 	enemyCheckFilters.categoryBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
 	enemyCheckFilters.maskBits = Engine::GetInstance().ENEMY_LAYER;
 
-	emptyFilter.maskBits = 0x0000;
+	playerLadderFilters.categoryBits = Engine::GetInstance().USE_LADDER_LAYER;
+	playerLadderFilters.maskBits = Engine::GetInstance().LADDER_LAYER;
 
-	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(15), PIXEL_TO_METERS(29));
+	emptyFilter.maskBits = 0x0000;
+	emptyFilter.categoryBits = 0x0000;
+
+	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(13), PIXEL_TO_METERS(29));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
@@ -132,30 +137,34 @@ void Player::InitColliders() {
 		fixture->SetFilterData(playerFilters);
 	}
 
-	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(10));
 	groundCheck->SetSensor(true);
+	groundCheck->SetDensity(0);
 	groundCheck->SetFilterData(playerFilters);
 
 
-	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(2));
-	//enemyCheck->SetSensor(true)
+	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(2));
 	enemyCheck->SetFilterData(enemyCheckFilters);
 	enemyCheck->SetFriction(0);
+	enemyCheck->SetDensity(0);
 	enemyCheckController.AcceptOnlyTriggers(false);
 
+	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0), PIXEL_TO_METERS(10), PIXEL_TO_METERS(18));
+	ladderCheck->SetFilterData(playerLadderFilters);
+	ladderCheck->SetFriction(0);
+	ladderCheck->SetDensity(0);
+	ladderCheck->SetSensor(true);
+
+	playerCollider->ResetMassData();
 
 	Engine::GetInstance().box2DSensors.get()->AddSensor(&groundCheckController);
 	Engine::GetInstance().box2DSensors.get()->AddSensor(&enemyCheckController);
-
-	
+	Engine::GetInstance().box2DSensors.get()->AddSensor(&ladderCheckController);
 }
 
 
 bool Player::Update(float dt)
 {
-
-
-
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		Engine::GetInstance().render.get()->camera.x -= speed * 5 * dt / 1000;
@@ -176,9 +185,14 @@ bool Player::Update(float dt)
 
 	if (isGrounded)
 		isDoingFallAttack = false;
-	else
+	else {
 		if(previousGroundedValue)
 			coyoteTimer.Start();
+	}
+
+	if(isInLadder)
+		isDoingFallAttack = false;
+
 	if (TryShovelAttack())
 		isDoingShovelAttack = false;
 
@@ -190,18 +204,11 @@ bool Player::Update(float dt)
 		enemyCheck->SetFilterData(emptyFilter);
 	}
 
+	b2Vec2 inputValue = GetMoveInput();
 
-
-	b2Vec2 velocity{ GetMoveInput().x * dt/1000, playerCollider->GetLinearVelocity().y};
-
-	if (enemyCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
-	{
-		velocity.y = 0;
-		playerCollider->SetLinearVelocity(velocity);
-
-		DoJump(-jumpForce * fallAttackJumpMultiplier);
-	}
-
+	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
+	if (isInLadder)
+		velocity.y = inputValue.y * dt / 1000;
 
 
 	if (Engine::GetInstance().input.get()->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
@@ -211,7 +218,6 @@ bool Player::Update(float dt)
 	}
 	if (isDoingShovelAttack && isGrounded)
 		velocity.x = 0;
-
 
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
@@ -229,6 +235,20 @@ bool Player::Update(float dt)
 		}
 	}
 
+	if (ladderCheckController.IsBeingTriggered() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_X) == KEY_DOWN) {
+		isInLadder = !isInLadder;
+	}
+	else if(!ladderCheckController.IsBeingTriggered()){
+		isInLadder = false;
+	}
+
+	if (enemyCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
+	{
+		velocity.y = 0;
+		playerCollider->SetLinearVelocity(velocity);
+
+		DoJump(-jumpForce * fallAttackJumpMultiplier);
+	}
 
 	playerCollider->SetLinearVelocity(velocity);
 	SetGravityValue(playerCollider->GetLinearVelocity().y);
@@ -250,10 +270,7 @@ bool Player::Update(float dt)
 			isFlipped = true;
 	}
 
-	//Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
-
-
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) {
+	if (isInLadder) {
 		animator.SelectAnimation("Player_Climb", true);
 	}
 	else if(isDoingShovelAttack)
@@ -278,12 +295,12 @@ bool Player::Update(float dt)
 		}
 	}
 
-
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
 	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
 	Engine::GetInstance().box2DCreator.get()->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	Engine::GetInstance().box2DCreator.get()->RenderFixture(ladderCheck, b2Color{255,0,255,255});
 	if(isDoingFallAttack)
 		Engine::GetInstance().box2DCreator.get()->RenderFixture(enemyCheck, b2Color{0,255,0,255});
 
@@ -299,12 +316,19 @@ b2Vec2 Player::GetMoveInput() {
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		velocity.x += (speed);
 
+	if (isInLadder) {
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			velocity.y-= (ladderSpeed);
+
+		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+			velocity.y += (ladderSpeed);
+	}
 
 	return velocity;
 
 }
 bool Player::TryShovelAttack() {
-	if (attackRecoverTimer.ReadMSec() >= attackRecoverMS)
+	if (attackRecoverTimer.ReadMSec() >= attackRecoverMS && !isInLadder)
 		return true;
 	return false;
 }
@@ -314,7 +338,7 @@ void Player::DoShovelAttack() {
 }
 
 bool Player::TryFallAttack() {
-	if (!isGrounded && !isDoingFallAttack)
+	if (!isGrounded && !isDoingFallAttack && !isInLadder)
 		return true;
 	return false;
 }
@@ -338,11 +362,14 @@ void Player::DoJump(float force) {
 void Player::SetGravityValue(float verticalVelocity) {
 	float gravityValue = defaultGravity;
 
-	
 	if (verticalVelocity > 0) {
 		gravityValue = fallGravity;
 		if (isDoingFallAttack)
 			gravityValue = fallAttackGravity;
+	}
+
+	if (isInLadder) {
+		gravityValue = 0;
 	}
 	playerCollider->SetGravityScale(gravityValue);
 }

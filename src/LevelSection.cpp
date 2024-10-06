@@ -245,6 +245,11 @@ void LevelSection::AddLayers(uint16* container, std::string layersInput)
             layersToAdd |= Engine::GetInstance().ENEMY_LAYER;
         if (line == "PLAYER_ATTACK_LAYER")
             layersToAdd |= Engine::GetInstance().PLAYER_ATTACK_LAYER;
+        if (line == "LADDER_LAYER")
+            layersToAdd |= Engine::GetInstance().LADDER_LAYER;
+
+        if (line == "USE_LADDER_LAYER")
+            layersToAdd |= Engine::GetInstance().USE_LADDER_LAYER;
     }
     *container = layersToAdd;
 }

@@ -30,7 +30,8 @@ public:
 
 	//Player Exposed Stats
 	float speed = 150.0f;
-	float jumpForce = 93.0f;
+	float ladderSpeed = 150.0f;
+	float jumpForce = 58.0f;
 	float fallAttackJumpMultiplier = 1.1f;
 
 	
@@ -78,7 +79,6 @@ private:
 	
 
 	/// Delays
-
 	float attackRecoverMS=400;
 	Timer attackRecoverTimer;
 
@@ -108,6 +108,7 @@ private:
 		b2Filter groundCheckFilters;
 		b2Filter enemyCheckFilters;
 		b2Filter playerFilters;
+		b2Filter playerLadderFilters;
 			
 		///// GroundCollider
 		b2Fixture* groundCheck;
