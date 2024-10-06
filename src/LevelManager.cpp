@@ -25,7 +25,6 @@ bool LevelManager::LoadParameters(xml_node parameters)
 	bool ret = true;
 	this->parameters = parameters;
 	path = parameters.attribute("path").as_string();
-	
 
 	return true;
 }
@@ -35,7 +34,6 @@ bool LevelManager::Start()
 	LoadLevel(parameters.child("firstLevel").attribute("level").as_int());
 	ChargeAllLevelSection(1);
 	LoadSection(parameters.child("startingSection").attribute("section").as_int());
-
 
 	return true;
 }
@@ -52,12 +50,7 @@ bool LevelManager::Update(float dt)
 		if (pair.second != nullptr) {
 			pair.second->Update(dt);
 		}
-		else {
-			
-		}
 	}
-
-
 	return true;
 }
 
@@ -131,14 +124,11 @@ bool LevelManager::ChargeAllLevelSection(int startingIndex)
 		}
 		startingIndex++;
 	}
-
-
 	return true;
 }
 
 bool LevelManager::LoadSection(int sectionNumber)
 {
-
 	if (sectionNumber == -1)
 		return true;
 	if (loadedSections[sectionNumber] == nullptr)
@@ -159,7 +149,6 @@ bool LevelManager::LoadSection(int sectionNumber)
 		sectionsInUse.push_back(sectionToLoad->topSection);
 	if (sectionToLoad->bottomSection != -1)
 		sectionsInUse.push_back(sectionToLoad->bottomSection);
-
 
 	return true;
 }

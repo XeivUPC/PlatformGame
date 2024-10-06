@@ -32,11 +32,6 @@ class CollidersManager;
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
 
-
-
-
-
-
 class Engine
 {
 public:
