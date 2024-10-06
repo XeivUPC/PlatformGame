@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Window.h"
 #include "Render.h"
+#include "LevelManager.h"
 #include "Log.h"
 
 #define VSYNC true
@@ -39,8 +40,7 @@ bool Render::Awake()
 	}
 	else
 	{
-		camera.x = 0;
-		camera.y = 0;
+		
 
 		SDL_DisplayMode displayMode;
 		if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0)
@@ -49,6 +49,9 @@ bool Render::Awake()
 		int scale = Engine::GetInstance().window.get()->GetScale();
 		int windowWidth = Engine::GetInstance().window.get()->width;  
 		int windowHeight = Engine::GetInstance().window.get()->height;
+
+		camera.x = 0;
+		camera.y = 16 * 2 * scale;
 		
 		SDL_RenderSetLogicalSize(renderer, windowWidth * scale, windowHeight * scale);
 	}
@@ -62,6 +65,9 @@ bool Render::Start()
 	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
+
+
+
 	return true;
 }
 
@@ -106,6 +112,7 @@ void Render::ResetViewPort()
 {
 	SDL_RenderSetViewport(renderer, &viewport);
 }
+
 
 // Blit to screen
 bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip flipMode, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const

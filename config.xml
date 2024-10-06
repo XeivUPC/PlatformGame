@@ -10,9 +10,14 @@
     </render>
 
     <window>
-        <resolution width="400" height="240" scale="3"/>
+        <resolution width="400" height="240" scale="4"/>
         <fullscreen_window value="false"/>
     </window>
+
+	<audio>
+		<music path ="Assets/Musics/"/>
+		<sfx path ="Assets/Sounds/"/>
+	</audio>
 
     <scene>
         <player x="100" y="100" texturePath="Assets/Textures/Player/ShovelKnight_Atlas2.png"/>
@@ -21,6 +26,6 @@
 
 	<levels path="Assets/Maps/LevelsData/">
 		<firstLevel level ="0"/>
-		<startingSection section ="3"/>
+		<startingSection section ="1"/>
 	</levels>
 </config>

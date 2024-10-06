@@ -23,7 +23,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(16, 16*8);
+	position = Vector2D(16*8, 16*8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
@@ -33,7 +33,7 @@ bool Player::Awake() {
 	jumpRecoverTimer = Timer();
 
 	/// Texture, index, size, pivot
-
+	jumpSoundId = Engine::GetInstance().audio.get()->LoadFx("Player_Jump.wav");
 	
 
 
@@ -83,6 +83,15 @@ void Player::InitAnimations() {
 	attack.AddSprite(Sprite{ texture,{2.0f, 5.0f}, {70, 70}});
 	attack.AddSprite(Sprite{ texture,{3.0f, 5.0f}, {70, 70}});
 
+	AnimationData climb = AnimationData("Player_Climb");
+	climb.AddSprite(Sprite{ texture,{1.0f, 6.0f}, {70, 70} });
+	climb.AddSprite(Sprite{ texture,{1.0f, 6.0f}, {70, 70} });
+	climb.AddSprite(Sprite{ texture,{2.0f, 6.0f}, {70, 70} });
+	climb.AddSprite(Sprite{ texture,{2.0f, 6.0f}, {70, 70} });
+
+	AnimationData climb_exit = AnimationData("Player_Exit_Climb");
+	climb_exit.AddSprite(Sprite{ texture,{0.0f, 6.0f}, {70, 70} });
+
 
 	animator.AddAnimation(idle);
 	animator.AddAnimation(idle2);
@@ -91,6 +100,8 @@ void Player::InitAnimations() {
 	animator.AddAnimation(jump_fall);
 	animator.AddAnimation(fall_attack);
 	animator.AddAnimation(attack);
+	animator.AddAnimation(climb);
+	animator.AddAnimation(climb_exit);
 	animator.SelectAnimation("Player_Idle", true);
 
 	animator.SetSpeed(100);
@@ -142,6 +153,24 @@ void Player::InitColliders() {
 
 bool Player::Update(float dt)
 {
+
+
+
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		Engine::GetInstance().render.get()->camera.x -= speed * 5 * dt / 1000;
+
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		Engine::GetInstance().render.get()->camera.x += speed * 5 * dt / 1000;
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		Engine::GetInstance().render.get()->camera.y += speed * 5 * dt / 1000;
+
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		Engine::GetInstance().render.get()->camera.y -= speed * 5 * dt / 1000;
+
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
 
@@ -170,7 +199,7 @@ bool Player::Update(float dt)
 		velocity.y = 0;
 		playerCollider->SetLinearVelocity(velocity);
 
-		DoJump(-jumpForce*1.15f);
+		DoJump(-jumpForce * fallAttackJumpMultiplier);
 	}
 
 
@@ -193,6 +222,7 @@ bool Player::Update(float dt)
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		if (TryJump()) {
+			Engine::GetInstance().audio.get()->PlayFx(jumpSoundId);
 			velocity.y = 0;			
 			playerCollider->SetLinearVelocity(velocity);
 			DoJump(-jumpForce);
@@ -222,7 +252,11 @@ bool Player::Update(float dt)
 
 	//Engine::GetInstance().render.get()->DrawTexture(texture, METERS_TO_PIXELS(position.getX()+ textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y),(SDL_RendererFlip)isFlipped);
 
-	if(isDoingShovelAttack)
+
+	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_X) == KEY_REPEAT) {
+		animator.SelectAnimation("Player_Climb", true);
+	}
+	else if(isDoingShovelAttack)
 		animator.SelectAnimation("Player_Attack", true);
 	else if (isGrounded) {
 		if (velocity.x == 0)
@@ -264,6 +298,8 @@ b2Vec2 Player::GetMoveInput() {
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		velocity.x += (speed);
+
+
 	return velocity;
 
 }

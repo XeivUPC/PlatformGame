@@ -154,7 +154,7 @@ void Box2DCreator::RenderFixture(b2Fixture* fixture, b2Color color)
 		// Render the polygon as a filled shape using DrawLine to connect vertices
 		for (int i = 0; i < vertexCount; ++i) {
 			int next = (i + 1) % vertexCount;  // Wrap around to the first vertex
-			render->DrawLine(points[i].x, points[i].y, points[next].x, points[next].y, color.r, color.g, color.b, color.a, false);
+			render->DrawLine(points[i].x, points[i].y, points[next].x, points[next].y, color.r, color.g, color.b, color.a, true);
 		}
 
 	}
@@ -173,7 +173,7 @@ void Box2DCreator::RenderFixture(b2Fixture* fixture, b2Color color)
 
 		int scale = Engine::GetInstance().window.get()->GetScale();
 		// Draw the circle using the custom DrawCircle method
-		render->DrawCircle(screenX, screenY, screenRadius * scale, color.r, color.g, color.b, color.a, false);
+		render->DrawCircle(screenX, screenY, screenRadius * scale, color.r, color.g, color.b, color.a, true);
 	}
 }
 

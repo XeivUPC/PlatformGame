@@ -26,6 +26,8 @@ public:
 	// Play a music file
 	bool PlayMusic(const char* path, float fadeTime = DEFAULT_MUSIC_FADE_TIME);
 
+	bool LoadParameters(xml_node parameters);
+
 	// Load a WAV in memory
 	int LoadFx(const char* path);
 
@@ -33,6 +35,9 @@ public:
 	bool PlayFx(int fx, int repeat = 0);
 
 private:
+	xml_node configParameters;
+	std::string sfxPath;
+	std::string musicPath;
 
 	_Mix_Music* music;
 	std::list<Mix_Chunk*> fx;

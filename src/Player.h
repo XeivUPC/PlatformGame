@@ -25,11 +25,13 @@ public:
 
 	bool CleanUp();
 
+
 public:
 
 	//Player Exposed Stats
 	float speed = 150.0f;
-	float jumpForce = 80.0f;
+	float jumpForce = 93.0f;
+	float fallAttackJumpMultiplier = 1.1f;
 
 	
 	std::string textureName; 
@@ -88,6 +90,10 @@ private:
 	/// Animator
 	Animator animator;
 	void InitAnimations();
+
+
+	//// Audio
+	int jumpSoundId;
 
 
 	//// Colliders

@@ -33,7 +33,7 @@ bool LevelSection::Update(float dt)
                 Vector2D mapCoord = MapToWorld(i, j);
 
                 // Complete the draw function
-                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX(), mapCoord.getY(), SDL_FLIP_NONE, &tileRect);
+                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX() + sectionOffset.x, mapCoord.getY() + sectionOffset.y, SDL_FLIP_NONE, &tileRect);
 
             }
         }
@@ -74,8 +74,10 @@ bool LevelSection::CleanUp()
     return true;
 }
 
-bool LevelSection::Load(std::string fileName, std::string texturePath)
+
+bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset)
 {
+
     bool ret = true;
 
     // L05: DONE 3: Implement LoadMap to load the map properties
@@ -89,6 +91,18 @@ bool LevelSection::Load(std::string fileName, std::string texturePath)
         ret = false;
     }
     else {
+
+        sectionOffset = offset;
+        pugi::xml_node mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "BottomSection");
+        bottomSection = mapProperties.attribute("value").as_int();
+        mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "TopSection");
+        topSection = mapProperties.attribute("value").as_int();
+        mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "LeftSection");
+        leftSection = mapProperties.attribute("value").as_int();
+        mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "RightSection");
+        rightSection = mapProperties.attribute("value").as_int();
+
+
         CreateMapData(&mapFileXML);
         for (pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode != NULL; tilesetNode = tilesetNode.next_sibling("tileset")) {
             TileSet* tileset = CreateTileset(&tilesetNode, texturePath);
@@ -192,7 +206,7 @@ b2Body* LevelSection::CreateColliders(xml_node* node)
     x += width / 2;
     y += height / 2;
 
-    b2Vec2 position{ PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
+    b2Vec2 position{ PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS(y) + PIXEL_TO_METERS(sectionOffset.y) };
 
     b2Filter filter;
     for (pugi::xml_node colliderProperties = node->child("properties"); colliderProperties != NULL; colliderProperties = colliderProperties.next_sibling("properties"))
