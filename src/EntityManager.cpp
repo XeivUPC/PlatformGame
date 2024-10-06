@@ -5,9 +5,11 @@
 #include "Scene.h"
 #include "Log.h"
 
+
 EntityManager::EntityManager() : Module()
 {
 	name = "entitymanager";
+
 }
 
 // Destructor
@@ -54,8 +56,8 @@ bool EntityManager::CleanUp()
 	{
 		if (entity->active == false) continue;
 		ret = entity->CleanUp();
+		delete entity;
 	}
-
 	entities.clear();
 
 	return ret;

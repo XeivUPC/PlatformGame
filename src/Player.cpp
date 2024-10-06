@@ -9,6 +9,8 @@
 #include "Scene.h"
 #include "Log.h"
 
+
+
 Player::Player() : Entity(EntityType::PLAYER)
 {
 	name = "Player";
@@ -21,7 +23,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(0, 0);
+	position = Vector2D(16, 16*8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
@@ -48,6 +50,8 @@ bool Player::Start() {
 }
 
 void Player::InitAnimations() {
+
+
 	AnimationData idle = AnimationData("Player_Idle");
 	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
 
@@ -101,29 +105,30 @@ void Player::InitColliders() {
 
 	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
-	b2Filter playerCollidersFilter;
-	playerCollidersFilter.categoryBits = Engine::GetInstance().PLAYER_LAYER;
-	playerCollidersFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
+	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
+	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
 
-	b2Filter enemyCollidersFilter;
-	enemyCollidersFilter.categoryBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
-	enemyCollidersFilter.maskBits = Engine::GetInstance().ENEMY_LAYER;
+	enemyCheckFilters.categoryBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
+	enemyCheckFilters.maskBits = Engine::GetInstance().ENEMY_LAYER;
+
+	emptyFilter.maskBits = 0x0000;
 
 	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(15), PIXEL_TO_METERS(29));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
 		fixture->SetFriction(0);
-		fixture->SetFilterData(playerCollidersFilter);
+		fixture->SetFilterData(playerFilters);
 	}
+
 	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
 	groundCheck->SetSensor(true);
-	groundCheck->SetFilterData(playerCollidersFilter);
+	groundCheck->SetFilterData(playerFilters);
 
 
-	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10));
-	//enemyCheck->SetSensor(true);
-	enemyCheck->SetFilterData(enemyCollidersFilter);
+	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(2));
+	//enemyCheck->SetSensor(true)
+	enemyCheck->SetFilterData(enemyCheckFilters);
 	enemyCheck->SetFriction(0);
 	enemyCheckController.AcceptOnlyTriggers(false);
 
@@ -148,6 +153,15 @@ bool Player::Update(float dt)
 	if (TryShovelAttack())
 		isDoingShovelAttack = false;
 
+	if (isDoingFallAttack && !isDoingShovelAttack)
+	{
+		enemyCheck->SetFilterData(enemyCheckFilters);
+	}
+	else {
+		enemyCheck->SetFilterData(emptyFilter);
+	}
+
+
 
 	b2Vec2 velocity{ GetMoveInput().x * dt/1000, playerCollider->GetLinearVelocity().y};
 
@@ -156,7 +170,7 @@ bool Player::Update(float dt)
 		velocity.y = 0;
 		playerCollider->SetLinearVelocity(velocity);
 
-		DoJump(-jumpForce*1.25f);
+		DoJump(-jumpForce*1.15f);
 	}
 
 
@@ -246,10 +260,10 @@ bool Player::Update(float dt)
 b2Vec2 Player::GetMoveInput() {
 	b2Vec2 velocity{ 0,0 };
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		velocity.x = (-speed);
+		velocity.x -= (speed);
 
 	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		velocity.x = (speed);
+		velocity.x += (speed);
 	return velocity;
 
 }

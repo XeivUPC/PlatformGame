@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "Engine.h"
 
+
 Window::Window() : Module()
 {
 	window = NULL;

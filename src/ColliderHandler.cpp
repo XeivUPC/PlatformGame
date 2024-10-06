@@ -1,5 +1,11 @@
 #include "ColliderHandler.h"
 
+
+ColliderHandler::ColliderHandler()
+{
+
+}
+
 void ColliderHandler::SetSensor(b2Fixture* bodyToTrack)
 {
     this->bodyToTrack = bodyToTrack;

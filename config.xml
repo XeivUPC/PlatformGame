@@ -15,7 +15,12 @@
     </window>
 
     <scene>
-        <player x="100" y="100" texturePath="Assets/Textures/ShovelKnight_Atlas2.png"/>
+        <player x="100" y="100" texturePath="Assets/Textures/Player/ShovelKnight_Atlas2.png"/>
         <map path="Assets/Maps/" name="MapTemplate.tmx"/>
-     </scene>
+    </scene>
+
+	<levels path="Assets/Maps/LevelsData/">
+		<firstLevel level ="0"/>
+		<startingSection section ="3"/>
+	</levels>
 </config>

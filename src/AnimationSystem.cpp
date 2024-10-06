@@ -1,7 +1,9 @@
 #include "AnimationSystem.h"
 #include "Timer.h"
 #include "Render.h"
+#include "Textures.h"
 #include "Engine.h"
+
 
 SDL_Rect AnimationData::GetSpriteRect(int spriteIndex)
 {
@@ -41,6 +43,16 @@ AnimationData::AnimationData(const char* n)
 	name = n;
 }
 
+AnimationData::AnimationData()
+{
+}
+
+AnimationData::~AnimationData()
+{
+	sprites.clear();
+}
+
+
 void Animator::Next()
 {
 	if (customSpriteRangeStart != -1 && customSpriteRangeEnd != -1)
@@ -79,6 +91,12 @@ void Animator::Next()
 
 Animator::Animator()
 {
+
+}
+
+Animator::~Animator()
+{
+	animations.clear();
 }
 
 Animator::Animator(std::vector<AnimationData> anims, float s)

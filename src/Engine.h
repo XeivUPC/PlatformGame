@@ -17,7 +17,7 @@ class Textures;
 class Audio;
 class Scene;
 class EntityManager;
-class Map;
+class LevelManager;
 class Box2DCreator;
 class CollidersManager;
 
@@ -115,7 +115,7 @@ public:
 	std::shared_ptr<Audio> audio;
 	std::shared_ptr<Scene> scene;
 	std::shared_ptr<EntityManager> entityManager;
-	std::shared_ptr<Map> map;
+	std::shared_ptr<LevelManager> levelManager;
 	std::shared_ptr<Box2DCreator> box2DCreator;
 	std::shared_ptr<CollidersManager> box2DSensors;
 

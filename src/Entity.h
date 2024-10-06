@@ -13,7 +13,7 @@ class Entity
 {
 public:
 
-	Entity(EntityType type) : type(type), active(true) {}
+	Entity(EntityType type) : type(type), active(true) {  }
 
 	virtual bool Awake()
 	{

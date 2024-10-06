@@ -4,7 +4,7 @@
 class ColliderHandler
 {
 public:
-
+    ColliderHandler();
     void SetSensor(b2Fixture* bodyToTrack);
     bool IsBeingTriggered();
     void AcceptOnlyTriggers(bool acceptOnlyTriggers);

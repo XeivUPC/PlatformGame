@@ -1,26 +1,238 @@
 #include "LevelSection.h"
+#include "LOG.h"
+#include "Engine.h"
+#include "Textures.h"
+#include "Scene.h"
+#include <sstream> 
+#include "Render.h"
+#include "Box2DCreator.h"
 
-bool LevelSection::LoadSectionData()
+LevelSection::LevelSection()
 {
+
+}
+
+LevelSection::~LevelSection()
+{
+}
+
+bool LevelSection::Update(float dt)
+{
+
+    for (const auto& mapLayer : mapData.layers) {
+
+        for (int i = 0; i < mapData.width; i++) {
+            for (int j = 0; j < mapData.height; j++) {
+                //Get the gid from tile
+                int gid = mapLayer->Get(i, j) -1;
+                if (gid < 0)
+                    continue;
+                //Get the Rect from the tileSetTexture;
+                SDL_Rect tileRect = mapData.tilesets.front()->GetRect(gid);
+                //Get the screen coordinates from the tile coordinates
+                Vector2D mapCoord = MapToWorld(i, j);
+
+                // Complete the draw function
+                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX(), mapCoord.getY(), SDL_FLIP_NONE, &tileRect);
+
+            }
+        }
+    }
+
+    for (auto*& collider : colliders)
+    {
+        Engine::GetInstance().box2DCreator.get()->RenderBody(collider, b2Color{ 0,255,0,255 });
+    }
+
 	return true;
 }
 
-int LevelSection::GetLeftSectionNumber()
+bool LevelSection::CleanUp()
 {
-	return leftSection;
+    LOG("Unloading map");
+
+    // Make sure you clean up any memory allocated from tilesets/map
+    for (const auto& tileset : mapData.tilesets) {
+        Engine::GetInstance().textures.get()->UnLoad(tileset->texture);
+        delete tileset;
+    }
+    mapData.tilesets.clear();
+
+    // clean up all layer data
+    for (const auto& layer : mapData.layers)
+    {
+        delete layer->tiles;
+        delete layer;
+    }
+    mapData.layers.clear();
+
+    for (auto*& collider : colliders)
+    {
+        Engine::GetInstance().scene.get()->world->DestroyBody(collider);
+    }
+
+    return true;
 }
 
-int LevelSection::GetRightSectionNumber()
+bool LevelSection::Load(std::string fileName, std::string texturePath)
 {
-	return rightSection;
+    bool ret = true;
+
+    // L05: DONE 3: Implement LoadMap to load the map properties
+    // retrieve the paremeters of the <map> node and save it into map data
+    pugi::xml_document mapFileXML;
+    pugi::xml_parse_result result = mapFileXML.load_file(fileName.c_str());
+
+    if (result == NULL)
+    {
+        LOG("Could not load map xml file %s. pugi error: %s", fileName.c_str(), result.description());
+        ret = false;
+    }
+    else {
+        CreateMapData(&mapFileXML);
+        for (pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode != NULL; tilesetNode = tilesetNode.next_sibling("tileset")) {
+            TileSet* tileset = CreateTileset(&tilesetNode, texturePath);
+            mapData.tilesets.push_back(tileset);
+        }
+        for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
+            MapLayer* mapLayer = CreateMapLayer(&layerNode);
+            mapData.layers.push_back(mapLayer);
+        }
+        for (pugi::xml_node colliderNode = mapFileXML.child("map").find_child_by_attribute("objectgroup", "name", "Colliders").child("object"); colliderNode != NULL; colliderNode = colliderNode.next_sibling("object")) {
+
+            b2Body* collider = CreateColliders(&colliderNode);
+            colliders.push_back(collider);
+        }
+        if (mapFileXML) mapFileXML.reset();
+    }
+    return ret;
 }
 
-int LevelSection::GetTopSectionNumber()
+
+Vector2D LevelSection::MapToWorld(int x, int y) const
 {
-	return topSection;
+    Vector2D ret;
+
+    ret.setX(x * mapData.tilewidth);
+    ret.setY(y * mapData.tileheight);
+
+    return ret;
 }
 
-int LevelSection::GetBottomSectionNumber()
+TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
 {
-	return bottomSection;
+    TileSet* tileset = new TileSet();
+
+    std::string tsxFileName = node->attribute("source").as_string();
+    tsxFileName = tsxFileName.substr(3);
+
+    std::string tsxFilePath = texturePath + tsxFileName;
+    pugi::xml_document document;
+    pugi::xml_parse_result result2 = document.load_file(tsxFilePath.c_str());
+
+    tileset->name = document.child("tileset").attribute("name").as_string();
+    tileset->firstgid = document.child("tileset").attribute("firstgid").as_int();
+    tileset->tilewidth = document.child("tileset").attribute("tilewidth").as_int();
+    tileset->tileheight = document.child("tileset").attribute("tileheight").as_int();
+    tileset->columns = document.child("tileset").attribute("columns").as_int();
+
+    std::string mapTex = texturePath;
+    mapTex += document.child("tileset").child("image").attribute("source").as_string();
+    tileset->texture = Engine::GetInstance().textures.get()->Load(mapTex.c_str());
+    return tileset;
 }
+
+MapLayer* LevelSection::CreateMapLayer(xml_node* node)
+{
+    MapLayer* mapLayer = new MapLayer();
+
+    mapLayer->id = node->attribute("id").as_int();
+    mapLayer->name = node->attribute("name").as_string();
+    mapLayer->width = node->attribute("width").as_int();
+    mapLayer->height = node->attribute("height").as_int();
+
+    //Reserve the memory for the data 
+    mapLayer->tiles = new unsigned int[mapLayer->width * mapLayer->height];
+    memset(mapLayer->tiles, 0, mapLayer->width * mapLayer->height);
+
+    //Iterate over all the tiles and assign the values in the data array
+
+    std::string tileData = node->child("data").text().as_string();
+    std::stringstream ss(tileData);
+    std::string item;
+
+    int i = 0;
+    while (std::getline(ss, item, ',')) {
+        // Convert string to integer and store in the vector
+        mapLayer->tiles[i] = std::stoi(item);
+        i++;
+    }
+    return mapLayer;
+}
+
+void LevelSection::CreateMapData(xml_document* document)
+{
+
+    mapData.width = document->child("map").attribute("width").as_int();
+    mapData.height = document->child("map").attribute("height").as_int();
+    mapData.tilewidth = document->child("map").attribute("tilewidth").as_int();
+    mapData.tileheight = document->child("map").attribute("tileheight").as_int();
+}
+
+b2Body* LevelSection::CreateColliders(xml_node* node)
+{
+    b2World* world = Engine::GetInstance().scene.get()->world;
+
+    int x = node->attribute("x").as_int();
+    int y = node->attribute("y").as_int();
+
+    int width = node->attribute("width").as_int();
+    int height = node->attribute("height").as_int();
+
+    x += width / 2;
+    y += height / 2;
+
+    b2Vec2 position{ PIXEL_TO_METERS(x), PIXEL_TO_METERS(y) };
+
+    b2Filter filter;
+    for (pugi::xml_node colliderProperties = node->child("properties"); colliderProperties != NULL; colliderProperties = colliderProperties.next_sibling("properties"))
+    {
+
+        pugi::xml_node layersObjectProperty = colliderProperties.find_child_by_attribute("property", "name", "OBJECT_LAYERS");
+        std::string value = layersObjectProperty.attribute("value").as_string();
+        AddLayers(&filter.categoryBits, value);
+
+        pugi::xml_node layersAffectingProperty = colliderProperties.find_child_by_attribute("property", "name", "AFFECTING_LAYERS");
+        value = layersAffectingProperty.attribute("value").as_string();
+        AddLayers(&filter.maskBits, value);
+
+
+    }
+    b2Body* collider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(width), PIXEL_TO_METERS(height));
+
+    collider->SetType(b2_staticBody);
+    collider->GetFixtureList()[0].SetFilterData(filter);
+
+    return collider;
+}
+
+void LevelSection::AddLayers(uint16* container, std::string layersInput)
+{
+    std::istringstream stream(layersInput);
+    std::string line;
+    uint16 layersToAdd = 0;
+    while (std::getline(stream, line)) {
+
+        if (line == "PLAYER_LAYER")
+            layersToAdd |= Engine::GetInstance().PLAYER_LAYER;
+        if(line == "GROUND_LAYER")
+            layersToAdd |= Engine::GetInstance().GROUND_LAYER;
+        if (line == "ENEMY_LAYER")
+            layersToAdd |= Engine::GetInstance().ENEMY_LAYER;
+        if (line == "PLAYER_ATTACK_LAYER")
+            layersToAdd |= Engine::GetInstance().PLAYER_ATTACK_LAYER;
+    }
+    *container = layersToAdd;
+}
+
+

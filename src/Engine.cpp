@@ -12,14 +12,14 @@
 #include "Audio.h"
 #include "Scene.h"
 #include "EntityManager.h"
-#include "Map.h"
+#include "LevelManager.h"
 
 
 
 
 // Constructor
 Engine::Engine() {
-
+    
 	LOG("Constructor Engine::Engine");
 
     //Measure the amount of ms that takes to execute the App constructor and LOG the result
@@ -36,7 +36,7 @@ Engine::Engine() {
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
     scene = std::make_shared<Scene>();
-    map = std::make_shared<Map>();
+    levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
 
     box2DCreator = std::make_shared<Box2DCreator>();
@@ -49,9 +49,9 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(textures));
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(scene));
-    // Add the map module
-    AddModule(std::static_pointer_cast<Module>(map));
-    // Add the entity manager
+    //// Add the map module
+    AddModule(std::static_pointer_cast<Module>(levelManager));
+    //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
 
     // Render last 

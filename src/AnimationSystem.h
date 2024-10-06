@@ -15,7 +15,7 @@ class AnimationData
 {
 	friend class Animator;
 private:
-	const char* name;
+	const char* name = "";
 	std::vector <Sprite> sprites;
 protected:
 	SDL_Rect GetSpriteRect(int spriteIndex);
@@ -25,7 +25,8 @@ public:
 	void AddSprite(Sprite sprite);
 	AnimationData(const char* n, std::vector<Sprite> s);
 	AnimationData(const char* n);
-	AnimationData() {};
+	AnimationData();
+	~AnimationData();
 
 };
 
@@ -43,6 +44,7 @@ private:
 
 public:
 	Animator();
+	~Animator();
 	Animator(std::vector<AnimationData> anims, float s);
 	void AddAnimation(AnimationData anim);
 	void SelectAnimation(const char* animName, bool l);

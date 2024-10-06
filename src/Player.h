@@ -29,7 +29,7 @@ public:
 
 	//Player Exposed Stats
 	float speed = 150.0f;
-	float jumpForce = 95.0f;
+	float jumpForce = 80.0f;
 
 	
 	std::string textureName; 
@@ -92,9 +92,17 @@ private:
 
 	//// Colliders
 	void InitColliders();
+		///// Filters
+		b2Filter emptyFilter;
+
+		b2Filter groundCheckFilters;
+		b2Filter enemyCheckFilters;
+		b2Filter playerFilters;
+			
 		///// GroundCollider
 		b2Fixture* groundCheck;
 		ColliderHandler groundCheckController;
+		
 
 		//// EnemyCollider
 		b2Fixture* enemyCheck;
