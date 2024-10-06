@@ -59,6 +59,7 @@ private:
 	bool isDoingFallAttack = false;
 	bool isDoingShovelAttack = false;
 	bool isFlipped=false;
+	bool isInLadder = false;
 
 	/// MAX VALUES
 	const float MAX_FALL_SPEED = 100.0f;
@@ -80,6 +81,9 @@ private:
 
 	float attackRecoverMS=400;
 	Timer attackRecoverTimer;
+
+	float exitLadderTimeMS = 100;
+	Timer exitLadderTimer;
 
 	float jumpRecoverMS= 150;
 	Timer jumpRecoverTimer;
@@ -113,6 +117,10 @@ private:
 		//// EnemyCollider
 		b2Fixture* enemyCheck;
 		ColliderHandler enemyCheckController;
+
+		//// LadderCollider
+		b2Fixture* ladderCheck;
+		ColliderHandler ladderCheckController;
 
 		///// Player Collider
 		b2Body* playerCollider;
