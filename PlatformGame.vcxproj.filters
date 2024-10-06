@@ -99,6 +99,12 @@
     <ClCompile Include="src\LevelSection.cpp">
       <Filter>Source Files\Game\LevelRelated</Filter>
     </ClCompile>
+    <ClCompile Include="src\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Parallax.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -169,6 +175,10 @@
     </ClInclude>
     <ClInclude Include="src\MemLeaks.h">
       <Filter>Source Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\Parallax.h">
+      <Filter>Source Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -115,7 +115,7 @@ bool Enemy::Update(float dt)
 bool Enemy::CleanUp()
 {
 	LOG("Cleanup enemy");
-	Engine::GetInstance().scene->world->DestroyBody();
+	Engine::GetInstance().scene->world->DestroyBody(enemyCollider);
 	Engine::GetInstance().textures.get()->UnLoad(texture);
 	return true;
 }

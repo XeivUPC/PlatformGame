@@ -158,6 +158,7 @@
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LevelSection.cpp" />
     <ClCompile Include="src\Log.cpp" />
+    <ClCompile Include="src\Parallax.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\PlatformGame.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\MemLeaks.h" />
     <ClInclude Include="src\Module.h" />
+    <ClInclude Include="src\Parallax.h" />
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Render.h" />

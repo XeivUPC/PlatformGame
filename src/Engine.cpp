@@ -31,6 +31,7 @@ Engine::Engine() {
 
     // Modules
     window = std::make_shared<Window>();
+    parallax = std::make_shared<Parallax>();
     input = std::make_shared<Input>();
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
@@ -44,6 +45,7 @@ Engine::Engine() {
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
+    AddModule(std::static_pointer_cast<Module>(parallax));
     AddModule(std::static_pointer_cast<Module>(window));
     AddModule(std::static_pointer_cast<Module>(input));
     AddModule(std::static_pointer_cast<Module>(textures));
@@ -54,7 +56,7 @@ Engine::Engine() {
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
 
-    // Render last 
+    // Render last
     AddModule(std::static_pointer_cast<Module>(render));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
