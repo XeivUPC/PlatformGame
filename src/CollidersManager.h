@@ -4,7 +4,7 @@
 
 class ColliderHandler;
 
-class CollidersManager : public b2ContactListener {
+class CollidersManager : public b2ContactListener { //collisionmanager, collisiondector
 public:
     CollidersManager();
     ~CollidersManager();

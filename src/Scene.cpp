@@ -34,8 +34,8 @@ bool Scene::Awake()
 	//Get the player texture name from the config file and assigns the value
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-
-	world->SetContactListener(Engine::GetInstance().box2DSensors.get());
+	const std::shared_ptr<CollidersManager>& box2DSensor = Engine::GetInstance().box2DSensors;
+	world->SetContactListener(box2DSensor.get());
 
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
@@ -67,10 +67,10 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_E) == KEY_DOWN){
-		if (player->active == true) player->Disable();
-		else player->Enable();
-	}
+	//if(Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN){
+	//	if (player->active == true) player->Disable();
+	//	else player->Enable();
+	//}
 
 
 	return true;
@@ -82,7 +82,7 @@ bool Scene::PostUpdate()
 	bool ret = true;
 
 	// Detects if the player wants to exit the game with ESC key
-	if(Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	if(Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 	return ret;
 }

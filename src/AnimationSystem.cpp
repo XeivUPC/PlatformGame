@@ -145,6 +145,8 @@ void Animator::SetSpeed(float s)
 
 void Animator::Update(float dt)
 {
+	if (!isPlaying)
+		return;
 	timer -= dt;
 	if (timer <= 0)
 	{
@@ -157,7 +159,12 @@ void Animator::Update(float dt)
 void Animator::Animate(int x, int y, SDL_RendererFlip flip)
 {	
 	SDL_Rect rect = animations[currentAnimation].GetSpriteRect(currentSprite);
-	Engine::GetInstance().render.get()->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect, 1, 0);
+	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect, 1, 0);
+}
+
+void Animator::SetIfPlaying(bool isPlaying)
+{
+	this->isPlaying = isPlaying;
 }
 
 const char* Animator::GetCurrentAnimationName()

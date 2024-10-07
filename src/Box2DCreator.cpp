@@ -6,6 +6,7 @@
 
 b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius)
 {
+	
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.position.Set(position.x, position.y);
@@ -90,7 +91,7 @@ b2Fixture* Box2DCreator::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float rad
 	circleFixtureDef.friction = 0.3f;
 
 
-	return bodyToAddTo->CreateFixture(&circleFixtureDef);;
+	return bodyToAddTo->CreateFixture(&circleFixtureDef);
 }
 
 b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height)
@@ -117,8 +118,8 @@ b2Fixture* Box2DCreator::AddCapsule(b2Body* bodyToAddTo, b2Vec2 offset, float wi
 
 void Box2DCreator::RenderBody(b2Body* body, b2Color color)
 {
-	b2World* world = Engine::GetInstance().scene.get()->world;
-	Render* render = Engine::GetInstance().render.get();
+	b2World* world = Engine::GetInstance().scene->world;
+	const std::shared_ptr<Render>& render = Engine::GetInstance().render;
 
 	for (b2Fixture* fixture = body->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext()) {
 		// Get the shape type (polygon or circle)
@@ -130,7 +131,7 @@ void Box2DCreator::RenderFixture(b2Fixture* fixture, b2Color color)
 {
 	b2Body* body = fixture->GetBody();
 	b2Shape::Type shapeType = fixture->GetType();
-	Render* render = Engine::GetInstance().render.get();
+	const std::shared_ptr<Render>& render = Engine::GetInstance().render;
 
 	// Handle polygon shapes (for rectangles)
 	if (shapeType == b2Shape::e_polygon) {
@@ -171,7 +172,7 @@ void Box2DCreator::RenderFixture(b2Fixture* fixture, b2Color color)
 		int screenY = (int)(METERS_TO_PIXELS(center.y));
 		int screenRadius = (int)(METERS_TO_PIXELS(radius));
 
-		int scale = Engine::GetInstance().window.get()->GetScale();
+		int scale = Engine::GetInstance().window->GetScale();
 		// Draw the circle using the custom DrawCircle method
 		render->DrawCircle(screenX, screenY, screenRadius * scale, color.r, color.g, color.b, color.a, true);
 	}

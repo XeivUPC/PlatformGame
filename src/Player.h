@@ -30,7 +30,7 @@ public:
 
 	//Player Exposed Stats
 	float speed = 150.0f;
-	float ladderSpeed = 150.0f;
+	float ladderSpeed = 50.0f;
 	float jumpForce = 58.0f;
 	float fallAttackJumpMultiplier = 1.1f;
 

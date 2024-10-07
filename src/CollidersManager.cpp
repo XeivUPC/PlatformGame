@@ -13,7 +13,7 @@ CollidersManager::~CollidersManager()
 
 void CollidersManager::AddSensor(ColliderHandler* sensor)
 {
-    sensors.push_back(sensor);
+    sensors.emplace_back(sensor);
 }
 
 void CollidersManager::RemoveSensor(ColliderHandler* sensor)
@@ -26,6 +26,11 @@ void CollidersManager::BeginContact(b2Contact* contact)
     for (auto sensor : sensors) {
         sensor->BeginContact(contact);
     }
+
+    /*class Sensor;
+    const b2BodyUserData& userData = contact->GetFixtureA()->GetBody()->GetUserData();
+    Sensor* sensorA = (Sensor*)userData.pointer;
+    Sensor* sensorB = ....;*/
 }
 
 void CollidersManager::EndContact(b2Contact* contact)

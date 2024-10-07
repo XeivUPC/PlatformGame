@@ -115,7 +115,10 @@ bool Input::PreUpdate()
 			break;
 
 			case SDL_MOUSEMOTION:
-				int scale = Engine::GetInstance().window.get()->GetScale();
+				int scale = Engine::GetInstance().window
+					
+					
+					->GetScale();
 				mouseMotionX = event.motion.xrel / scale;
 				mouseMotionY = event.motion.yrel / scale;
 				mouseX = event.motion.x / scale;

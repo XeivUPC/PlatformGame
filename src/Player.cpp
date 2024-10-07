@@ -34,7 +34,7 @@ bool Player::Awake() {
 	jumpRecoverTimer = Timer();
 
 	/// Texture, index, size, pivot
-	jumpSoundId = Engine::GetInstance().audio.get()->LoadFx("Player_Jump.wav");
+	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
 	
 
 
@@ -43,7 +43,7 @@ bool Player::Awake() {
 
 bool Player::Start() {
 
-	texture = Engine::GetInstance().textures.get()->Load(textureName.c_str());
+	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
 	InitAnimations();
 
@@ -110,8 +110,8 @@ void Player::InitAnimations() {
 
 void Player::InitColliders() {
 
-	Box2DCreator* colliderCreator = Engine::GetInstance().box2DCreator.get();
-	b2World* world = Engine::GetInstance().scene.get()->world;
+	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
+	b2World* world = Engine::GetInstance().scene->world;
 
 	///PlayerCollider
 
@@ -149,7 +149,7 @@ void Player::InitColliders() {
 	enemyCheck->SetDensity(0);
 	enemyCheckController.AcceptOnlyTriggers(false);
 
-	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0), PIXEL_TO_METERS(10), PIXEL_TO_METERS(18));
+	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(7)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(15));
 	ladderCheck->SetFilterData(playerLadderFilters);
 	ladderCheck->SetFriction(0);
 	ladderCheck->SetDensity(0);
@@ -157,28 +157,29 @@ void Player::InitColliders() {
 
 	playerCollider->ResetMassData();
 
-	Engine::GetInstance().box2DSensors.get()->AddSensor(&groundCheckController);
-	Engine::GetInstance().box2DSensors.get()->AddSensor(&enemyCheckController);
-	Engine::GetInstance().box2DSensors.get()->AddSensor(&ladderCheckController);
+	//No necesario
+	Engine::GetInstance().box2DSensors->AddSensor(&groundCheckController);
+	Engine::GetInstance().box2DSensors->AddSensor(&enemyCheckController);
+	Engine::GetInstance().box2DSensors->AddSensor(&ladderCheckController);
 }
 
 
 bool Player::Update(float dt)
 {
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.x -= speed * 5 * dt / 1000;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		Engine::GetInstance().render->camera.x -= speed * 5 * dt / 1000;
 
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.x += speed * 5 * dt / 1000;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		Engine::GetInstance().render->camera.x += speed * 5 * dt / 1000;
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.y += speed * 5 * dt / 1000;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+		Engine::GetInstance().render->camera.y += speed * 5 * dt / 1000;
 
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		Engine::GetInstance().render.get()->camera.y -= speed * 5 * dt / 1000;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		Engine::GetInstance().render->camera.y -= speed * 5 * dt / 1000;
 
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
@@ -211,7 +212,7 @@ bool Player::Update(float dt)
 		velocity.y = inputValue.y * dt / 1000;
 
 
-	if (Engine::GetInstance().input.get()->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
 		if (TryShovelAttack()) {
 			DoShovelAttack();
 		}
@@ -220,23 +221,25 @@ bool Player::Update(float dt)
 		velocity.x = 0;
 
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
 		if (TryFallAttack()) {
 			DoFallAttack();
 		}
 	}
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 		if (TryJump()) {
-			Engine::GetInstance().audio.get()->PlayFx(jumpSoundId);
+			Engine::GetInstance().audio->PlayFx(jumpSoundId);
 			velocity.y = 0;			
 			playerCollider->SetLinearVelocity(velocity);
 			DoJump(-jumpForce);
 		}
 	}
 
-	if (ladderCheckController.IsBeingTriggered() && Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_X) == KEY_DOWN) {
+	if (ladderCheckController.IsBeingTriggered() && Engine::GetInstance().input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) {
 		isInLadder = !isInLadder;
+		if (!isInLadder)
+			playerCollider->SetAwake(true);
 	}
 	else if(!ladderCheckController.IsBeingTriggered()){
 		isInLadder = false;
@@ -270,7 +273,9 @@ bool Player::Update(float dt)
 			isFlipped = true;
 	}
 
+	animator.SetIfPlaying(true);
 	if (isInLadder) {
+		animator.SetIfPlaying(velocity.y != 0);
 		animator.SelectAnimation("Player_Climb", true);
 	}
 	else if(isDoingShovelAttack)
@@ -298,29 +303,27 @@ bool Player::Update(float dt)
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
-	Engine::GetInstance().box2DCreator.get()->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Engine::GetInstance().box2DCreator.get()->RenderFixture(groundCheck, b2Color{0,0,255,255});
-	Engine::GetInstance().box2DCreator.get()->RenderFixture(ladderCheck, b2Color{255,0,255,255});
+	Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+	Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
 	if(isDoingFallAttack)
-		Engine::GetInstance().box2DCreator.get()->RenderFixture(enemyCheck, b2Color{0,255,0,255});
-
-
+		Engine::GetInstance().box2DCreator->RenderFixture(enemyCheck, b2Color{0,255,0,255});
 	return true;
 }
 
 b2Vec2 Player::GetMoveInput() {
 	b2Vec2 velocity{ 0,0 };
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		velocity.x -= (speed);
 
-	if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		velocity.x += (speed);
 
 	if (isInLadder) {
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 			velocity.y-= (ladderSpeed);
 
-		if (Engine::GetInstance().input.get()->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 			velocity.y += (ladderSpeed);
 	}
 
@@ -378,7 +381,7 @@ bool Player::CleanUp()
 {
 	LOG("Cleanup player");
 	Engine::GetInstance().scene->world->DestroyBody(playerCollider);
-	Engine::GetInstance().textures.get()->UnLoad(texture);
+	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 

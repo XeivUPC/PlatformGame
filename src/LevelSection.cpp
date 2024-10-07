@@ -41,7 +41,7 @@ bool LevelSection::Update(float dt)
 
     for (auto*& collider : colliders)
     {
-        Engine::GetInstance().box2DCreator.get()->RenderBody(collider, b2Color{ 0,255,0,255 });
+        Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
     }
 
 	return true;
@@ -53,7 +53,7 @@ bool LevelSection::CleanUp()
 
     // Make sure you clean up any memory allocated from tilesets/map
     for (const auto& tileset : mapData.tilesets) {
-        Engine::GetInstance().textures.get()->UnLoad(tileset->texture);
+        Engine::GetInstance().textures->UnLoad(tileset->texture);
         delete tileset;
     }
     mapData.tilesets.clear();
@@ -68,7 +68,7 @@ bool LevelSection::CleanUp()
 
     for (auto*& collider : colliders)
     {
-        Engine::GetInstance().scene.get()->world->DestroyBody(collider);
+        Engine::GetInstance().scene->world->DestroyBody(collider);
     }
 
     return true;
@@ -152,7 +152,7 @@ TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
 
     std::string mapTex = texturePath;
     mapTex += document.child("tileset").child("image").attribute("source").as_string();
-    tileset->texture = Engine::GetInstance().textures.get()->Load(mapTex.c_str());
+    tileset->texture = Engine::GetInstance().textures->Load(mapTex.c_str());
     return tileset;
 }
 
@@ -195,7 +195,7 @@ void LevelSection::CreateMapData(xml_document* document)
 
 b2Body* LevelSection::CreateColliders(xml_node* node)
 {
-    b2World* world = Engine::GetInstance().scene.get()->world;
+    b2World* world = Engine::GetInstance().scene->world;
 
     int x = node->attribute("x").as_int();
     int y = node->attribute("y").as_int();
@@ -222,7 +222,7 @@ b2Body* LevelSection::CreateColliders(xml_node* node)
 
 
     }
-    b2Body* collider = Engine::GetInstance().box2DCreator.get()->CreateBox(world, position, PIXEL_TO_METERS(width), PIXEL_TO_METERS(height));
+    b2Body* collider = Engine::GetInstance().box2DCreator->CreateBox(world, position, PIXEL_TO_METERS(width), PIXEL_TO_METERS(height));
 
     collider->SetType(b2_staticBody);
     collider->GetFixtureList()[0].SetFilterData(filter);

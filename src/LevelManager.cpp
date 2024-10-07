@@ -74,7 +74,7 @@ bool LevelManager::LoadLevel(int levelToPlay)
 	levelsPath = path + "Level" + std::to_string(currentLevel) +"/";
 	texturePath = path;
 
-	Engine::GetInstance().audio.get()->PlayMusic(("Level"+ std::to_string(currentLevel) +"_Music.ogg").c_str());
+	Engine::GetInstance().audio->PlayMusic(("Level"+ std::to_string(currentLevel) +"_Music.ogg").c_str());
 
 	return true;
 }
