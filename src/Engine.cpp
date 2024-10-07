@@ -51,8 +51,9 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(textures));
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(scene));
-    //// Add the map module
     AddModule(std::static_pointer_cast<Module>(parallax));
+    //// Add the map module
+    
     AddModule(std::static_pointer_cast<Module>(levelManager));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));

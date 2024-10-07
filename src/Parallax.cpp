@@ -2,10 +2,11 @@
 #include "Engine.h"
 #include "Textures.h"
 #include "Render.h"
+#include "Window.h"
 
 Parallax::Parallax()
 {
-    ParallaxFactor = 1;
+    ParallaxFactor = 2;
     offset = 0;
 }
 
@@ -35,16 +36,46 @@ bool Parallax::PreUpdate()
 
 bool Parallax::Update(float dt)
 {
+        // Obtener el tamaño de la textura
+        int textureWidth = 0;
+        int textureHeight = 0;
+        Engine::GetInstance().textures->GetSize(ParallaxLayers[0], textureWidth, textureHeight);
+        SDL_Rect rect{ 0 ,0 ,Engine::GetInstance().window->width, Engine::GetInstance().window->height };
+        if (Engine::GetInstance().window->width - Engine::GetInstance().render->camera.x > textureWidth)
+        {
+            Engine::GetInstance().render->DrawTexture(ParallaxLayers[0], Engine::GetInstance().window->width - Engine::GetInstance().render->camera.x-textureWidth, 0, SDL_FLIP_NONE, &rect);
+        }
+        
+        Engine::GetInstance().render->DrawTexture(ParallaxLayers[0], 0, 0, SDL_FLIP_NONE ,&rect);
+    //    // Calcular el desplazamiento en x
+    //    int offsetX = -Engine::GetInstance().render->camera.x * i / ParallaxFactor;
+
+    //    // Calcular cuántas texturas necesitamos dibujar
+    //    int startX = offsetX;
+    //    if (startX < Engine::GetInstance().window->width)
+    //    {
+    //        SDL_Rect rect = { startX, 0, textureWidth, textureHeight };
+    //        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], startX / Engine::GetInstance().window->GetScale(), 0, SDL_FLIP_NONE, &rect);
+    //        startX += textureWidth; // Mover a la siguiente posición de la textura
+    //    }
+
+    //    // Dibujo adicional para cubrir el lado izquierdo de la pantalla
+    //    startX = offsetX - textureWidth; // Empezar desde la izquierda
+    //    if (startX > -textureWidth) // Dibuja hasta que se salga por la izquierda
+    //    {
+    //        SDL_Rect rect = { startX, 0, textureWidth, textureHeight };
+    //        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], startX / Engine::GetInstance().window->GetScale(), 0, SDL_FLIP_NONE, &rect);
+    //        startX -= textureWidth; // Mover a la siguiente posición de la textura
+    //    }
+    //}
     return true;
 }
 
+
+
 bool Parallax::PostUpdate()
 {
-    for (int i = 0; i < count; i++)
-    {
-        SDL_Rect rect = SDL_Rect{(int)(i/count*ParallaxFactor+offset+Engine::GetInstance().render->camera.x), 0, Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h};
-        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], 0, 0, SDL_FLIP_NONE, &rect);
-    }
+   
     return true;
 }
 
