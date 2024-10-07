@@ -5,12 +5,20 @@
 
 class  Parallax : public Module
 {
+public:
+	Parallax();
+	virtual ~Parallax();
+	bool Awake();
+	bool Start();
+	bool PreUpdate();
+	bool Update(float dt);
+	bool PostUpdate();
+	bool CleanUp();
+	void LoadTexture(std::string path);
 private:
 	std::vector<SDL_Texture*> ParallaxLayers;
+	int count = 0;
 	float ParallaxFactor;
-public:
-	bool Awake()override;
-	bool PreUpdate()override;
-	bool Update(float dt)override;
-	bool CleanUp()override;
+	float offset;
+
 };

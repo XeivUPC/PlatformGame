@@ -13,6 +13,7 @@
 #include "Scene.h"
 #include "EntityManager.h"
 #include "LevelManager.h"
+#include "Parallax.h"
 
 
 
@@ -31,12 +32,12 @@ Engine::Engine() {
 
     // Modules
     window = std::make_shared<Window>();
-    parallax = std::make_shared<Parallax>();
     input = std::make_shared<Input>();
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
     scene = std::make_shared<Scene>();
+    parallax = std::make_shared<Parallax>();
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
 
@@ -45,13 +46,13 @@ Engine::Engine() {
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
-    AddModule(std::static_pointer_cast<Module>(parallax));
     AddModule(std::static_pointer_cast<Module>(window));
     AddModule(std::static_pointer_cast<Module>(input));
     AddModule(std::static_pointer_cast<Module>(textures));
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(scene));
     //// Add the map module
+    AddModule(std::static_pointer_cast<Module>(parallax));
     AddModule(std::static_pointer_cast<Module>(levelManager));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
