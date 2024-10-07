@@ -96,8 +96,11 @@ bool Engine::Awake() {
         //Iterates the module list and calls Awake on each module
         bool result = true;
         for (const auto& module : moduleList) {
-            result = module.get()->LoadParameters(configFile.child("config").child(module.get()->name.c_str()));
-            if(result) result = module.get()->Awake();
+            result = module
+                
+                
+                ->LoadParameters(configFile.child("config").child(module->name.c_str()));
+            if(result) result = module->Awake();
             if (!result) {
                 break;
             }
@@ -120,7 +123,7 @@ bool Engine::Start() {
     //Iterates the module list and calls Start on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module.get()->Start();
+        result = module->Start();
         if (!result) {
             break;
         }
@@ -164,7 +167,7 @@ bool Engine::CleanUp() {
     //Iterates the module list and calls CleanUp on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module.get()->CleanUp();
+        result = module->CleanUp();
         if (!result) {
             break;
         }
@@ -226,7 +229,7 @@ void Engine::FinishUpdate()
 
     std::string titleStr = ss.str();
 
-    window.get()->SetTitle(titleStr.c_str());
+    window->SetTitle(titleStr.c_str());
 }
 
 // Call modules before each loop iteration
@@ -235,7 +238,7 @@ bool Engine::PreUpdate()
     //Iterates the module list and calls PreUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module.get()->PreUpdate();
+        result = module->PreUpdate();
         if (!result) {
             break;
         }
@@ -250,7 +253,7 @@ bool Engine::DoUpdate()
     //Iterates the module list and calls Update on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module.get()->Update(dt);
+        result = module->Update(dt);
         if (!result) {
             break;
         }
@@ -265,7 +268,7 @@ bool Engine::PostUpdate()
     //Iterates the module list and calls PostUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module.get()->PostUpdate();
+        result = module->PostUpdate();
         if (!result) {
             break;
         }

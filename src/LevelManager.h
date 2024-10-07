@@ -29,8 +29,12 @@ public:
 
     // Load new map
     bool LoadLevel(int levelToPlay);
+    bool ChargeAllLevelSection(int startingIndex);
+    bool ChargeAdjacentSections(LevelSection* mainSection);
+
     bool LoadSection(int sectionNumber);
 
+    LevelSection* GetCurrentSection();
 
     std::string path;
     std::string levelsPath;
@@ -38,12 +42,10 @@ public:
 
 private:
 
-    std::vector<int> allSections;
-
     std::unordered_map<int, LevelSection*> loadedSections;
+    std::vector<int> sectionsInUse;
 
     int currentSection=0;
-
     int currentLevel=0;
 
     xml_node parameters;

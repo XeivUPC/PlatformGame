@@ -13,8 +13,9 @@
 
 void Enemy::InitColliders()
 {
-	Box2DCreator* colliderCreator = Engine::GetInstance().box2DCreator.get();
-	b2World* world = Engine::GetInstance().scene.get()->world;
+	const std::shared_ptr<Box2DCreator>& box2DSensor = Engine::GetInstance().box2DCreator
+		;
+	b2World* world = Engine::GetInstance().scene->world;
 
 	b2Vec2 enemyColliderposition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
@@ -38,8 +39,8 @@ void Enemy::InitColliders()
 
 	enemyCollider->SetFixedRotation(true);
 
-	Engine::GetInstance().box2DSensors.get()->AddSensor(&positionCheckController);
-	Engine::GetInstance().box2DSensors.get()->AddSensor(&playerCheckController);
+	Engine::GetInstance().box2DSensors->AddSensor(&positionCheckController);
+	Engine::GetInstance().box2DSensors->AddSensor(&playerCheckController);
 };
 
 void Enemy::Brain()
@@ -53,28 +54,28 @@ b2Vec2 Enemy::CalculateNearestDirection(bool verticalAxis, bool horizontalAxis)
 
 	if (verticalAxis)
 	{
-		if (Engine::GetInstance().scene.get()->player->position.getX() > position.getX())
+		if (Engine::GetInstance().scene->player->position.getX() > position.getX())
 		{
 			nearestDirection = b2Vec2{1, 0};
-			nearestDistance = Engine::GetInstance().scene.get()->player->position.getX() - position.getX();
+			nearestDistance = Engine::GetInstance().scene->player->position.getX() - position.getX();
 		}
 		else
 		{
 			nearestDirection = b2Vec2{ -1, 0 };
-			nearestDistance = position.getX() - Engine::GetInstance().scene.get()->player->position.getX();
+			nearestDistance = position.getX() - Engine::GetInstance().scene->player->position.getX();
 		}
 	}
 	else if (horizontalAxis)
 	{
-		if (Engine::GetInstance().scene.get()->player->position.getY() > position.getY())
+		if (Engine::GetInstance().scene->player->position.getY() > position.getY())
 		{
 			nearestDirection = b2Vec2{ 0, 1 };
-			nearestDistance = Engine::GetInstance().scene.get()->player->position.getY() - position.getY();
+			nearestDistance = Engine::GetInstance().scene->player->position.getY() - position.getY();
 		}
 		else
 		{
 			nearestDirection = b2Vec2{ 0, -1};
-			nearestDistance = position.getY() - Engine::GetInstance().scene.get()->player->position.getY();
+			nearestDistance = position.getY() - Engine::GetInstance().scene->player->position.getY();
 		}
 	}
 	return nearestDirection;
@@ -99,7 +100,7 @@ bool Enemy::Awake()
 
 bool Enemy::Start()
 {
-	texture = Engine::GetInstance().textures.get()->Load(textureName.c_str());
+	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
 	InitAnimations();
 
@@ -116,6 +117,6 @@ bool Enemy::CleanUp()
 {
 	LOG("Cleanup enemy");
 	Engine::GetInstance().scene->world->DestroyBody(enemyCollider);
-	Engine::GetInstance().textures.get()->UnLoad(texture);
+	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }

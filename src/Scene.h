@@ -33,10 +33,9 @@ public:
 
 	// Load Parameters from config file
 	bool LoadParameters(xml_node parameters);
-	Player* player;
 
+	Player* player;
 private:
-	
 	xml_node configParameters;
 public:
 	b2World* world;

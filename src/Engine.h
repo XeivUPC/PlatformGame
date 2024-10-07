@@ -33,19 +33,16 @@ class Parallax;
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
 
-
-
-
-
-
 class Engine
 {
 public:
 
 	const uint16_t PLAYER_LAYER = 0x0001;
-	const uint16_t PLAYER_ATTACK_LAYER= 0x0002;
-	const uint16_t GROUND_LAYER =0x0003;
-	const uint16_t ENEMY_LAYER =0x0004;
+	const uint16_t GROUND_LAYER =0x0002;
+	const uint16_t PLAYER_ATTACK_LAYER= 0x0004;
+	const uint16_t ENEMY_LAYER =0x0008;
+	const uint16_t LADDER_LAYER =0x0010;
+	const uint16_t USE_LADDER_LAYER =0x0020;
 
 	// Public method to get the instance of the Singleton
 	static Engine& GetInstance();

@@ -25,11 +25,14 @@ public:
 
 	bool CleanUp();
 
+
 public:
 
 	//Player Exposed Stats
 	float speed = 150.0f;
-	float jumpForce = 80.0f;
+	float ladderSpeed = 50.0f;
+	float jumpForce = 58.0f;
+	float fallAttackJumpMultiplier = 1.1f;
 
 	
 	std::string textureName; 
@@ -57,6 +60,7 @@ private:
 	bool isDoingFallAttack = false;
 	bool isDoingShovelAttack = false;
 	bool isFlipped=false;
+	bool isInLadder = false;
 
 	/// MAX VALUES
 	const float MAX_FALL_SPEED = 100.0f;
@@ -75,9 +79,11 @@ private:
 	
 
 	/// Delays
-
 	float attackRecoverMS=400;
 	Timer attackRecoverTimer;
+
+	float exitLadderTimeMS = 100;
+	Timer exitLadderTimer;
 
 	float jumpRecoverMS= 150;
 	Timer jumpRecoverTimer;
@@ -90,6 +96,10 @@ private:
 	void InitAnimations();
 
 
+	//// Audio
+	int jumpSoundId;
+
+
 	//// Colliders
 	void InitColliders();
 		///// Filters
@@ -98,6 +108,7 @@ private:
 		b2Filter groundCheckFilters;
 		b2Filter enemyCheckFilters;
 		b2Filter playerFilters;
+		b2Filter playerLadderFilters;
 			
 		///// GroundCollider
 		b2Fixture* groundCheck;
@@ -107,6 +118,10 @@ private:
 		//// EnemyCollider
 		b2Fixture* enemyCheck;
 		ColliderHandler enemyCheckController;
+
+		//// LadderCollider
+		b2Fixture* ladderCheck;
+		ColliderHandler ladderCheckController;
 
 		///// Player Collider
 		b2Body* playerCollider;

@@ -19,7 +19,14 @@ bool Audio::Awake()
 {
 	LOG("Loading Audio Mixer");
 	bool ret = true;
+
+
+	musicPath = configParameters.child("music").attribute("path").as_string();
+	sfxPath = configParameters.child("sfx").attribute("path").as_string();
+
+
 	SDL_Init(0);
+
 
 	if(SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{
@@ -98,11 +105,11 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 		Mix_FreeMusic(music);
 	}
 
-	music = Mix_LoadMUS(path);
+	music = Mix_LoadMUS((musicPath + path).c_str());
 
 	if(music == NULL)
 	{
-		LOG("Cannot load music %s. Mix_GetError(): %s\n", path, Mix_GetError());
+		LOG("Cannot load music %s. Mix_GetError(): %s\n", (musicPath + path).c_str(), Mix_GetError());
 		ret = false;
 	}
 	else
@@ -111,7 +118,7 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 		{
 			if(Mix_FadeInMusic(music, -1, (int) (fadeTime * 1000.0f)) < 0)
 			{
-				LOG("Cannot fade in music %s. Mix_GetError(): %s", path, Mix_GetError());
+				LOG("Cannot fade in music %s. Mix_GetError(): %s", (musicPath + path).c_str(), Mix_GetError());
 				ret = false;
 			}
 		}
@@ -119,14 +126,20 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 		{
 			if(Mix_PlayMusic(music, -1) < 0)
 			{
-				LOG("Cannot play in music %s. Mix_GetError(): %s", path, Mix_GetError());
+				LOG("Cannot play in music %s. Mix_GetError(): %s", (musicPath + path).c_str(), Mix_GetError());
 				ret = false;
 			}
 		}
 	}
 
-	LOG("Successfully playing %s", path);
+	LOG("Successfully playing %s", (musicPath + path).c_str());
 	return ret;
+}
+
+bool Audio::LoadParameters(xml_node parameters)
+{
+	configParameters = parameters;
+	return true;
 }
 
 // Load WAV
@@ -137,11 +150,11 @@ int Audio::LoadFx(const char* path)
 	if(!active)
 		return 0;
 
-	Mix_Chunk* chunk = Mix_LoadWAV(path);
+	Mix_Chunk* chunk = Mix_LoadWAV((sfxPath + path).c_str());
 
 	if(chunk == NULL)
 	{
-		LOG("Cannot load wav %s. Mix_GetError(): %s", path, Mix_GetError());
+		LOG("Cannot load wav %s. Mix_GetError(): %s", (sfxPath + path).c_str(), Mix_GetError());
 	}
 	else
 	{

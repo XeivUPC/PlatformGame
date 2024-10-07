@@ -70,7 +70,16 @@ public:
 	~LevelSection();
 	bool Update(float dt);
 	bool CleanUp();
-    bool Load(std::string fileName, std::string texturePath);
+    bool Load(std::string fileName, std::string texturePath, b2Vec2 offset  = b2Vec2_zero);
+
+    int leftSection;
+    int rightSection;
+    int topSection;
+    int bottomSection;
+
+    MapData mapData;
+
+    b2Vec2 sectionOffset;
 
 private:
 
@@ -82,7 +91,6 @@ private:
     b2Body* CreateColliders(xml_node* node);
 
     void AddLayers(uint16* container, std::string layersInput);
-    MapData mapData;
 
     std::list<b2Body*> colliders;
 

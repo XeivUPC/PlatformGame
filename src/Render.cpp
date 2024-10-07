@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Window.h"
 #include "Render.h"
+#include "LevelManager.h"
 #include "Log.h"
 
 #define VSYNC true
@@ -29,7 +30,10 @@ bool Render::Awake()
 	//flags |= SDL_RENDERER_PRESENTVSYNC;
 	LOG("Using vsync");
 
-	SDL_Window* window = Engine::GetInstance().window.get()->window;
+	SDL_Window* window = Engine::GetInstance().window
+		
+		
+		->window;
 	renderer = SDL_CreateRenderer(window, -1, flags);
 
 	if(renderer == NULL)
@@ -39,16 +43,18 @@ bool Render::Awake()
 	}
 	else
 	{
-		camera.x = 0;
-		camera.y = 0;
+		
 
 		SDL_DisplayMode displayMode;
 		if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0)
 			SDL_Log("No se pudo obtener el modo de pantalla: %s", SDL_GetError());
 
-		int scale = Engine::GetInstance().window.get()->GetScale();
-		int windowWidth = Engine::GetInstance().window.get()->width;  
-		int windowHeight = Engine::GetInstance().window.get()->height;
+		int scale = Engine::GetInstance().window->GetScale();
+		int windowWidth = Engine::GetInstance().window->width;  
+		int windowHeight = Engine::GetInstance().window->height;
+
+		camera.x = 0;
+		camera.y = 16 * 2 * scale;
 		
 		SDL_RenderSetLogicalSize(renderer, windowWidth * scale, windowHeight * scale);
 	}
@@ -62,6 +68,9 @@ bool Render::Start()
 	LOG("render start");
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
+
+
+
 	return true;
 }
 
@@ -107,11 +116,12 @@ void Render::ResetViewPort()
 	SDL_RenderSetViewport(renderer, &viewport);
 }
 
+
 // Blit to screen
 bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip flipMode, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speed) + x * scale;
@@ -152,7 +162,7 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip fl
 bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -180,7 +190,7 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -204,7 +214,7 @@ bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b,
 bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window.get()->GetScale();
+	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);

@@ -5,7 +5,7 @@
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
 
-class Box2DCreator
+class Box2DCreator //factory Box2DFactory --> PhysicsFactory
 {
 public:
 

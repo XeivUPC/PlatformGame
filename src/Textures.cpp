@@ -90,7 +90,10 @@ bool Textures::UnLoad(SDL_Texture* texture)
 // Translate a surface into a texture
 SDL_Texture* const Textures::LoadSurface(SDL_Surface* surface)
 {
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(Engine::GetInstance().render.get()->renderer, surface);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(Engine::GetInstance().render
+		
+		
+		->renderer, surface);
 
 	if (texture == NULL)
 	{
