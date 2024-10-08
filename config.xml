@@ -11,7 +11,7 @@
 
     <window>
         <resolution width="400" height="240" scale="1"/>
-        <fullscreen_window value="false"/>
+        <fullscreen_window value="true"/>
     </window>
 
 	<audio>
