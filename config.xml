@@ -10,7 +10,7 @@
     </render>
 
     <window>
-        <resolution width="400" height="240" scale="4"/>
+        <resolution width="400" height="240" scale="2"/>
         <fullscreen_window value="false"/>
     </window>
 

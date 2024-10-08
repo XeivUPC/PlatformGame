@@ -2,21 +2,22 @@
 #include "Engine.h"
 #include "Textures.h"
 #include "Render.h"
+#include "Window.h"
 
 Parallax::Parallax()
 {
-    ParallaxFactor = 1;
+    parallaxFactor = 1;
     offset = 0;
 }
 
 Parallax::~Parallax()
 {
-   
+
 }
 
 bool Parallax::Awake()
 {
-   
+
     return true;
 }
 
@@ -35,16 +36,29 @@ bool Parallax::PreUpdate()
 
 bool Parallax::Update(float dt)
 {
+    for (int i = 0; i < count; i++)
+    {
+        int velocity = parallaxFactor * i / (count-1)*Engine::GetInstance().window->GetScale();
+        //Get Texture Size (double as window size)
+        int textureWidth, textureHeight;
+        Engine::GetInstance().textures->GetSize(ParallaxLayers[i], textureWidth, textureHeight);
+
+        //Get Main Parallax Step
+        int parallaxStep = Engine::GetInstance().render->camera.x * velocity / textureWidth;
+
+        //Get Minimum Width
+        if (textureWidth + Engine::GetInstance().render->camera.x * velocity < textureWidth * -parallaxStep* Engine::GetInstance().window->GetScale())
+            Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], (-Engine::GetInstance().render->camera.x - textureWidth * (parallaxStep)) / Engine::GetInstance().window->GetScale() - velocity * (-Engine::GetInstance().render->camera.x) / Engine::GetInstance().window->GetScale(), 0, SDL_FLIP_NONE);        
+        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], (-Engine::GetInstance().render->camera.x) / Engine::GetInstance().window->GetScale() - velocity * (-Engine::GetInstance().render->camera.x) / Engine::GetInstance().window->GetScale(), 0, SDL_FLIP_NONE);
+    }
     return true;
 }
 
+
+
 bool Parallax::PostUpdate()
 {
-    for (int i = 0; i < count; i++)
-    {
-        SDL_Rect rect = SDL_Rect{(int)(i/count*ParallaxFactor+offset+Engine::GetInstance().render->camera.x), 0, Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h};
-        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], 0, 0, SDL_FLIP_NONE, &rect);
-    }
+
     return true;
 }
 

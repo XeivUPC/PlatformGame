@@ -18,7 +18,8 @@ public:
 private:
 	std::vector<SDL_Texture*> ParallaxLayers;
 	int count = 0;
-	float ParallaxFactor;
+	float parallaxFactor;
 	float offset;
+	int parallaxStep = 0;
 
 };
