@@ -23,7 +23,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(16*8, 16*8);
+	position = Vector2D(8, 8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
@@ -36,7 +36,6 @@ bool Player::Awake() {
 	/// Texture, index, size, pivot
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
 	
-
 
 	return true;
 }
@@ -115,7 +114,7 @@ void Player::InitColliders() {
 
 	///PlayerCollider
 
-	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
+	b2Vec2 playerColliderPosition{ position.getX(), position.getY() };
 
 	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
 	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
@@ -129,7 +128,7 @@ void Player::InitColliders() {
 	emptyFilter.maskBits = 0x0000;
 	emptyFilter.categoryBits = 0x0000;
 
-	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(13), PIXEL_TO_METERS(29));
+	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, 0.8f, 1.8f);
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
@@ -137,19 +136,19 @@ void Player::InitColliders() {
 		fixture->SetFilterData(playerFilters);
 	}
 
-	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(10));
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0.9f), 0.7f, 0.1f);
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
 	groundCheck->SetFilterData(playerFilters);
 
 
-	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(2));
+	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 1.0f), 0.4f, 0.1f);
 	enemyCheck->SetFilterData(enemyCheckFilters);
 	enemyCheck->SetFriction(0);
 	enemyCheck->SetDensity(0);
 	enemyCheckController.AcceptOnlyTriggers(false);
 
-	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(7)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(15));
+	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0.45f), 0.4f, 0.9f);
 	ladderCheck->SetFilterData(playerLadderFilters);
 	ladderCheck->SetFriction(0);
 	ladderCheck->SetDensity(0);
@@ -168,18 +167,16 @@ bool Player::Update(float dt)
 {
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.x -= speed * 5 * dt / 1000;
-
+		Engine::GetInstance().render->camera.x -= PIXEL_TO_METERS(speed / 3) * dt;
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.x += speed * 5 * dt / 1000;
+		Engine::GetInstance().render->camera.x += PIXEL_TO_METERS(speed / 3) * dt;
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.y += speed * 5 * dt / 1000;
-
+		Engine::GetInstance().render->camera.y += PIXEL_TO_METERS(speed / 3) * dt;
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.y -= speed * 5 * dt / 1000;
+		Engine::GetInstance().render->camera.y -= PIXEL_TO_METERS(speed/3) * dt;
 
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
@@ -207,9 +204,13 @@ bool Player::Update(float dt)
 
 	b2Vec2 inputValue = GetMoveInput();
 
-	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
-	if (isInLadder)
-		velocity.y = inputValue.y * dt / 1000;
+	b2Vec2 velocity{ inputValue.x * dt, playerCollider->GetLinearVelocity().y };
+	if (isInLadder) {
+		velocity.y = inputValue.y * dt;
+		velocity.y = PIXEL_TO_METERS(velocity.y);
+	}
+
+	velocity.x = PIXEL_TO_METERS(velocity.x);
 
 
 	if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
@@ -299,6 +300,7 @@ bool Player::Update(float dt)
 				animator.SelectAnimation("Player_Jump_Rise", true);
 		}
 	}
+
 
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);

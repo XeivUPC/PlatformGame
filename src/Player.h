@@ -29,9 +29,9 @@ public:
 public:
 
 	//Player Exposed Stats
-	float speed = 150.0f;
-	float ladderSpeed = 50.0f;
-	float jumpForce = 58.0f;
+	float speed = 8;
+	float ladderSpeed = 2;
+	float jumpForce = 1800;
 	float fallAttackJumpMultiplier = 1.1f;
 
 	
@@ -63,12 +63,12 @@ private:
 	bool isInLadder = false;
 
 	/// MAX VALUES
-	const float MAX_FALL_SPEED = 100.0f;
+	const float MAX_FALL_SPEED = 60.0f;
 
 	/// Gravity Values
 	float defaultGravity = 1.0f;
-	float fallGravity = 2.5f;
-	float fallAttackGravity = 2.75f;
+	float fallGravity = 2.25f;
+	float fallAttackGravity = 2.5f;
 
 	/// Attack Values
 	int attackDamage=1;

@@ -2,11 +2,11 @@
 #include "Engine.h"
 #include "Textures.h"
 #include "Render.h"
+#include "Window.h"
 
 Parallax::Parallax()
 {
-    ParallaxFactor = 1;
-    offset = 0;
+
 }
 
 Parallax::~Parallax()
@@ -22,9 +22,10 @@ bool Parallax::Awake()
 
 bool Parallax::Start()
 {
-    LoadTexture("Assets/Maps/Clouds_Parallax.png");
-    LoadTexture("Assets/Maps/Castle_Parallax.png");
-    LoadTexture("Assets/Maps/Trees1.png");
+    LoadTexture("Assets/Textures/Parallax/Cloud_Parallax.png",0);
+    LoadTexture("Assets/Textures/Parallax/Castle_Parallax.png",0.2);
+    LoadTexture("Assets/Textures/Parallax/Trees_1_Parallax.png",0.4);
+    LoadTexture("Assets/Textures/Parallax/Trees_2_Parallax.png",0.6);
     return true;
 }
 
@@ -35,16 +36,41 @@ bool Parallax::PreUpdate()
 
 bool Parallax::Update(float dt)
 {
+    int textureWidth;
+    int textureHeight;
+
+    int scale = Engine::GetInstance().window->GetScale();
+    Vector2D cameraOffset = Engine::GetInstance().render->cameraGameOffset;
+
+    int cameraX = -Engine::GetInstance().render->camera.x / scale + cameraOffset.getX();
+    int cameraY = -Engine::GetInstance().render->camera.y / scale + cameraOffset.getY();
+
+    
+    for (int i = 0; i < ParallaxLayers.size(); i++)
+    {
+        Engine::GetInstance().textures->GetSize(ParallaxLayers[i].texture, textureWidth, textureHeight);
+        ParallaxLayers[i].offset.setX( ParallaxLayers[i].offset.getX() - (cameraX - lastCameraX) * ParallaxLayers[i].speed);
+
+        if (ParallaxLayers[i].offset.getX() > textureWidth)
+            ParallaxLayers[i].offset.setX(0);
+        else if(ParallaxLayers[i].offset.getX() < -textureWidth)
+            ParallaxLayers[i].offset.setX(0);
+
+        SDL_Rect rect = SDL_Rect{ 0, 0, textureWidth,textureHeight };
+  
+        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX(), cameraY, SDL_FLIP_NONE, &rect);
+        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX() - textureWidth, cameraY, SDL_FLIP_NONE, &rect);
+        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX() + textureWidth, cameraY, SDL_FLIP_NONE, &rect);
+    }
+
+    lastCameraX = cameraX;
+
     return true;
 }
 
 bool Parallax::PostUpdate()
 {
-    for (int i = 0; i < count; i++)
-    {
-        SDL_Rect rect = SDL_Rect{(int)(i/count*ParallaxFactor+offset+Engine::GetInstance().render->camera.x), 0, Engine::GetInstance().render->camera.w, Engine::GetInstance().render->camera.h};
-        Engine::GetInstance().render->DrawTexture(ParallaxLayers[i], 0, 0, SDL_FLIP_NONE, &rect);
-    }
+    
     return true;
 }
 
@@ -52,15 +78,14 @@ bool Parallax::CleanUp()
 {
     for (int i = 0; i < ParallaxLayers.size(); i++)
     {
-        Engine::GetInstance().textures->UnLoad(ParallaxLayers[i]);
+        Engine::GetInstance().textures->UnLoad(ParallaxLayers[i].texture);
     }
     ParallaxLayers.clear();
     return true;
 }
 
-void Parallax::LoadTexture(std::string path)
+void Parallax::LoadTexture(std::string path, float speed)
 {
     SDL_Texture* texture = (Engine::GetInstance().textures->Load(path.c_str()));
-    ParallaxLayers.push_back(texture);
-    count++;
+    ParallaxLayers.push_back({ texture, speed , {0,0} });
 }

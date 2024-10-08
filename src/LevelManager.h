@@ -34,6 +34,8 @@ public:
 
     bool LoadSection(int sectionNumber);
 
+    void GoToNextSection(b2Vec2 direction);
+
     LevelSection* GetCurrentSection();
 
     std::string path;

@@ -53,7 +53,7 @@ bool Render::Awake()
 		int windowWidth = Engine::GetInstance().window->width;  
 		int windowHeight = Engine::GetInstance().window->height;
 
-		cameraGameOffset = { 0, 16 * 2.0f};
+		cameraGameOffset = { 0, (float)METERS_TO_PIXELS(2)};
 
 		camera.x = cameraGameOffset.getX()*scale;
 		camera.y = cameraGameOffset.getY()*scale;
@@ -85,6 +85,7 @@ bool Render::PreUpdate()
 
 bool Render::Update(float dt)
 {
+
 	return true;
 }
 
