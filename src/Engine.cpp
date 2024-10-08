@@ -40,6 +40,7 @@ Engine::Engine() {
     parallax = std::make_shared<Parallax>();
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
+    parallax = std::make_shared<Parallax>();
 
     box2DCreator = std::make_shared<Box2DCreator>();
     box2DSensors = std::make_shared<CollidersManager>();

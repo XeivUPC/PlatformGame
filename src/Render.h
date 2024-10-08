@@ -41,6 +41,7 @@ public:
 
 public:
 
+	Vector2D cameraGameOffset;
 	SDL_Renderer* renderer;
 	SDL_Rect camera;
 	SDL_Rect viewport;

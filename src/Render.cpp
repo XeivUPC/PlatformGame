@@ -53,8 +53,10 @@ bool Render::Awake()
 		int windowWidth = Engine::GetInstance().window->width;  
 		int windowHeight = Engine::GetInstance().window->height;
 
-		camera.x = 0;
-		camera.y = 16 * 2 * scale;
+		cameraGameOffset = { 0, 16 * 2.0f};
+
+		camera.x = cameraGameOffset.getX()*scale;
+		camera.y = cameraGameOffset.getY()*scale;
 		
 		SDL_RenderSetLogicalSize(renderer, windowWidth * scale, windowHeight * scale);
 	}
