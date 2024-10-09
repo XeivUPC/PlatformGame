@@ -54,6 +54,7 @@ bool LevelManager::Update(float dt)
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
 		loadedSections[sectionsInUse[i]]->Update(dt);
+		printf("%d\n", sectionsInUse[i]);
 	}
 
 	//for (const auto& pair : loadedSections) {
@@ -97,6 +98,8 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 	if (mainSection->leftSection != -1 && loadedSections[mainSection->leftSection] == nullptr) {
 		LevelSection* sectionLeft = new LevelSection();
 		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y));
+
+		sectionLeft->sectionOffset.x = -sectionLeft->mapData.width * sectionLeft->mapData.tilewidth + mainSection->sectionOffset.x;
 		loadedSections[mainSection->leftSection] = sectionLeft;
 	}
 	if (mainSection->rightSection != -1 && loadedSections[mainSection->rightSection] == nullptr) {
