@@ -3,7 +3,6 @@
 #include "Engine.h"
 #include "Scene.h"
 #include "Audio.h"
-#include "Window.h"
 
 LevelManager::LevelManager()
 {
@@ -41,29 +40,17 @@ bool LevelManager::Start()
 
 bool LevelManager::Update(float dt)
 {
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ 1,0 });
 
-	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ -1,0 });
-
-	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ 0,1 });
-
-
-	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
-		GoToNextSection(b2Vec2{0,-1});
-
-	for (size_t i = 0; i < sectionsInUse.size(); i++)
-	{
-		loadedSections[sectionsInUse[i]]->Update(dt);
-	}
-
-	//for (const auto& pair : loadedSections) {
-	//	if (pair.second != nullptr) {
-	//		pair.second->Update(dt);
-	//	}
+	//for (size_t i = 0; i < sectionsInUse.size(); i++)
+	//{
+	//	loadedSections[sectionsInUse[i]]->Update(dt);
 	//}
+
+	for (const auto& pair : loadedSections) {
+		if (pair.second != nullptr) {
+			pair.second->Update(dt);
+		}
+	}
 	return true;
 }
 
@@ -99,28 +86,24 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 
 	if (mainSection->leftSection != -1 && loadedSections[mainSection->leftSection] == nullptr) {
 		LevelSection* sectionLeft = new LevelSection();
-		b2Vec2 positionToPlace = b2Vec2(-mainSection->mapData.width + mainSection->position.x, mainSection->position.y);
-		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, positionToPlace);
+		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y));
 		loadedSections[mainSection->leftSection] = sectionLeft;
 	}
 	if (mainSection->rightSection != -1 && loadedSections[mainSection->rightSection] == nullptr) {
 		LevelSection* sectionRight = new LevelSection();
-		b2Vec2 positionToPlace = b2Vec2(mainSection->mapData.width  + mainSection->position.x, mainSection->position.y);
-		sectionRight->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->rightSection) + ".tmx", texturePath, positionToPlace);
+		sectionRight->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->rightSection) + ".tmx", texturePath, b2Vec2(mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y));
 		loadedSections[mainSection->rightSection] = sectionRight;
 	}
 
 	if (mainSection->topSection != -1 && loadedSections[mainSection->topSection] == nullptr) {
 		LevelSection* sectionTop = new LevelSection();
-		b2Vec2 positionToPlace = b2Vec2(mainSection->position.x, -mainSection->mapData.height + mainSection->position.y);
-		sectionTop->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->topSection) + ".tmx", texturePath, positionToPlace);
+		sectionTop->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->topSection) + ".tmx", texturePath, b2Vec2(mainSection->sectionOffset.x, -mainSection->mapData.height * mainSection->mapData.tileheight + mainSection->sectionOffset.y));
 		loadedSections[mainSection->topSection] = sectionTop;
 	}
 
 	if (mainSection->bottomSection != -1 && loadedSections[mainSection->bottomSection] == nullptr) {
 		LevelSection* sectionBottom = new LevelSection();
-		b2Vec2 positionToPlace = b2Vec2(mainSection->position.x, mainSection->mapData.height + mainSection->position.y);
-		sectionBottom->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->bottomSection) + ".tmx", texturePath, positionToPlace);
+		sectionBottom->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->bottomSection) + ".tmx", texturePath, b2Vec2(mainSection->sectionOffset.x, mainSection->mapData.height * mainSection->mapData.tileheight + mainSection->sectionOffset.y));
 		loadedSections[mainSection->bottomSection] = sectionBottom;
 	}
 	return true;
@@ -168,29 +151,6 @@ bool LevelManager::LoadSection(int sectionNumber)
 		sectionsInUse.push_back(sectionToLoad->bottomSection);
 
 	return true;
-}
-
-void LevelManager::GoToNextSection(b2Vec2 direction)
-{
-	if (direction == b2Vec2_zero)
-		return;
-	if (direction.x == 1) {
-		LoadSection(loadedSections[currentSection]->rightSection);
-
-	}
-	if (direction.x == -1) {
-		LoadSection(loadedSections[currentSection]->leftSection);
-
-	}
-	if (direction.y == 1) {
-		LoadSection(loadedSections[currentSection]->topSection);
-
-	}
-	if (direction.y == -1) {
-		LoadSection(loadedSections[currentSection]->bottomSection);
-
-	}
-	
 }
 
 LevelSection* LevelManager::GetCurrentSection()

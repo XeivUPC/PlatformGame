@@ -30,9 +30,10 @@ bool LevelSection::Update(float dt)
                 //Get the Rect from the tileSetTexture;
                 SDL_Rect tileRect = mapData.tilesets.front()->GetRect(gid);
                 //Get the screen coordinates from the tile coordinates
+                Vector2D mapCoord = MapToWorld(i, j);
 
                 // Complete the draw function
-                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, METERS_TO_PIXELS((i + position.x)) , METERS_TO_PIXELS((j + position.y)) , SDL_FLIP_NONE, &tileRect);
+                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX() + sectionOffset.x, mapCoord.getY() + sectionOffset.y, SDL_FLIP_NONE, &tileRect);
 
             }
         }
@@ -91,7 +92,7 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
     }
     else {
 
-        position = offset;
+        sectionOffset = offset;
         pugi::xml_node mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "BottomSection");
         bottomSection = mapProperties.attribute("value").as_int();
         mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "TopSection");
@@ -196,19 +197,16 @@ b2Body* LevelSection::CreateColliders(xml_node* node)
 {
     b2World* world = Engine::GetInstance().scene->world;
 
-    float x = PIXEL_TO_METERS(node->attribute("x").as_int());
-    float y = PIXEL_TO_METERS(node->attribute("y").as_int());
+    int x = node->attribute("x").as_int();
+    int y = node->attribute("y").as_int();
 
-    float width = node->attribute("width").as_int();
-    float height = node->attribute("height").as_int();
+    int width = node->attribute("width").as_int();
+    int height = node->attribute("height").as_int();
 
-    width = PIXEL_TO_METERS(width);
-    height = PIXEL_TO_METERS(height);
+    x += width / 2;
+    y += height / 2;
 
-    x += width / 2.0f;
-    y += height / 2.0f;
-
-    b2Vec2 colliderPosition{x + position.x, y + position.y };
+    b2Vec2 position{ PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS(y) + PIXEL_TO_METERS(sectionOffset.y) };
 
     b2Filter filter;
     for (pugi::xml_node colliderProperties = node->child("properties"); colliderProperties != NULL; colliderProperties = colliderProperties.next_sibling("properties"))
@@ -224,7 +222,7 @@ b2Body* LevelSection::CreateColliders(xml_node* node)
 
 
     }
-    b2Body* collider = Engine::GetInstance().box2DCreator->CreateBox(world, colliderPosition, width, height);
+    b2Body* collider = Engine::GetInstance().box2DCreator->CreateBox(world, position, PIXEL_TO_METERS(width), PIXEL_TO_METERS(height));
 
     collider->SetType(b2_staticBody);
     collider->GetFixtureList()[0].SetFilterData(filter);

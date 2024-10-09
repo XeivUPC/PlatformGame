@@ -79,7 +79,7 @@ public:
 
     MapData mapData;
 
-    b2Vec2 position;
+    b2Vec2 sectionOffset;
 
 private:
 
