@@ -50,7 +50,10 @@ public:
 	SDL_Color background;
 
 private:
-	void ConfineCameraBetweenRange();
+	void ConfineCameraBetweenRange(float dt);
+	void FollowPlayer();
+
+	float cameraSpeed = 600;
 	Vector2D minRangeConfinePosition{0,0};
 	Vector2D maxRangeConfinePosition{100,0};
 };

@@ -23,6 +23,7 @@ bool Audio::Awake()
 
 	musicPath = configParameters.child("music").attribute("path").as_string();
 	sfxPath = configParameters.child("sfx").attribute("path").as_string();
+	volume = configParameters.child("volume").attribute("value").as_int();
 
 
 	SDL_Init(0);
@@ -53,6 +54,8 @@ bool Audio::Awake()
 		active = false;
 		ret = true;
 	}
+
+	SetMasterVolume(volume);
 
 	return ret;
 }
@@ -151,7 +154,7 @@ int Audio::LoadFx(const char* path)
 		return 0;
 
 	Mix_Chunk* chunk = Mix_LoadWAV((sfxPath + path).c_str());
-
+	Mix_VolumeChunk(chunk, volume);
 	if(chunk == NULL)
 	{
 		LOG("Cannot load wav %s. Mix_GetError(): %s", (sfxPath + path).c_str(), Mix_GetError());
@@ -181,4 +184,42 @@ bool Audio::PlayFx(int id, int repeat)
 	}
 
 	return ret;
+}
+
+// Set the volume for a specific sound effect
+void Audio::SetFxVolume(int id, int volume)
+{
+	if (!active) return;
+
+	// Clamp the volume between 0 and 128
+	if (volume < 0) volume = 0;
+	if (volume > 128) volume = 128;
+
+	if (id > 0 && id <= fx.size())
+	{
+		auto fxIt = fx.begin();
+		std::advance(fxIt, id - 1);
+		Mix_VolumeChunk(*fxIt, volume);
+		LOG("FX volume for sound effect %d set to %d", id, volume);
+	}
+}
+
+// Set the volume for all sound effects
+void Audio::SetMasterVolume(int volume)
+{
+	if (!active) return;
+
+	this->volume = volume;
+	// Clamp the volume between 0 and 128
+	if (volume < 0) volume = 0;
+	if (volume > 128) volume = 128;
+
+	for (auto& chunk : fx)
+	{
+		Mix_VolumeChunk(chunk, volume);
+	}
+
+	Mix_VolumeMusic(volume);
+
+	LOG("Volumes set to %d", volume);
 }

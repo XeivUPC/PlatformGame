@@ -14,7 +14,7 @@
         <resolution width="400" height="240" scale="1"/>
 		<fullscreen value="false"/>
 		<borderless value="false"/>
-		<resizable value="false"/>
+		<resizable value="true"/>
         <fullscreen_window value="false"/>
 
     </window>
@@ -22,6 +22,7 @@
 	<audio>
 		<music path ="Assets/Musics/"/>
 		<sfx path ="Assets/Sounds/"/>
+		<volume value="32"/>
 	</audio>
 
     <scene>
