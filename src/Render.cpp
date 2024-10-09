@@ -122,7 +122,6 @@ void Render::ConfineCameraBetweenRange(float dt)
 
 	if (camera.x > minX) {
 		camera.x -= cameraSpeed*dt/1000;
-
 		if(abs(camera.x - minX) < 5)
 			camera.x = minX;
 	}
