@@ -1,6 +1,7 @@
 #include "LevelManager.h"
 #include "Log.h"
 #include "Engine.h"
+#include "Render.h"
 #include "Scene.h"
 #include "Audio.h"
 
@@ -41,16 +42,25 @@ bool LevelManager::Start()
 bool LevelManager::Update(float dt)
 {
 
-	//for (size_t i = 0; i < sectionsInUse.size(); i++)
-	//{
-	//	loadedSections[sectionsInUse[i]]->Update(dt);
-	//}
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+		GoToNextSection(b2Vec2{ 1,0 });
+	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+		GoToNextSection(b2Vec2{ -1,0 });
+	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+		GoToNextSection(b2Vec2{ 0,1 });
+	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+		GoToNextSection(b2Vec2{ 0,-1 });
 
-	for (const auto& pair : loadedSections) {
-		if (pair.second != nullptr) {
-			pair.second->Update(dt);
-		}
+	for (size_t i = 0; i < sectionsInUse.size(); i++)
+	{
+		loadedSections[sectionsInUse[i]]->Update(dt);
 	}
+
+	//for (const auto& pair : loadedSections) {
+	//	if (pair.second != nullptr) {
+	//		pair.second->Update(dt);
+	//	}
+	//}
 	return true;
 }
 
@@ -115,7 +125,7 @@ bool LevelManager::ChargeAllLevelSection(int startingIndex)
 		
 		if (startingIndex == 1) {
 			LevelSection* section = new LevelSection();
-			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath);
+			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath, {0,16*2});
 			loadedSections[startingIndex] = section;
 		}
 		else {
@@ -150,7 +160,34 @@ bool LevelManager::LoadSection(int sectionNumber)
 	if (sectionToLoad->bottomSection != -1)
 		sectionsInUse.push_back(sectionToLoad->bottomSection);
 
+	Vector2D minPos = { PIXEL_TO_METERS(sectionToLoad->sectionOffset.x), PIXEL_TO_METERS(sectionToLoad->sectionOffset.y ) };
+	Vector2D maxPos = { PIXEL_TO_METERS(sectionToLoad->sectionOffset.x) + sectionToLoad->mapData.width,PIXEL_TO_METERS(sectionToLoad->sectionOffset.y) + sectionToLoad->mapData.height };
+	Engine::GetInstance().GetInstance().render->SetConfinementValues(minPos,maxPos);
+
 	return true;
+}
+
+void LevelManager::GoToNextSection(b2Vec2 direction)
+{
+	if (direction == b2Vec2_zero)
+		return;
+	if (direction.x == 1) {
+		LoadSection(loadedSections[currentSection]->rightSection);
+
+	}
+	if (direction.x == -1) {
+		LoadSection(loadedSections[currentSection]->leftSection);
+
+	}
+	if (direction.y == 1) {
+		LoadSection(loadedSections[currentSection]->topSection);
+
+	}
+	if (direction.y == -1) {
+		LoadSection(loadedSections[currentSection]->bottomSection);
+
+	}
+
 }
 
 LevelSection* LevelManager::GetCurrentSection()
