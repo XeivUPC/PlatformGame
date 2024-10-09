@@ -10,8 +10,8 @@
     </render>
 
     <window>
-        <resolution width="400" height="240" scale="2"/>
-        <fullscreen_window value="false"/>
+        <resolution width="400" height="240" scale="1"/>
+        <fullscreen_window value="true"/>
     </window>
 
 	<audio>
