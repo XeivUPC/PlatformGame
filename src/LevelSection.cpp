@@ -41,7 +41,7 @@ bool LevelSection::Update(float dt)
 
     for (auto*& collider : colliders)
     {
-        Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
+       // Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
     }
 
 	return true;
@@ -75,14 +75,14 @@ bool LevelSection::CleanUp()
 }
 
 
-bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset)
+bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset, bool loadColliders)
 {
 
     bool ret = true;
 
     // L05: DONE 3: Implement LoadMap to load the map properties
     // retrieve the paremeters of the <map> node and save it into map data
-    pugi::xml_document mapFileXML;
+;
     pugi::xml_parse_result result = mapFileXML.load_file(fileName.c_str());
 
     if (result == NULL)
@@ -112,12 +112,12 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
             MapLayer* mapLayer = CreateMapLayer(&layerNode);
             mapData.layers.push_back(mapLayer);
         }
-        for (pugi::xml_node colliderNode = mapFileXML.child("map").find_child_by_attribute("objectgroup", "name", "Colliders").child("object"); colliderNode != NULL; colliderNode = colliderNode.next_sibling("object")) {
 
-            b2Body* collider = CreateColliders(&colliderNode);
-            colliders.push_back(collider);
-        }
-        if (mapFileXML) mapFileXML.reset();
+        mapNode = mapFileXML.child("map");
+
+        if (loadColliders)
+            LoadColliders();
+
     }
     return ret;
 }
@@ -153,6 +153,10 @@ TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
     std::string mapTex = texturePath;
     mapTex += document.child("tileset").child("image").attribute("source").as_string();
     tileset->texture = Engine::GetInstance().textures->Load(mapTex.c_str());
+
+    if (document)
+        document.reset();
+
     return tileset;
 }
 
@@ -191,6 +195,17 @@ void LevelSection::CreateMapData(xml_document* document)
     mapData.height = document->child("map").attribute("height").as_int();
     mapData.tilewidth = document->child("map").attribute("tilewidth").as_int();
     mapData.tileheight = document->child("map").attribute("tileheight").as_int();
+}
+
+void LevelSection::LoadColliders() {
+
+    
+    for (pugi::xml_node colliderNode = mapNode.find_child_by_attribute("objectgroup", "name", "Colliders").child("object"); colliderNode != NULL; colliderNode = colliderNode.next_sibling("object")) {
+
+        b2Body* collider = CreateColliders(&colliderNode);
+        colliders.push_back(collider);
+    }
+
 }
 
 b2Body* LevelSection::CreateColliders(xml_node* node)
