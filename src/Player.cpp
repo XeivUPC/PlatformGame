@@ -23,7 +23,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(8, 8);
+	position = Vector2D(16*8, 16*8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
@@ -36,6 +36,7 @@ bool Player::Awake() {
 	/// Texture, index, size, pivot
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
 	
+
 
 	return true;
 }
@@ -113,8 +114,8 @@ void Player::InitColliders() {
 	b2World* world = Engine::GetInstance().scene->world;
 
 	///PlayerCollider
-
-	b2Vec2 playerColliderPosition{ position.getX(), position.getY() };
+	
+	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
 	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
 	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
@@ -128,33 +129,39 @@ void Player::InitColliders() {
 	emptyFilter.maskBits = 0x0000;
 	emptyFilter.categoryBits = 0x0000;
 
-	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, 0.8f, 1.8f);
+	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(11), PIXEL_TO_METERS(29));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
 		fixture->SetFriction(0);
 		fixture->SetFilterData(playerFilters);
 	}
+	
 
-	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0.9f), 0.7f, 0.1f);
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(10));
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
 	groundCheck->SetFilterData(playerFilters);
 
 
-	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 1.0f), 0.4f, 0.1f);
+	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(2));
 	enemyCheck->SetFilterData(enemyCheckFilters);
 	enemyCheck->SetFriction(0);
 	enemyCheck->SetDensity(0);
 	enemyCheckController.AcceptOnlyTriggers(false);
 
-	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0.45f), 0.4f, 0.9f);
+	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(7)), PIXEL_TO_METERS(8), PIXEL_TO_METERS(15));
 	ladderCheck->SetFilterData(playerLadderFilters);
 	ladderCheck->SetFriction(0);
 	ladderCheck->SetDensity(0);
 	ladderCheck->SetSensor(true);
 
 	playerCollider->ResetMassData();
+
+	b2MassData massData;
+	massData.mass = playerMass;
+	massData.center = playerCollider->GetLocalCenter();
+	playerCollider->SetMassData(&massData);
 
 	//No necesario
 	Engine::GetInstance().box2DSensors->AddSensor(&groundCheckController);
@@ -165,19 +172,6 @@ void Player::InitColliders() {
 
 bool Player::Update(float dt)
 {
-
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.x -= PIXEL_TO_METERS(speed / 3) * dt;
-
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.x += PIXEL_TO_METERS(speed / 3) * dt;
-
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.y += PIXEL_TO_METERS(speed / 3) * dt;
-
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.y -= PIXEL_TO_METERS(speed/3) * dt;
-
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
 
@@ -204,13 +198,9 @@ bool Player::Update(float dt)
 
 	b2Vec2 inputValue = GetMoveInput();
 
-	b2Vec2 velocity{ inputValue.x * dt, playerCollider->GetLinearVelocity().y };
-	if (isInLadder) {
-		velocity.y = inputValue.y * dt;
-		velocity.y = PIXEL_TO_METERS(velocity.y);
-	}
-
-	velocity.x = PIXEL_TO_METERS(velocity.x);
+	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
+	if (isInLadder)
+		velocity.y = inputValue.y * dt / 1000;
 
 
 	if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
@@ -301,15 +291,16 @@ bool Player::Update(float dt)
 		}
 	}
 
-
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
-	Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
-	Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
-	if(isDoingFallAttack)
-		Engine::GetInstance().box2DCreator->RenderFixture(enemyCheck, b2Color{0,255,0,255});
+
+
+	//Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+	//Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	//Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
+	//if(isDoingFallAttack)
+	//	Engine::GetInstance().box2DCreator->RenderFixture(enemyCheck, b2Color{0,255,0,255});
 	return true;
 }
 

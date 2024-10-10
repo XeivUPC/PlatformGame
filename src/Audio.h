@@ -34,6 +34,9 @@ public:
 	// Play a previously loaded WAV
 	bool PlayFx(int fx, int repeat = 0);
 
+	void SetFxVolume(int id, int volume);   
+	void SetMasterVolume(int volume);
+
 private:
 	xml_node configParameters;
 	std::string sfxPath;
@@ -41,4 +44,5 @@ private:
 
 	_Mix_Music* music;
 	std::list<Mix_Chunk*> fx;
+	int volume = 128;
 };

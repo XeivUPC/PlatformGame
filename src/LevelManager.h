@@ -33,7 +33,6 @@ public:
     bool ChargeAdjacentSections(LevelSection* mainSection);
 
     bool LoadSection(int sectionNumber);
-
     void GoToNextSection(b2Vec2 direction);
 
     LevelSection* GetCurrentSection();

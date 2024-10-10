@@ -17,7 +17,7 @@ void Enemy::InitColliders()
 		;
 	b2World* world = Engine::GetInstance().scene->world;
 
-	b2Vec2 enemyColliderposition{ position.getX(), position.getY() };
+	b2Vec2 enemyColliderposition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
 	b2Filter mapCollidersFilter;
 	mapCollidersFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;

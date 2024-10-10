@@ -39,6 +39,8 @@ public:
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
 
+	void SetConfinementValues(Vector2D min, Vector2D max);
+
 public:
 
 	Vector2D cameraGameOffset;
@@ -48,5 +50,10 @@ public:
 	SDL_Color background;
 
 private:
+	void ConfineCameraBetweenRange(float dt);
+	void FollowPlayer();
 
+	float cameraSpeed = 600;
+	Vector2D minRangeConfinePosition{0,0};
+	Vector2D maxRangeConfinePosition{100,0};
 };

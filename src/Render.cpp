@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Window.h"
 #include "Render.h"
+#include "Scene.h"
 #include "LevelManager.h"
 #include "Log.h"
 
@@ -53,7 +54,7 @@ bool Render::Awake()
 		int windowWidth = Engine::GetInstance().window->width;  
 		int windowHeight = Engine::GetInstance().window->height;
 
-		cameraGameOffset = { 0, (float)METERS_TO_PIXELS(2)};
+		cameraGameOffset = { 0, 16 * 2.0f};
 
 		camera.x = cameraGameOffset.getX()*scale;
 		camera.y = cameraGameOffset.getY()*scale;
@@ -85,12 +86,14 @@ bool Render::PreUpdate()
 
 bool Render::Update(float dt)
 {
-
+	ConfineCameraBetweenRange(dt);
+	FollowPlayer();
 	return true;
 }
 
 bool Render::PostUpdate()
 {
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
@@ -107,6 +110,77 @@ bool Render::CleanUp()
 void Render::SetBackgroundColor(SDL_Color color)
 {
 	background = color;
+}
+
+void Render::ConfineCameraBetweenRange(float dt)
+{
+	float minX =- METERS_TO_PIXELS(minRangeConfinePosition.getX());
+	float maxX =- METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
+
+	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY())+32;
+	float maxY = minY;
+
+	if (camera.x > minX) {
+		camera.x -= cameraSpeed*dt/1000;
+		if(abs(camera.x - minX) < 5)
+			camera.x = minX;
+	}
+	if (camera.x < maxX) {
+		camera.x += cameraSpeed * dt / 1000;
+		if (abs(camera.x - maxX) < 5)
+			camera.x = maxX;
+	}
+	if (camera.y < minY) {
+		camera.y += cameraSpeed * dt / 1000;
+		if (abs(camera.y - minY) < 5)
+			camera.y = minY;
+	}
+	if (camera.y > maxY) {
+		camera.y -= cameraSpeed * dt / 1000;
+		if (abs(camera.y - maxY) < 5)
+			camera.y = maxY;
+	}
+
+	float playerPosX = Engine::GetInstance().scene->player->position.getX();
+	float playerPosY = Engine::GetInstance().scene->player->position.getY();
+
+	if (playerPosX > maxRangeConfinePosition.getX())
+		Engine::GetInstance().levelManager->GoToNextSection({ 1,0 });
+	if (playerPosX < minRangeConfinePosition.getX())
+		Engine::GetInstance().levelManager->GoToNextSection({ -1,0 });
+
+
+	
+	if (playerPosY < minRangeConfinePosition.getY())
+		Engine::GetInstance().levelManager->GoToNextSection({0, 1 });
+	if (playerPosY > maxRangeConfinePosition.getY())
+		Engine::GetInstance().levelManager->GoToNextSection({ 0,-1 });
+}
+
+void Render::FollowPlayer()
+{
+	float minX = -METERS_TO_PIXELS(minRangeConfinePosition.getX());
+	float maxX = -METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
+
+	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY()) + 32;
+	float maxY = minY;
+
+	float targetPos = METERS_TO_PIXELS((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
+
+	if (targetPos > minX) {
+		return;
+	}
+	if (targetPos < maxX) {
+		return;
+	}
+
+	camera.x = targetPos;
+}
+
+void Render::SetConfinementValues(Vector2D min, Vector2D max) {
+	minRangeConfinePosition = min;
+	maxRangeConfinePosition = max;
+
 }
 
 void Render::SetViewPort(const SDL_Rect& rect)
