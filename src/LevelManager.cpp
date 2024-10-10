@@ -54,7 +54,6 @@ bool LevelManager::Update(float dt)
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
 		loadedSections[sectionsInUse[i]]->Update(dt);
-		printf("%d\n", sectionsInUse[i]);
 	}
 
 	//for (const auto& pair : loadedSections) {

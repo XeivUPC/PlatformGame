@@ -41,7 +41,7 @@ bool LevelSection::Update(float dt)
 
     for (auto*& collider : colliders)
     {
-       // Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
+        Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
     }
 
 	return true;

@@ -14,7 +14,7 @@
 #include "EntityManager.h"
 #include "LevelManager.h"
 #include "Parallax.h"
-
+#include "TextGenerator.h"
 
 
 
@@ -40,6 +40,7 @@ Engine::Engine() {
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
     parallax = std::make_shared<Parallax>();
+    text = std::make_shared<TextGenerator>();
 
     box2DCreator = std::make_shared<Box2DCreator>();
     box2DSensors = std::make_shared<CollidersManager>();
@@ -54,6 +55,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(parallax));
     //// Add the map module
     AddModule(std::static_pointer_cast<Module>(levelManager));
+    AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
 
