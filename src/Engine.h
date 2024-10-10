@@ -21,6 +21,7 @@ class LevelManager;
 class Box2DCreator;
 class CollidersManager;
 class Parallax;
+class TextGenerator;
 
 
 #define GRAVITY_X 0.0f
@@ -117,6 +118,7 @@ public:
 	std::shared_ptr<Box2DCreator> box2DCreator;
 	std::shared_ptr<CollidersManager> box2DSensors;
 	std::shared_ptr<Parallax> parallax;
+	std::shared_ptr<TextGenerator> text;
 
 private: 
 

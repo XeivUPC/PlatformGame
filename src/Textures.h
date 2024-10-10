@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Module.h"
+#include <list>
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_render.h"
 #include "SDL2/SDL_surface.h"
@@ -8,7 +9,6 @@
 class Textures : public Module
 {
 public:
-
 	Textures();
 
 	// Destructor
@@ -31,5 +31,4 @@ public:
 
 public:
 	std::list<SDL_Texture*> textures;
-
 };
