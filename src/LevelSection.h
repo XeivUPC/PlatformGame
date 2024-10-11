@@ -70,7 +70,8 @@ public:
 	~LevelSection();
 	bool Update(float dt);
 	bool CleanUp();
-    bool Load(std::string fileName, std::string texturePath, b2Vec2 offset  = b2Vec2_zero);
+    bool Load(std::string fileName, std::string texturePath, b2Vec2 offset  = b2Vec2_zero, bool loadColliders = true );
+    void LoadColliders();
 
     int leftSection;
     int rightSection;
@@ -94,7 +95,8 @@ private:
 
     std::list<b2Body*> colliders;
 
-	
+    pugi::xml_document mapFileXML;
+    pugi::xml_node mapNode;
 };
 
 

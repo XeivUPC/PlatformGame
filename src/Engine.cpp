@@ -18,7 +18,6 @@
 
 
 
-
 // Constructor
 Engine::Engine() {
     
@@ -38,7 +37,6 @@ Engine::Engine() {
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
     scene = std::make_shared<Scene>();
-    parallax = std::make_shared<Parallax>();
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
     parallax = std::make_shared<Parallax>();
@@ -55,14 +53,13 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
-    AddModule(std::static_pointer_cast<Module>(text));
     //// Add the map module
-    
     AddModule(std::static_pointer_cast<Module>(levelManager));
+    AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
 
-    // Render last
+    // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());

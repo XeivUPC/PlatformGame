@@ -54,7 +54,6 @@ bool LevelManager::Update(float dt)
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
 		loadedSections[sectionsInUse[i]]->Update(dt);
-		//printf("%d\n", sectionsInUse[i]);
 	}
 
 	//for (const auto& pair : loadedSections) {
@@ -80,12 +79,13 @@ bool LevelManager::CleanUp()
 
 bool LevelManager::LoadLevel(int levelToPlay)
 {
+	CleanUp();
 	currentLevel = levelToPlay;
 
 	levelsPath = path + "Level" + std::to_string(currentLevel) +"/";
 	texturePath = path;
 
-	//Engine::GetInstance().audio->PlayMusic(("Level"+ std::to_string(currentLevel) +"_Music.ogg").c_str());
+	Engine::GetInstance().audio->PlayMusic(("Level"+ std::to_string(currentLevel) +"_Music.ogg").c_str());
 
 	return true;
 }
@@ -97,9 +97,10 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 
 	if (mainSection->leftSection != -1 && loadedSections[mainSection->leftSection] == nullptr) {
 		LevelSection* sectionLeft = new LevelSection();
-		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y));
+		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false);
 
 		sectionLeft->sectionOffset.x = -sectionLeft->mapData.width * sectionLeft->mapData.tilewidth + mainSection->sectionOffset.x;
+		sectionLeft->LoadColliders();
 		loadedSections[mainSection->leftSection] = sectionLeft;
 	}
 	if (mainSection->rightSection != -1 && loadedSections[mainSection->rightSection] == nullptr) {
