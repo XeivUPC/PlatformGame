@@ -49,7 +49,7 @@ bool LevelSection::Update(float dt)
 
 bool LevelSection::CleanUp()
 {
-    LOG("Unloading map");
+    //LOG("Unloading map");
 
     // Make sure you clean up any memory allocated from tilesets/map
     for (const auto& tileset : mapData.tilesets) {

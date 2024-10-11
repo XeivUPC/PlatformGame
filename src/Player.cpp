@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Box2DCreator.h"
 #include "CollidersManager.h"
+#include "TextGenerator.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
@@ -293,8 +294,6 @@ bool Player::Update(float dt)
 
 	animator.Update(dt);
 	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
-
-
 
 	//Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
 	//Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});

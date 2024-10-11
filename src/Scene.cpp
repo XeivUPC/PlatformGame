@@ -71,7 +71,7 @@ bool Scene::Update(float dt)
 	//	if (player->active == true) player->Disable();
 	//	else player->Enable();
 	//}
-
+	
 
 	return true;
 }
@@ -80,7 +80,7 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-
+	
 	// Detects if the player wants to exit the game with ESC key
 	if(Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;

@@ -38,7 +38,6 @@ bool TextGenerator::Start()
 	int widht, height;
 	Engine::GetInstance().textures->GetSize(fontTexture, widht, height);
 	count = Vector2D{ (float)widht/size.getX(), (float)height/size.getY()};
-	return true;
 	charReferences.push_back(65);
 	charReferences.push_back(66);
 	charReferences.push_back(67);
@@ -105,7 +104,6 @@ bool TextGenerator::Start()
 	charReferences.push_back(58);
 	charReferences.push_back(44);
 	charReferences.push_back(59);
-	charReferences.push_back(59);
 	charReferences.push_back(40);
 	charReferences.push_back(42);
 	charReferences.push_back(33);
@@ -115,8 +113,10 @@ bool TextGenerator::Start()
 	charReferences.push_back(35);
 	charReferences.push_back(36);
 	charReferences.push_back(37);
+	charReferences.push_back(38);
 	charReferences.push_back(45);
 	charReferences.push_back(43);
+	return true;
 }
 
 bool TextGenerator::PreUpdate()
@@ -147,5 +147,6 @@ void TextGenerator::Write(const char* text, int x, int y)
 	{
 		SDL_Rect letter = GetCharRect(text[i]);
 		Engine::GetInstance().render->DrawTexture(fontTexture, x + size.getX() * i, y, SDL_FLIP_NONE, &letter);
+		i++;
 	}
 }
