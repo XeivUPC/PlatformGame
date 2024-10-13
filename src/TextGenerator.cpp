@@ -27,7 +27,6 @@ TextGenerator::~TextGenerator()
 
 bool TextGenerator::Awake()
 {
-	
 	return true;
 }
 

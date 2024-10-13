@@ -3,7 +3,6 @@
 #include "Textures.h"
 #include "Box2DCreator.h"
 #include "CollidersManager.h"
-#include "TextGenerator.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
