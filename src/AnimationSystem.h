@@ -41,7 +41,7 @@ private:
 	float speed = 1;
 	float timer = 0;
 	void Next();
-	bool isPlaying;
+	bool isPlaying=true;
 
 public:
 	Animator();

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Module.h"
-#include <list>
+#include <unordered_map>
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_render.h"
 #include "SDL2/SDL_surface.h"
@@ -25,12 +25,12 @@ public:
 	bool CleanUp();
 
 	// Load Texture
-	SDL_Texture* const Load(const char* path);
+	SDL_Texture* const Load(std::string path);
 	SDL_Texture* const LoadSurface(SDL_Surface* surface);
 	bool UnLoad(SDL_Texture* texture);
 	void GetSize(const SDL_Texture* texture, int& width, int& height) const;
 
 public:
-	std::list<SDL_Texture*> textures;
+	std::unordered_map<std::string,SDL_Texture*> textures;
 
 };

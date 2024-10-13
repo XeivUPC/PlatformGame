@@ -26,6 +26,12 @@
     <Filter Include="Source Files\Game\Enemies">
       <UniqueIdentifier>{d7a60d49-7ee0-4083-bc93-ec05d785a348}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\CheckPoints">
+      <UniqueIdentifier>{d45e8e0f-5828-49cc-8e89-d0969d90e83b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Obstacle">
+      <UniqueIdentifier>{3d588d78-86af-47e8-8f53-b656b98159f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -114,6 +120,15 @@
     <ClCompile Include="src\Counter.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\CheckPoint.cpp">
+      <Filter>Source Files\Game\CheckPoints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirtBlock.cpp">
+      <Filter>Source Files\Game\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MovingPlatform.cpp">
+      <Filter>Source Files\Game\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -196,6 +211,15 @@
     </ClInclude>
     <ClInclude Include="src\Counter.h">
       <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CheckPoint.h">
+      <Filter>Source Files\Game\CheckPoints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirtBlock.h">
+      <Filter>Source Files\Game\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MovingPlatform.h">
+      <Filter>Source Files\Game\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

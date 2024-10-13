@@ -40,6 +40,7 @@ public:
 	void SetBackgroundColor(SDL_Color color);
 
 	void SetConfinementValues(Vector2D min, Vector2D max);
+	void ConfineCameraBetweenRange();
 
 public:
 

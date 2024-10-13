@@ -29,10 +29,10 @@ public:
 public:
 
 	//Player Exposed Stats
-	float speed = 160*3;
+	float speed = 120*3;
 	float ladderSpeed = 160;
 	float jumpForce = 160;
-	float fallAttackJumpMultiplier = 1.1f;
+	float fallAttackJumpMultiplier = 1.0f;
 
 	
 	std::string textureName; 
@@ -92,7 +92,7 @@ private:
 	b2Vec2 textureOffset{-35,-35};
 
 	/// Animator
-	Animator animator;
+	Animator* animator;
 	void InitAnimations();
 
 
@@ -116,8 +116,11 @@ private:
 		
 
 		//// EnemyCollider
-		b2Fixture* enemyCheck;
-		ColliderHandler enemyCheckController;
+		b2Fixture* shovelFallAttackCheck;
+		ColliderHandler shovelFallAttackCheckController;
+
+		b2Fixture* shovelAttackCheckLeft;
+		b2Fixture* shovelAttackCheckRight;
 
 		//// LadderCollider
 		b2Fixture* ladderCheck;

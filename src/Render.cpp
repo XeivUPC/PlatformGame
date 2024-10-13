@@ -87,13 +87,13 @@ bool Render::PreUpdate()
 bool Render::Update(float dt)
 {
 	ConfineCameraBetweenRange(dt);
-	FollowPlayer();
+	
 	return true;
 }
 
 bool Render::PostUpdate()
 {
-
+	FollowPlayer();
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;
@@ -157,7 +157,7 @@ void Render::ConfineCameraBetweenRange(float dt)
 		Engine::GetInstance().levelManager->GoToNextSection({ 0,-1 });
 }
 
-void Render::FollowPlayer()
+void Render::ConfineCameraBetweenRange()
 {
 	float minX = -METERS_TO_PIXELS(minRangeConfinePosition.getX());
 	float maxX = -METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
@@ -165,7 +165,36 @@ void Render::FollowPlayer()
 	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY()) + 32;
 	float maxY = minY;
 
+
 	float targetPos = METERS_TO_PIXELS((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
+
+	camera.x = targetPos;
+
+	if (camera.x > minX) {
+		camera.x = minX;		
+	}
+	if (camera.x < maxX) {
+		camera.x = maxX;
+	}
+	if (camera.y < minY) {
+		camera.y = minY;
+	}
+	if (camera.y > maxY) {
+		camera.y = maxY;
+	}
+
+	}
+
+
+void Render::FollowPlayer()
+{
+	float minX = -METERS_TO_PIXELS_RAW(minRangeConfinePosition.getX());
+	float maxX = -METERS_TO_PIXELS_RAW(maxRangeConfinePosition.getX()) + viewport.w;
+
+	float minY = METERS_TO_PIXELS_RAW(-minRangeConfinePosition.getY()) + 32;
+	float maxY = minY;
+
+	float targetPos = METERS_TO_PIXELS_RAW((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
 
 	if (targetPos > minX) {
 		return;
