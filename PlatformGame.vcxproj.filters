@@ -32,6 +32,9 @@
     <Filter Include="Source Files\Game\Obstacle">
       <UniqueIdentifier>{3d588d78-86af-47e8-8f53-b656b98159f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\UI">
+      <UniqueIdentifier>{b523fab9-dce4-4e5c-b0d8-7756b7b92237}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -129,6 +132,9 @@
     <ClCompile Include="src\MovingPlatform.cpp">
       <Filter>Source Files\Game\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -220,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="src\MovingPlatform.h">
       <Filter>Source Files\Game\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI.h">
+      <Filter>Source Files\Game\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
