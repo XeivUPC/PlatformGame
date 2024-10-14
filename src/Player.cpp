@@ -36,7 +36,6 @@ bool Player::Awake() {
 
 	/// Texture, index, size, pivot
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
-	
 
 
 	return true;
@@ -203,6 +202,12 @@ bool Player::Update(float dt)
 		}
 	}
 
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT) {
+		coins.Add(1);
+	}
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_M) == KEY_DOWN) {
+		magic.Add(1);
+	}
 
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
