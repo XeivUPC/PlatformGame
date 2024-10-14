@@ -63,7 +63,7 @@ Engine::Engine() {
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
-    AddModule(std::static_pointer_cast<Module>(ui));
+    AddModule(std::static_pointer_cast<UI>(ui));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
 }

@@ -72,12 +72,13 @@ bool CheckPoint::Start()
 	b2World* world = Engine::GetInstance().scene->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()-2.5f)};
 
-	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(25), PIXEL_TO_METERS(25));
+	b2FixtureUserData fixtureData;
+	fixtureData.pointer = (uintptr_t)(&collisionController);
+	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(25), PIXEL_TO_METERS(25), fixtureData);
 	body->GetFixtureList()[0].SetFilterData(filter);
 	body->GetFixtureList()[0].SetSensor(true);
 	body->SetType(b2_staticBody);
 
-	Engine::GetInstance().box2DSensors->AddSensor(&collisionController);
 	collisionController.SetSensor(&body->GetFixtureList()[0]);
 
 	return true;
@@ -105,7 +106,7 @@ bool CheckPoint::Update(float dt)
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	Engine::GetInstance().box2DCreator->RenderBody(body, {0,255,0,255});
+	//Engine::GetInstance().box2DCreator->RenderBody(body, {0,255,0,255});
 	return true;
 }
 

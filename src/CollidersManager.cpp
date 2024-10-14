@@ -8,34 +8,34 @@ CollidersManager::CollidersManager()
 
 CollidersManager::~CollidersManager()
 {
-    sensors.clear();
-}
-
-void CollidersManager::AddSensor(ColliderHandler* sensor)
-{
-    sensors.emplace_back(sensor);
-}
-
-void CollidersManager::RemoveSensor(ColliderHandler* sensor)
-{
-    sensors.erase(std::remove(sensors.begin(), sensors.end(), sensor), sensors.end());
+   
 }
 
 void CollidersManager::BeginContact(b2Contact* contact)
 {
-    for (auto sensor : sensors) {
-        sensor->BeginContact(contact);
-    }
 
-    /*class Sensor;
-    const b2BodyUserData& userData = contact->GetFixtureA()->GetBody()->GetUserData();
-    Sensor* sensorA = (Sensor*)userData.pointer;
-    Sensor* sensorB = ....;*/
+    b2FixtureUserData dataA = contact->GetFixtureA()->GetUserData();
+    ColliderHandler* sensorA = (ColliderHandler*)dataA.pointer;
+    if (sensorA != nullptr)
+        sensorA->BeginContact(contact);
+
+    b2FixtureUserData dataB = contact->GetFixtureB()->GetUserData();
+    ColliderHandler* sensorB = (ColliderHandler*)dataB.pointer;
+    if (sensorB != nullptr)
+        sensorB->BeginContact(contact);
+
 }
 
 void CollidersManager::EndContact(b2Contact* contact)
 {
-    for (auto sensor : sensors) {
-        sensor->EndContact(contact);
-    }
+
+    b2FixtureUserData dataA = contact->GetFixtureA()->GetUserData();
+    ColliderHandler* sensorA = (ColliderHandler*)dataA.pointer;
+    if (sensorA != nullptr)
+        sensorA->EndContact(contact);
+
+    b2FixtureUserData dataB = contact->GetFixtureB()->GetUserData();
+    ColliderHandler* sensorB = (ColliderHandler*)dataB.pointer;
+    if (sensorB != nullptr)
+        sensorB->EndContact(contact);
 }

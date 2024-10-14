@@ -107,7 +107,7 @@ void TopUI::OrbDrawAndLogic(Health counter, int factor, int fullIndex, int halfI
 
 void TopUI::Render()
 {
-	SDL_Rect top{ -Engine::GetInstance().render->camera.x * Engine::GetInstance().window->GetScale(), -Engine::GetInstance().render->camera.y * Engine::GetInstance().window->GetScale(), Engine::GetInstance().window->width* Engine::GetInstance().window->GetScale(), 16 * Engine::GetInstance().window->GetScale() };
+	SDL_Rect top{ -Engine::GetInstance().render->camera.x * Engine::GetInstance().window->GetScale(), -Engine::GetInstance().render->camera.y * Engine::GetInstance().window->GetScale(), Engine::GetInstance().window->width* Engine::GetInstance().window->GetScale(), 32 * Engine::GetInstance().window->GetScale() };
 	Engine::GetInstance().render->DrawRectangle(top,0,0,0);
 	if (!isActive)
 		return;

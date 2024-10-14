@@ -7,8 +7,8 @@
 #include "ColliderHandler.h"
 #include "AnimationSystem.h"
 #include "Timer.h"
+#include "Counter.h"
 #include "HealthSystem.h"
-#include "CounterSystem.h"
 
 class Player : public Entity
 {
@@ -41,6 +41,7 @@ public:
 	SDL_Texture* texture = NULL;
 
 	Health playerHealth = Health(20);
+
 	Counter coins = Counter();
 	Counter magic = Counter();
 
