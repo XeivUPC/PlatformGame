@@ -6,6 +6,10 @@
 #include <sstream> 
 #include "Render.h"
 #include "Box2DCreator.h"
+#include "CheckPoint.h"
+#include "DirtBlock.h"
+#include "EntityManager.h"
+#include "MovingPlatform.h"
 
 LevelSection::LevelSection()
 {
@@ -33,7 +37,7 @@ bool LevelSection::Update(float dt)
                 Vector2D mapCoord = MapToWorld(i, j);
 
                 // Complete the draw function
-                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX() + sectionOffset.x, mapCoord.getY() + sectionOffset.y, SDL_FLIP_NONE, &tileRect);
+                Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX() + sectionOffset.x , mapCoord.getY() + sectionOffset.y, SDL_FLIP_NONE, &tileRect);
 
             }
         }
@@ -49,8 +53,6 @@ bool LevelSection::Update(float dt)
 
 bool LevelSection::CleanUp()
 {
-    //LOG("Unloading map");
-
     // Make sure you clean up any memory allocated from tilesets/map
     for (const auto& tileset : mapData.tilesets) {
         Engine::GetInstance().textures->UnLoad(tileset->texture);
@@ -75,7 +77,7 @@ bool LevelSection::CleanUp()
 }
 
 
-bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset, bool loadColliders)
+bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset, bool loadColliders, bool loadObjects)
 {
 
     bool ret = true;
@@ -95,6 +97,9 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
         sectionOffset = offset;
         pugi::xml_node mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "BottomSection");
         bottomSection = mapProperties.attribute("value").as_int();
+
+        mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "Level");
+        sectionNumber = mapProperties.attribute("value").as_int();
         mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "TopSection");
         topSection = mapProperties.attribute("value").as_int();
         mapProperties = mapFileXML.child("map").child("properties").find_child_by_attribute("property", "name", "LeftSection");
@@ -117,11 +122,12 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
 
         if (loadColliders)
             LoadColliders();
+        if (loadObjects)
+            LoadObjects();
 
     }
     return ret;
 }
-
 
 Vector2D LevelSection::MapToWorld(int x, int y) const
 {
@@ -206,6 +212,74 @@ void LevelSection::LoadColliders() {
         colliders.push_back(collider);
     }
 
+}
+
+void LevelSection::LoadObjects()
+{
+    for (pugi::xml_node objectNode = mapNode.find_child_by_attribute("objectgroup", "name", "Objects").child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object")) {
+
+        pugi::xml_node objectTypePropety = objectNode.child("properties").find_child_by_attribute("property", "name", "Type");
+
+        std::string type = objectTypePropety.attribute("value").as_string();
+        if (type  == "CheckPoint") {
+            float x = objectNode.attribute("x").as_int();
+            float y = objectNode.attribute("y").as_int();
+
+            Vector2D postion{ PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS(y) + PIXEL_TO_METERS(sectionOffset.y) };
+            CheckPoint* checkPoint = new CheckPoint(sectionNumber, postion);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)checkPoint);
+        }
+
+        if (type == "DirtBlock") {
+            float x = objectNode.attribute("x").as_int();
+            float y = objectNode.attribute("y").as_int();
+
+            pugi::xml_node objectSizePropety = objectNode.child("properties").find_child_by_attribute("property", "name", "Size");
+            int size = objectSizePropety.attribute("value").as_int();
+
+            Vector2D postion{ PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS(y) + PIXEL_TO_METERS(sectionOffset.y) };
+            DirtBlock* dirtBlock = new DirtBlock((DirtBlock::DirtSize)size, postion);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)dirtBlock);
+        }
+
+        if (type == "BubbleGenerator") {
+            float x = objectNode.attribute("x").as_int();
+            float y = objectNode.attribute("y").as_int();
+        }
+
+        if (type == "MovingPlatform") {
+            float x = objectNode.attribute("x").as_int();
+            float y = objectNode.attribute("y").as_int();
+
+            int width = objectNode.attribute("width").as_int();
+            int height = objectNode.attribute("height").as_int();
+
+            pugi::xml_node objectMoveTypeProperty = objectNode.child("properties").find_child_by_attribute("property", "name", "IsVertical");
+            bool isVertical = objectMoveTypeProperty.attribute("value").as_bool();
+            
+            pugi::xml_node platformTypePropety = objectNode.child("properties").find_child_by_attribute("property", "name", "PlatformType");
+            int platformType = platformTypePropety.attribute("value").as_bool();
+
+
+
+            Vector2D leftSide{};
+            Vector2D rightSide{};
+
+            if (!isVertical) {
+                leftSide = { PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x),PIXEL_TO_METERS((y + height / 2)) + PIXEL_TO_METERS(sectionOffset.y) };
+                rightSide ={ PIXEL_TO_METERS((x + width)) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS((y + height / 2)) + PIXEL_TO_METERS(sectionOffset.y) };
+            }
+            else {
+                leftSide = { PIXEL_TO_METERS((x + width/2)) + PIXEL_TO_METERS(sectionOffset.x),PIXEL_TO_METERS((y + height)) + PIXEL_TO_METERS(sectionOffset.y) };
+                rightSide = { PIXEL_TO_METERS((x + width/2)) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS((y )) + PIXEL_TO_METERS(sectionOffset.y) };
+            }
+
+           
+
+            MovingPlatform* movingPlatform = new MovingPlatform(sectionNumber, leftSide, rightSide, platformType, isVertical);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)movingPlatform);
+        }
+    }
 }
 
 b2Body* LevelSection::CreateColliders(xml_node* node)

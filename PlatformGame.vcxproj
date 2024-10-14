@@ -148,9 +148,11 @@
     <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Box2DCreator.cpp" />
+    <ClCompile Include="src\CheckPoint.cpp" />
     <ClCompile Include="src\ColliderHandler.cpp" />
     <ClCompile Include="src\CollidersManager.cpp" />
     <ClCompile Include="src\Counter.cpp" />
+    <ClCompile Include="src\DirtBlock.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
@@ -159,6 +161,7 @@
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LevelSection.cpp" />
     <ClCompile Include="src\Log.cpp" />
+    <ClCompile Include="src\MovingPlatform.cpp" />
     <ClCompile Include="src\Parallax.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\PlatformGame.cpp" />
@@ -176,9 +179,11 @@
     <ClInclude Include="src\AnimationSystem.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Box2DCreator.h" />
+    <ClInclude Include="src\CheckPoint.h" />
     <ClInclude Include="src\ColliderHandler.h" />
     <ClInclude Include="src\CollidersManager.h" />
     <ClInclude Include="src\Counter.h" />
+    <ClInclude Include="src\DirtBlock.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
@@ -190,6 +195,7 @@
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\MemLeaks.h" />
     <ClInclude Include="src\Module.h" />
+    <ClInclude Include="src\MovingPlatform.h" />
     <ClInclude Include="src\Parallax.h" />
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Player.h" />

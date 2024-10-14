@@ -1,8 +1,11 @@
 #include "LevelManager.h"
+#include "EntityManager.h"
 #include "Log.h"
 #include "Engine.h"
+#include "Entity.h"
 #include "Render.h"
 #include "Scene.h"
+#include "Textures.h"
 #include "Audio.h"
 
 LevelManager::LevelManager()
@@ -42,14 +45,6 @@ bool LevelManager::Start()
 bool LevelManager::Update(float dt)
 {
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ 1,0 });
-	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ -1,0 });
-	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ 0,1 });
-	else if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
-		GoToNextSection(b2Vec2{ 0,-1 });
 
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
@@ -66,14 +61,21 @@ bool LevelManager::Update(float dt)
 
 bool LevelManager::CleanUp()
 {
+	LOG("Unloading map");
 	for (const auto& pair : loadedSections) {
 		if (pair.second != nullptr) {
 			pair.second->CleanUp();
 			delete pair.second;
 		}	
 	}
-	loadedSections.clear();
+	for (CheckPoint* checkPoint : checkPoints) {
+		if (checkPoint != nullptr) {
+			Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd((Entity*)checkPoint);
+		}
+	}
 
+	loadedSections.clear();
+	checkPoints.clear();
 	return true;
 }
 
@@ -97,10 +99,11 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 
 	if (mainSection->leftSection != -1 && loadedSections[mainSection->leftSection] == nullptr) {
 		LevelSection* sectionLeft = new LevelSection();
-		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false);
+		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false, false);
 
 		sectionLeft->sectionOffset.x = -sectionLeft->mapData.width * sectionLeft->mapData.tilewidth + mainSection->sectionOffset.x;
 		sectionLeft->LoadColliders();
+		sectionLeft->LoadObjects();
 		loadedSections[mainSection->leftSection] = sectionLeft;
 	}
 	if (mainSection->rightSection != -1 && loadedSections[mainSection->rightSection] == nullptr) {
@@ -192,6 +195,55 @@ void LevelManager::GoToNextSection(b2Vec2 direction)
 
 	}
 
+}
+
+void LevelManager::GoToClosestCheckPoint()
+{
+	int sectionToGo = INT16_MAX;
+	bool finded = false;
+	for (size_t i = 0; i < checkPoints.size(); i++)
+	{
+		CheckPoint* checkPoint = checkPoints[i];
+		if (checkPoint->IsUnlocked()) {
+			int sectionPlaced = checkPoint->GetSection();
+			if (currentSection >= sectionPlaced || sectionToGo>sectionPlaced) {
+				sectionToGo = sectionPlaced;
+				finded = true;
+			}
+		}
+	}
+	if (finded) {
+		LoadSection(sectionToGo);
+	}
+	else
+		LoadSection(1);
+	Engine::GetInstance().GetInstance().render->ConfineCameraBetweenRange();
+}
+
+Vector2D LevelManager::GetClosestCheckPointPosition()
+{
+	int sectionToGo = INT16_MAX;
+	bool finded = false;
+
+	Vector2D pos{8,8};
+	for (size_t i = 0; i < checkPoints.size(); i++)
+	{
+		CheckPoint* checkPoint = checkPoints[i];
+		if (checkPoint->IsUnlocked()) {
+			int sectionPlaced = checkPoint->GetSection();
+			if (currentSection >= sectionPlaced || sectionToGo > sectionPlaced) {
+				sectionToGo = sectionPlaced;
+				finded = true;
+				pos = checkPoint->GetRespawnPos();
+			}
+		}
+	}
+	return pos;
+}
+
+void LevelManager::RegisterCheckPoint(CheckPoint* checkPoint)
+{
+	checkPoints.emplace_back(checkPoint);
 }
 
 LevelSection* LevelManager::GetCurrentSection()

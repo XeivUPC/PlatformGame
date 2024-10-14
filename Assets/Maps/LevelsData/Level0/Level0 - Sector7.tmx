@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="38">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="52">
  <properties>
   <property name="BottomSection" type="int" value="8"/>
   <property name="LeftSection" type="int" value="-1"/>
@@ -127,7 +127,50 @@
 0,676,550,551,552,0,550,515,517,0,0,0,0,0,0,0,0,0,0,0,0,0,0,710,711
 </data>
  </layer>
- <objectgroup id="10" name="Objects"/>
+ <objectgroup id="10" name="Objects">
+  <object id="44" x="48" y="144">
+   <properties>
+    <property name="Size" type="int" value="0"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="45" x="32" y="144">
+   <properties>
+    <property name="Size" type="int" value="0"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="46" x="32" y="160">
+   <properties>
+    <property name="Size" type="int" value="0"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="47" x="48" y="160">
+   <properties>
+    <property name="Size" type="int" value="0"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="48" x="48" y="176">
+   <properties>
+    <property name="Size" type="int" value="0"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="49" x="32" y="176">
+   <properties>
+    <property name="Size" type="int" value="0"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="8" name="Colliders">
   <object id="26" x="32" y="192" width="48" height="16">
    <properties>
@@ -136,18 +179,6 @@
    </properties>
   </object>
   <object id="29" x="96" y="192" width="32" height="16">
-   <properties>
-    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
-    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
-   </properties>
-  </object>
-  <object id="30" x="64" y="144" width="64" height="16">
-   <properties>
-    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
-    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
-   </properties>
-  </object>
-  <object id="31" x="128" y="144" width="240" height="64">
    <properties>
     <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
     <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
@@ -181,6 +212,18 @@
    <properties>
     <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
     <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+  <object id="50" x="64" y="144" width="304" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="51" x="128" y="160" width="16" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
    </properties>
   </object>
  </objectgroup>

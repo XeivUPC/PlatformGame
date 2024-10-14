@@ -46,7 +46,7 @@ bool Textures::CleanUp()
 	LOG("Freeing textures and Image library");
 	for (const auto& texture : textures) {
 		LOG("Freeing texture");
-		SDL_DestroyTexture(texture);
+		SDL_DestroyTexture(texture.second);
 	}
 	textures.clear();
 
@@ -55,10 +55,15 @@ bool Textures::CleanUp()
 }
 
 // Load new texture from file path
-SDL_Texture* const Textures::Load(const char* path)
+SDL_Texture* const Textures::Load(std::string path)
 {
+	if (textures.count(path) != 0) {
+		LOG("Texture is already loaded: %s", path.c_str());
+		return textures[path];
+	}
+
 	SDL_Texture* texture = NULL;
-	SDL_Surface* surface = IMG_Load(path);
+	SDL_Surface* surface = IMG_Load(path.c_str());
 
 	if (surface == NULL)
 	{
@@ -67,6 +72,8 @@ SDL_Texture* const Textures::Load(const char* path)
 	else
 	{
 		texture = LoadSurface(surface);
+		if(texture!=nullptr)
+			textures[path] = texture;
 		SDL_FreeSurface(surface);
 	}
 
@@ -77,7 +84,7 @@ SDL_Texture* const Textures::Load(const char* path)
 bool Textures::UnLoad(SDL_Texture* texture)
 {
 	for (const auto& _texture : textures) {
-		if (_texture == texture) {
+		if (_texture.second == texture) {
 			LOG("Unloading texture");
 			SDL_DestroyTexture(texture);
 			return true;
@@ -98,10 +105,6 @@ SDL_Texture* const Textures::LoadSurface(SDL_Surface* surface)
 	if (texture == NULL)
 	{
 		LOG("Unable to create texture from surface! SDL Error: %s\n", SDL_GetError());
-	}
-	else
-	{
-		textures.push_back(texture);
 	}
 
 	return texture;
