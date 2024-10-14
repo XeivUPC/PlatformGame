@@ -224,10 +224,12 @@ void Render::ResetViewPort()
 
 
 // Blit to screen
-bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip flipMode, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip flipMode, const SDL_Rect* section, SDL_Color color, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
 	int scale = Engine::GetInstance().window->GetScale();
+
+	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speed) + x * scale;
@@ -261,6 +263,8 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip fl
 		LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 		ret = false;
 	}
+
+	SDL_SetTextureColorMod(texture,255,255,255);
 
 	return ret;
 }

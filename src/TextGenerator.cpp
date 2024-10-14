@@ -149,3 +149,14 @@ void TextGenerator::Write(const char* text, int x, int y)
 		i++;
 	}
 }
+
+void TextGenerator::Write(const char* text, int x, int y, SDL_Color color)
+{
+	int i = 0;
+	while (text[i] != '\0')
+	{
+		SDL_Rect letter = GetCharRect(text[i]);
+		Engine::GetInstance().render->DrawTexture(fontTexture, x + size.getX() * i, y, SDL_FLIP_NONE, &letter, color);
+		i++;
+	}
+}

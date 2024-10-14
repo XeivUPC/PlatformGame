@@ -152,14 +152,13 @@ void Animator::Update(float dt)
 	{
 		timer = speed;
 		Next();
-		
 	}
 }
 
 void Animator::Animate(int x, int y, SDL_RendererFlip flip)
 {	
 	SDL_Rect rect = animations[currentAnimation].GetSpriteRect(currentSprite);
-	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect, 1, 0);
+	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect,{255,255,255,255}, 1, 0);
 }
 
 void Animator::SetIfPlaying(bool isPlaying)

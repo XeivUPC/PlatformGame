@@ -40,9 +40,6 @@ class UI : public Module
 {
 private:
 	SDL_Texture* UITexture = NULL;
-	TopUI topUI;
-	Pause pauseMenuUI;
-	Dialogue dialogueUI;
 	enum Constraint
 	{
 		OPTION_CONSTRAINT_HORIZONTAL,
@@ -50,6 +47,9 @@ private:
 		OPTION_CONSTRAINT_GRID,
 	};
 public:
+	TopUI topUI;
+	Pause pauseMenuUI;
+	Dialogue dialogueUI;
 	UI();
 	virtual ~UI();
 	bool Awake();

@@ -23,6 +23,7 @@ bool UI::Start()
 {
 	UITexture = Engine::GetInstance().textures->Load("Assets/Textures/UI.png");
 	topUI.Activate();
+	pauseMenuUI.Deactivate();
 	return true;
 }
 
@@ -38,6 +39,8 @@ bool UI::Update(float dt)
 		topUI.Deactivate();
 	}
 	topUI.Render();
+	pauseMenuUI.Render();
+	dialogueUI.Render();
 	return true;
 }
 
@@ -124,9 +127,27 @@ void TopUI::Render()
 
 void Pause::Render()
 {
-	//Engine::GetInstance().render->DrawRectangle()
+	if (!isActive)
+		return;
+	SDL_Rect pause{ -Engine::GetInstance().render->camera.x * Engine::GetInstance().window->GetScale() + 64 * Engine::GetInstance().window->GetScale(), -Engine::GetInstance().render->camera.y * Engine::GetInstance().window->GetScale() + 32 * Engine::GetInstance().window->GetScale(), 272 * Engine::GetInstance().window->GetScale(), 176 * Engine::GetInstance().window->GetScale() };
+	Engine::GetInstance().render->DrawRectangle(pause, 0, 0, 0);
+	Engine::GetInstance().render->DrawRectangle(pause, 255, 255, 255, 255, false);
+	Engine::GetInstance().text->Write("-PAUSE-", 176, 40, { 44,152,213,255});
+	pause.x = 112;
+	pause.y = 0;
+	pause.w = 16;
+	pause.h = 16;
+	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 65, -Engine::GetInstance().render->camera.y + 33, SDL_FLIP_NONE, &pause);
+	pause.x = 128;
+	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 319, -Engine::GetInstance().render->camera.y + 33, SDL_FLIP_NONE, &pause);
+	pause.x = 144;
+	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 319, -Engine::GetInstance().render->camera.y + 191, SDL_FLIP_NONE, &pause);
+	pause.x = 160;
+	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 65, -Engine::GetInstance().render->camera.y + 191, SDL_FLIP_NONE, &pause);
 }
 
 void Dialogue::Render()
 {
+	if (!isActive)
+		return;
 }
