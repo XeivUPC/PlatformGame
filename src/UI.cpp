@@ -107,6 +107,8 @@ void TopUI::OrbDrawAndLogic(Health counter, int factor, int fullIndex, int halfI
 
 void TopUI::Render()
 {
+	SDL_Rect top{ -Engine::GetInstance().render->camera.x * Engine::GetInstance().window->GetScale(), -Engine::GetInstance().render->camera.y * Engine::GetInstance().window->GetScale(), Engine::GetInstance().window->width* Engine::GetInstance().window->GetScale(), 16 * Engine::GetInstance().window->GetScale() };
+	Engine::GetInstance().render->DrawRectangle(top,0,0,0);
 	if (!isActive)
 		return;
 	OrbDrawAndLogic(Engine::GetInstance().scene->player->playerHealth, 2, 4, 5, 8, {152,4});
@@ -115,8 +117,8 @@ void TopUI::Render()
 	SDL_Rect potion{ 16, 0, 16, 16 };
 	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 80, -Engine::GetInstance().render->camera.y, SDL_FLIP_NONE, &potion);
 	Engine::GetInstance().text->Write("-gold-    -item-    -life-                  -boss-", -Engine::GetInstance().render->camera.x*Engine::GetInstance().window->GetScale(), -Engine::GetInstance().render->camera.y* Engine::GetInstance().window->GetScale());
-	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().scene->player->coins.GetAmount()).c_str(), 16, 8);
-	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().scene->player->magic.GetAmount()).c_str(), 96, 8);
+	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().scene->player->coins.GetAmount()).c_str(), -Engine::GetInstance().render->camera.x * Engine::GetInstance().window->GetScale() + 16, -Engine::GetInstance().render->camera.y * Engine::GetInstance().window->GetScale() + 8);
+	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().scene->player->magic.GetAmount()).c_str(), -Engine::GetInstance().render->camera.x * Engine::GetInstance().window->GetScale() + 96, -Engine::GetInstance().render->camera.y * Engine::GetInstance().window->GetScale() + 8);
 }
 
 
