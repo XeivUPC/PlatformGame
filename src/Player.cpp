@@ -142,14 +142,17 @@ void Player::InitColliders() {
 		fixture->SetFilterData(playerFilters);
 	}
 	
-
-	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(10));
+	b2FixtureUserData groundCheckData;
+	groundCheckData.pointer = (uintptr_t)(&groundCheckController);
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(10), groundCheckData);
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
 	groundCheck->SetFilterData(groundCheckFilters);
 
 
-	shovelFallAttackCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(2));
+	b2FixtureUserData shovelFallAttackData;
+	shovelFallAttackData.pointer = (uintptr_t)(&shovelFallAttackCheckController);
+	shovelFallAttackCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(2), shovelFallAttackData);
 	shovelFallAttackCheck->SetFilterData(enemyCheckFilters);
 	shovelFallAttackCheck->SetFriction(0);
 	shovelFallAttackCheck->SetDensity(0);
@@ -166,8 +169,9 @@ void Player::InitColliders() {
 	shovelAttackCheckLeft->SetDensity(0);
 
 
-
-	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(7)), PIXEL_TO_METERS(8), PIXEL_TO_METERS(15));
+	b2FixtureUserData ladderCheckData;
+	ladderCheckData.pointer = (uintptr_t)(&ladderCheckController);
+	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(7)), PIXEL_TO_METERS(8), PIXEL_TO_METERS(15), ladderCheckData);
 	ladderCheck->SetFilterData(playerLadderFilters);
 	ladderCheck->SetFriction(0);
 	ladderCheck->SetDensity(0);
@@ -179,11 +183,6 @@ void Player::InitColliders() {
 	massData.mass = playerMass;
 	massData.center = playerCollider->GetLocalCenter();
 	playerCollider->SetMassData(&massData);
-
-	//No necesario
-	Engine::GetInstance().box2DSensors->AddSensor(&groundCheckController);
-	Engine::GetInstance().box2DSensors->AddSensor(&shovelFallAttackCheckController);
-	Engine::GetInstance().box2DSensors->AddSensor(&ladderCheckController);
 }
 
 
@@ -202,6 +201,12 @@ bool Player::Update(float dt)
 			playerHealth.ResetHealth();
 		}
 	}
+
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT)
+		coins.Add(1);
+
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
+		magic.Add(1);
 
 
 	bool previousGroundedValue = isGrounded;

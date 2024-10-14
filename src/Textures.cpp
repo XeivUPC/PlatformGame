@@ -58,7 +58,7 @@ bool Textures::CleanUp()
 SDL_Texture* const Textures::Load(std::string path)
 {
 	if (textures.count(path) != 0) {
-		LOG("Texture is already loaded: %s", path.c_str());
+		//LOG("Texture is already loaded: %s", path.c_str());
 		return textures[path];
 	}
 

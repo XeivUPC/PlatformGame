@@ -15,6 +15,7 @@
 #include "LevelManager.h"
 #include "Parallax.h"
 #include "TextGenerator.h"
+#include "UI.h"
 
 
 
@@ -44,6 +45,7 @@ Engine::Engine() {
 
     box2DCreator = std::make_shared<Box2DCreator>();
     box2DSensors = std::make_shared<CollidersManager>();
+    ui = std::make_shared<UI>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -61,6 +63,7 @@ Engine::Engine() {
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
+    AddModule(std::static_pointer_cast<UI>(ui));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
 }

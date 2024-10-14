@@ -39,8 +39,6 @@ void Enemy::InitColliders()
 
 	enemyCollider->SetFixedRotation(true);
 
-	Engine::GetInstance().box2DSensors->AddSensor(&positionCheckController);
-	Engine::GetInstance().box2DSensors->AddSensor(&playerCheckController);
 };
 
 void Enemy::Brain()

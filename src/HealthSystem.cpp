@@ -3,7 +3,10 @@
 
 void Health::CorrectHealth()
 {
-	currentHealth > baseHealth ? currentHealth = baseHealth : currentHealth < 0 ? currentHealth = 0 : true;
+	if (currentHealth > baseHealth)
+		currentHealth = baseHealth;
+	else if (currentHealth < 0)
+		currentHealth = 0;
 }
 
 Health::Health(const int bHealth)
@@ -27,12 +30,11 @@ void Health::ResetHealth()
 	currentHealth = baseHealth;
 }
 
-bool Health::ModifyBaseHealth(int amount)
+void Health::ModifyBaseHealth(int amount)
 {
-	if (amount < 0)return false;
+	if (amount < 0)amount = 0;
 	baseHealth = amount;
 	CorrectHealth();
-	return true;
 }
 
 void Health::Hurt(int Damage)

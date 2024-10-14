@@ -4,7 +4,7 @@
 #include "Render.h"
 #include "Window.h"
 
-b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius)
+b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius, b2FixtureUserData userData)
 {
 	
 	b2BodyDef bodyDef;
@@ -16,6 +16,7 @@ b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius
 
 	b2FixtureDef circleFixtureDef;
 	circleFixtureDef.shape = &circleShape;
+	circleFixtureDef.userData = userData;
 	circleFixtureDef.density = 1.0f;
 	circleFixtureDef.friction = 0.3f;
 	body->CreateFixture(&circleFixtureDef);
@@ -23,7 +24,7 @@ b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius
 	return body;
 }
 
-b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, float height)
+b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, float height, b2FixtureUserData userData)
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
@@ -33,6 +34,7 @@ b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, fl
 	b2PolygonShape boxShape = CreateBoxShape(width, height);
 
 	b2FixtureDef boxFixtureDef;
+	boxFixtureDef.userData = userData;
 	boxFixtureDef.shape = &boxShape;
 	boxFixtureDef.density = 1.0f;
 	boxFixtureDef.friction = 0.3f;
@@ -41,7 +43,7 @@ b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, fl
 	return body;
 }
 
-b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width, float height, float radius)
+b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width, float height, float radius, b2FixtureUserData userData)
 {
 	float rectangleHeight = height - 2 * radius; // Adjust height to accommodate the circle ends
 
@@ -56,6 +58,7 @@ b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width
 	// Create the rectangle fixture
 	b2FixtureDef rectangleFixtureDef;
 	rectangleFixtureDef.shape = &boxShape;
+	rectangleFixtureDef.userData = userData;
 	rectangleFixtureDef.density = 1.0f;
 	rectangleFixtureDef.friction = 0.3f;
 
@@ -81,25 +84,27 @@ b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width
 
 }
 
-b2Fixture* Box2DCreator::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float radius)
+b2Fixture* Box2DCreator::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float radius, b2FixtureUserData userData)
 {
 	b2CircleShape circleShape = CreateCircleShape(radius, offset);
 
 	b2FixtureDef circleFixtureDef;
 	circleFixtureDef.shape = &circleShape;
 	circleFixtureDef.density = 1.0f;
+	circleFixtureDef.userData = userData;
 	circleFixtureDef.friction = 0.3f;
 
 
 	return bodyToAddTo->CreateFixture(&circleFixtureDef);
 }
 
-b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height)
+b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height, b2FixtureUserData userData)
 {
 
 	b2PolygonShape boxShape = CreateBoxShape(width, height, offset);
 
 	b2FixtureDef boxFixtureDef;
+	boxFixtureDef.userData = userData;
 	boxFixtureDef.shape = &boxShape;
 	boxFixtureDef.density = 1.0f;
 	boxFixtureDef.friction = 0.3f;
@@ -108,13 +113,6 @@ b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width,
 
 }
 
-b2Fixture* Box2DCreator::AddCapsule(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height, float radius)
-{
-
-
-
-	return nullptr;
-}
 
 void Box2DCreator::RenderBody(b2Body* body, b2Color color)
 {

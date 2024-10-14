@@ -45,7 +45,7 @@ bool LevelSection::Update(float dt)
 
     for (auto*& collider : colliders)
     {
-        Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
+        //Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
     }
 
 	return true;
@@ -266,12 +266,12 @@ void LevelSection::LoadObjects()
             Vector2D rightSide{};
 
             if (!isVertical) {
-                leftSide = { PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x),PIXEL_TO_METERS((y + height / 2)) + PIXEL_TO_METERS(sectionOffset.y) };
-                rightSide ={ PIXEL_TO_METERS((x + width)) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS((y + height / 2)) + PIXEL_TO_METERS(sectionOffset.y) };
+                leftSide = { PIXEL_TO_METERS((x + mapData.tilewidth/2)) + PIXEL_TO_METERS(sectionOffset.x),PIXEL_TO_METERS((y + height / 2)) + PIXEL_TO_METERS(sectionOffset.y) };
+                rightSide ={ PIXEL_TO_METERS((x + width - mapData.tilewidth/2)) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS((y + height / 2)) + PIXEL_TO_METERS(sectionOffset.y) };
             }
             else {
-                leftSide = { PIXEL_TO_METERS((x + width/2)) + PIXEL_TO_METERS(sectionOffset.x),PIXEL_TO_METERS((y + height)) + PIXEL_TO_METERS(sectionOffset.y) };
-                rightSide = { PIXEL_TO_METERS((x + width/2)) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS((y )) + PIXEL_TO_METERS(sectionOffset.y) };
+                leftSide = { PIXEL_TO_METERS((x + width/2)) + PIXEL_TO_METERS(sectionOffset.x),PIXEL_TO_METERS((y + height - mapData.tileheight/2)) + PIXEL_TO_METERS(sectionOffset.y) };
+                rightSide = { PIXEL_TO_METERS((x + width/2)) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS((y + mapData.tileheight/2)) + PIXEL_TO_METERS(sectionOffset.y) };
             }
 
            

@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Scene.h"
 #include "Audio.h"
+#include <set>
 #include "Textures.h"
 #include "Box2DCreator.h"
 #include "CollidersManager.h"
@@ -49,11 +50,15 @@ bool MovingPlatform::Start()
 	b2World* world = Engine::GetInstance().scene->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()) };
 
-	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(16*3), PIXEL_TO_METERS(16));
+	b2FixtureUserData fixtureData;
+	fixtureData.pointer = (uintptr_t)(&collisionController);
+	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(16*3), PIXEL_TO_METERS(16), fixtureData);
 	body->GetFixtureList()[0].SetFilterData(filter);
 	body->SetType(b2_kinematicBody);
 	body->SetGravityScale(0);
 	body->SetFixedRotation(true);
+
+	collisionController.SetSensor(&body->GetFixtureList()[0]);
 
 	return true;
 }
@@ -102,24 +107,32 @@ bool MovingPlatform::Update(float dt)
 	position.setY(body->GetPosition().y);
 
 
-	if (isVertical) {
-		Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
-	}
-	else {
-		Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
-	}
+	//if (isVertical) {
+	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
+	//}
+	//else {
+	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
+	//}
 
 
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	Engine::GetInstance().box2DCreator->RenderBody(body, { 255,255,0,255 });
+	//Engine::GetInstance().box2DCreator->RenderBody(body, { 255,255,0,255 });
 
-
-	
+	if (!isVertical)
+	{
+		b2Vec2 platVel = body->GetLinearVelocity();
+		for (b2Body* entity : collisionController.GetBodiesColliding())
+		{
+			b2Vec2 vel = entity->GetLinearVelocity();
+			entity->SetLinearVelocity({ vel.x + platVel.x, vel.y + platVel.y });
+		}
+	}
 
 	return true;
 }
+
 
 bool MovingPlatform::CleanUp()
 {

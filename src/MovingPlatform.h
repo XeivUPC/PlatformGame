@@ -41,4 +41,5 @@ private:
 	float speed = 130;
 
 	b2Body* body;
+	ColliderHandler collisionController;
 };

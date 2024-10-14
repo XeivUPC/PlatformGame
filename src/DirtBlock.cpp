@@ -70,11 +70,13 @@ bool DirtBlock::Start()
 
 	filter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
 	filter.maskBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
-	hitCheck = colliderCreator->AddBox(body, { 0,0}, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY())+0.7f);
+
+	b2FixtureUserData fixtureData;
+	fixtureData.pointer = (uintptr_t)(&collisionController);
+	hitCheck = colliderCreator->AddBox(body, { 0,0}, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY())+0.7f, fixtureData);
 	hitCheck->SetSensor(true);
 	hitCheck->SetFilterData(filter);
 
-	Engine::GetInstance().box2DSensors->AddSensor(&collisionController);
 	collisionController.SetSensor(&body->GetFixtureList()[0]);
 
 
@@ -126,8 +128,8 @@ bool DirtBlock::Update(float dt)
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	if(!isBroken)
-		Engine::GetInstance().box2DCreator->RenderBody(body, { 0,255,0,255 });
+	/*if(!isBroken)
+		Engine::GetInstance().box2DCreator->RenderBody(body, { 0,255,0,255 });*/
 
 	return true;
 }

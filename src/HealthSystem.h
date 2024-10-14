@@ -11,7 +11,7 @@ public:
 	int GetCurrentHealth();
 	int GetBaseHealth();
 	void ResetHealth();
-	bool ModifyBaseHealth(int amount);
+	void ModifyBaseHealth(int amount);
 	void Hurt(int Damage);
 	void Heal(int HealtAmount);
 	bool IsAlive();
