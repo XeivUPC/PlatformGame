@@ -9,6 +9,8 @@ struct Sprite
 	SDL_Texture* texture;
 	Vector2D index;
 	Vector2D size;
+
+	int extraData;
 };
 
 class AnimationData
@@ -23,6 +25,7 @@ protected:
 	int GetCount(int spriteIndex);
 public:
 	void AddSprite(Sprite sprite);
+	void AddSprite(Sprite sprite, int extraData);
 	AnimationData(const char* n, std::vector<Sprite> s);
 	AnimationData(const char* n);
 	AnimationData();

@@ -29,6 +29,13 @@ int AnimationData::GetCount(int spriteIndex)
 
 void AnimationData::AddSprite(Sprite sprite)
 {
+	sprite.extraData = -1;
+	sprites.push_back(sprite);
+}
+
+void AnimationData::AddSprite(Sprite sprite, int extraData)
+{
+	sprite.extraData = extraData;
 	sprites.push_back(sprite);
 }
 
@@ -159,7 +166,7 @@ void Animator::Update(float dt)
 void Animator::Animate(int x, int y, SDL_RendererFlip flip)
 {	
 	SDL_Rect rect = animations[currentAnimation].GetSpriteRect(currentSprite);
-	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect, 1, 0);
+	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect);
 }
 
 void Animator::SetIfPlaying(bool isPlaying)

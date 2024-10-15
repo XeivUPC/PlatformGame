@@ -132,7 +132,7 @@ bool LevelManager::ChargeAllLevelSection(int startingIndex)
 		
 		if (startingIndex == 1) {
 			LevelSection* section = new LevelSection();
-			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath, {0,16*2});
+			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath, {0,16*1});
 			loadedSections[startingIndex] = section;
 		}
 		else {

@@ -36,7 +36,7 @@ bool Window::Awake()
 		if (resizable == true) flags |= SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED;
 		if(fullscreen_window == true) flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width * GetScale(), height * GetScale(), flags);
+		window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
 
 		if(window == NULL)
 		{
@@ -76,13 +76,6 @@ void Window::GetWindowSize(int& width, int& height) const
 	height = this->height;
 }
 
-int Window::GetScale() const
-{
-	if (fullscreen_window)
-		return 1;
-	return scale;
-}
-
 bool Window::LoadParameters(xml_node parameters)
 {
 	bool ret = true;
@@ -98,7 +91,6 @@ bool Window::LoadParameters(xml_node parameters)
 
 	width = parameters.child("resolution").attribute("width").as_int(1280);
 	height = parameters.child("resolution").attribute("height").as_int(720);
-	scale = parameters.child("resolution").attribute("scale").as_int(1);
 
 	return ret;
 }

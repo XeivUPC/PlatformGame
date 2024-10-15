@@ -164,6 +164,7 @@
     <ClCompile Include="src\MovingPlatform.cpp" />
     <ClCompile Include="src\Parallax.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
+    <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\PlatformGame.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Render.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="src\MovingPlatform.h" />
     <ClInclude Include="src\Parallax.h" />
     <ClInclude Include="src\PerfTimer.h" />
+    <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\Scene.h" />

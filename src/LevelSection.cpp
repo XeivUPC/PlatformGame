@@ -2,7 +2,7 @@
 #include "LOG.h"
 #include "Engine.h"
 #include "Textures.h"
-#include "Scene.h"
+#include "Physics.h"
 #include <sstream> 
 #include "Render.h"
 #include "Box2DCreator.h"
@@ -18,25 +18,38 @@ LevelSection::LevelSection()
 
 LevelSection::~LevelSection()
 {
+    for (const auto& animatedTile : animatedTiles) {
+        delete animatedTile.second;
+    }
+    animatedTiles.clear();
 }
 
 bool LevelSection::Update(float dt)
 {
 
+    for (const auto& animatedTile : animatedTiles) {
+        animatedTile.second->Update(dt);
+    }
+    
     for (const auto& mapLayer : mapData.layers) {
-
+        int layerIndex = mapLayer->layerIndex+1;
         for (int i = 0; i < mapData.width; i++) {
             for (int j = 0; j < mapData.height; j++) {
                 //Get the gid from tile
                 int gid = mapLayer->Get(i, j) -1;
                 if (gid < 0)
                     continue;
+
+                if (animatedTiles.find(gid) != animatedTiles.end())
+                    gid = animatedTiles.at(gid)->GetCurrentAnimationSprite().extraData;
+
                 //Get the Rect from the tileSetTexture;
                 SDL_Rect tileRect = mapData.tilesets.front()->GetRect(gid);
                 //Get the screen coordinates from the tile coordinates
                 Vector2D mapCoord = MapToWorld(i, j);
 
                 // Complete the draw function
+                Engine::GetInstance().render->SelectLayer(layerIndex);
                 Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX() + sectionOffset.x , mapCoord.getY() + sectionOffset.y, SDL_FLIP_NONE, &tileRect);
 
             }
@@ -70,7 +83,7 @@ bool LevelSection::CleanUp()
 
     for (auto*& collider : colliders)
     {
-        Engine::GetInstance().scene->world->DestroyBody(collider);
+        Engine::GetInstance().physics->world->DestroyBody(collider);
     }
 
     return true;
@@ -113,9 +126,11 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
             TileSet* tileset = CreateTileset(&tilesetNode, texturePath);
             mapData.tilesets.push_back(tileset);
         }
+        int layerIndex = 0;
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
-            MapLayer* mapLayer = CreateMapLayer(&layerNode);
+            MapLayer* mapLayer = CreateMapLayer(&layerNode, layerIndex);
             mapData.layers.push_back(mapLayer);
+            layerIndex++;
         }
 
         mapNode = mapFileXML.child("map");
@@ -160,20 +175,44 @@ TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
     mapTex += document.child("tileset").child("image").attribute("source").as_string();
     tileset->texture = Engine::GetInstance().textures->Load(mapTex.c_str());
 
+
+    for (pugi::xml_node tileAnimatedNode = document.child("tileset").child("tile"); tileAnimatedNode != NULL; tileAnimatedNode = tileAnimatedNode.next_sibling("tile")) {
+        int gid = tileAnimatedNode.attribute("id").as_int();
+        for (pugi::xml_node animationNode = tileAnimatedNode.child("animation"); animationNode != NULL; animationNode = animationNode.next_sibling("animation")) {
+            Animator* animator = new Animator();
+            AnimationData tileAnimation = AnimationData("animation");
+            int duration = -1;
+            for (pugi::xml_node animationFrameNode = animationNode.child("frame"); animationFrameNode != NULL; animationFrameNode = animationFrameNode.next_sibling("frame")) {
+                int tileId = animationFrameNode.attribute("tileid").as_int();
+                if(duration==-1)
+                    duration = animationFrameNode.attribute("duration").as_int();
+                tileAnimation.AddSprite({}, tileId);
+            }
+            animator->AddAnimation(tileAnimation);
+            animator->SetSpeed(duration);
+            animator->SelectAnimation("animation", true);
+
+            animatedTiles.emplace(gid, animator);
+        }
+    }
+
+
     if (document)
         document.reset();
 
     return tileset;
 }
 
-MapLayer* LevelSection::CreateMapLayer(xml_node* node)
+MapLayer* LevelSection::CreateMapLayer(xml_node* node, int layerIndex)
 {
     MapLayer* mapLayer = new MapLayer();
 
     mapLayer->id = node->attribute("id").as_int();
+    mapLayer->id = node->attribute("id").as_int();
     mapLayer->name = node->attribute("name").as_string();
     mapLayer->width = node->attribute("width").as_int();
     mapLayer->height = node->attribute("height").as_int();
+    mapLayer->layerIndex =layerIndex;
 
     //Reserve the memory for the data 
     mapLayer->tiles = new unsigned int[mapLayer->width * mapLayer->height];
@@ -284,7 +323,7 @@ void LevelSection::LoadObjects()
 
 b2Body* LevelSection::CreateColliders(xml_node* node)
 {
-    b2World* world = Engine::GetInstance().scene->world;
+    b2World* world = Engine::GetInstance().physics->world;
 
     int x = node->attribute("x").as_int();
     int y = node->attribute("y").as_int();

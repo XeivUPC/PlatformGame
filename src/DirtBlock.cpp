@@ -1,6 +1,6 @@
 #include "DirtBlock.h"
 #include "Engine.h"
-#include "Scene.h"
+#include "Physics.h"
 #include "Audio.h"
 #include "Textures.h"
 #include "Box2DCreator.h"
@@ -61,7 +61,7 @@ bool DirtBlock::Start()
 
 
 	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
-	b2World* world = Engine::GetInstance().scene->world;
+	b2World* world = Engine::GetInstance().physics->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()) };
 
 	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY()));
@@ -124,7 +124,7 @@ bool DirtBlock::Update(float dt)
 		animator->SelectAnimation("Default", true);
 	}
 
-	
+	Engine::GetInstance().render->SelectLayer(2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
@@ -144,7 +144,7 @@ void DirtBlock::Break()
 {
 	isBroken = true;
 	particleRemoveTimer.Start();
-	Engine::GetInstance().scene->world->DestroyBody(body);
+	Engine::GetInstance().physics->world->DestroyBody(body);
 	Engine::GetInstance().audio->PlayFx(breakSoundId);
 
 }

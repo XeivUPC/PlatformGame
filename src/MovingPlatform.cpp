@@ -1,6 +1,6 @@
 #include "MovingPlatform.h"
 #include "Engine.h"
-#include "Scene.h"
+#include "Physics.h"
 #include "Audio.h"
 #include <set>
 #include "Textures.h"
@@ -47,7 +47,7 @@ bool MovingPlatform::Start()
 
 
 	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
-	b2World* world = Engine::GetInstance().scene->world;
+	b2World* world = Engine::GetInstance().physics->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()) };
 
 	b2FixtureUserData fixtureData;
@@ -114,7 +114,7 @@ bool MovingPlatform::Update(float dt)
 	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
 	//}
 
-
+	Engine::GetInstance().render->SelectLayer(2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
@@ -137,7 +137,7 @@ bool MovingPlatform::Update(float dt)
 bool MovingPlatform::CleanUp()
 {
 	delete animator;
-	Engine::GetInstance().scene->world->DestroyBody(body);
+	Engine::GetInstance().physics->world->DestroyBody(body);
 	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }

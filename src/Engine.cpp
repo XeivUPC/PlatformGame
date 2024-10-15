@@ -10,6 +10,7 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
+#include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
 #include "LevelManager.h"
@@ -37,6 +38,7 @@ Engine::Engine() {
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
+    physics = std::make_shared<Physics>();
     scene = std::make_shared<Scene>();
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
@@ -53,6 +55,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(input));
     AddModule(std::static_pointer_cast<Module>(textures));
     AddModule(std::static_pointer_cast<Module>(audio));
+    AddModule(std::static_pointer_cast<Module>(physics));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
     //// Add the map module

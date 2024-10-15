@@ -4,7 +4,9 @@
 #include <SDL2/SDL.h>
 #include "pugixml.hpp"
 #include "Vector2D.h"
+#include "AnimationSystem.h"
 #include <string>
+#include <unordered_map>
 
 // Create a struct needed to hold the information to Map node
 struct TileSet
@@ -37,6 +39,7 @@ struct MapLayer
 {
     // Add the info to the MapLayer Struct
     int id;
+    int layerIndex;
     std::string name;
     int width;
     int height;
@@ -55,6 +58,7 @@ struct MapData
     int height;
     int tilewidth;
     int tileheight;
+    
     std::list<TileSet*> tilesets;
 
     //Add a list/array of layers to the map
@@ -90,7 +94,7 @@ private:
     Vector2D MapToWorld(int x, int y) const;
 
     TileSet* CreateTileset(xml_node* node, std::string texturePath);
-    MapLayer* CreateMapLayer(xml_node* node);
+    MapLayer* CreateMapLayer(xml_node* node, int layerIndex);
     void CreateMapData(xml_document* document);
     b2Body* CreateColliders(xml_node* node);
 
@@ -100,6 +104,8 @@ private:
 
     pugi::xml_document mapFileXML;
     pugi::xml_node mapNode;
+
+    std::unordered_map<int, Animator*> animatedTiles;
 };
 
 

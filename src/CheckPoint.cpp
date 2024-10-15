@@ -1,6 +1,6 @@
 #include "CheckPoint.h"
 #include "Engine.h"
-#include "Scene.h"
+#include "Physics.h"
 #include "Audio.h"
 #include "Textures.h"
 #include "Box2DCreator.h"
@@ -69,7 +69,7 @@ bool CheckPoint::Start()
 
 
 	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
-	b2World* world = Engine::GetInstance().scene->world;
+	b2World* world = Engine::GetInstance().physics->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()-2.5f)};
 
 	b2FixtureUserData fixtureData;
@@ -103,6 +103,7 @@ bool CheckPoint::Update(float dt)
 		animator->SelectAnimation("Off", true);
 	}
 	
+	Engine::GetInstance().render->SelectLayer(2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
@@ -113,7 +114,7 @@ bool CheckPoint::Update(float dt)
 bool CheckPoint::CleanUp()
 {
 	delete animator;
-	Engine::GetInstance().scene->world->DestroyBody(body);
+	Engine::GetInstance().physics->world->DestroyBody(body);
 	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }

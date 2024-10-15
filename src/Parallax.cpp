@@ -39,11 +39,10 @@ bool Parallax::Update(float dt)
     int textureWidth;
     int textureHeight;
 
-    int scale = Engine::GetInstance().window->GetScale();
     Vector2D cameraOffset = Engine::GetInstance().render->cameraGameOffset;
 
-    float cameraX = -Engine::GetInstance().render->camera.x / (float)scale + cameraOffset.getX();
-    float cameraY = -Engine::GetInstance().render->camera.y / (float)scale + cameraOffset.getY();
+    float cameraX = -Engine::GetInstance().render->camera.x + cameraOffset.getX();
+    float cameraY = -Engine::GetInstance().render->camera.y + cameraOffset.getY();
 
     
     for (int i = 0; i < ParallaxLayers.size(); i++)
@@ -58,10 +57,13 @@ bool Parallax::Update(float dt)
             else if (ParallaxLayers[i].offset.getX() < -textureWidth)
                 ParallaxLayers[i].offset.setX(0);
         }
-  
+        
+        Engine::GetInstance().render->SelectLayer(0);
         Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX(), cameraY, SDL_FLIP_NONE, &rect);
         if (ParallaxLayers[i].speed != 0) {
+            Engine::GetInstance().render->SelectLayer(0);
             Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX() - textureWidth, cameraY, SDL_FLIP_NONE, &rect);
+            Engine::GetInstance().render->SelectLayer(0);
             Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX() + textureWidth, cameraY, SDL_FLIP_NONE, &rect);
         }
     }

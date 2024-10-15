@@ -15,6 +15,8 @@ class Input;
 class Render;
 class Textures;
 class Audio;
+class Physics;
+
 class Scene;
 class EntityManager;
 class LevelManager;
@@ -115,6 +117,7 @@ public:
 	std::shared_ptr<Render> render;
 	std::shared_ptr<Textures> textures;
 	std::shared_ptr<Audio> audio;
+	std::shared_ptr<Physics> physics;
 	std::shared_ptr<Scene> scene;
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<LevelManager> levelManager;

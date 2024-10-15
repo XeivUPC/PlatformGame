@@ -40,9 +40,6 @@ class UI : public Module
 {
 private:
 	SDL_Texture* UITexture = NULL;
-	TopUI topUI;
-	Pause pauseMenuUI;
-	Dialogue dialogueUI;
 	enum Constraint
 	{
 		OPTION_CONSTRAINT_HORIZONTAL,
@@ -61,4 +58,7 @@ public:
 	SDL_Texture* GetTexture();
 	void DrawOnOption(SDL_Rect* rect, int option, Vector2D scale, Vector2D count, Vector2D offset, Constraint constraint);
 
+	TopUI topUI;
+	Pause pauseMenuUI;
+	Dialogue dialogueUI;
 };

@@ -1,6 +1,6 @@
 #include "Box2DCreator.h"
 #include "Engine.h"
-#include "Scene.h"
+#include "Physics.h"
 #include "Render.h"
 #include "Window.h"
 
@@ -116,7 +116,7 @@ b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width,
 
 void Box2DCreator::RenderBody(b2Body* body, b2Color color)
 {
-	b2World* world = Engine::GetInstance().scene->world;
+	b2World* world = Engine::GetInstance().physics->world;
 	const std::shared_ptr<Render>& render = Engine::GetInstance().render;
 
 	for (b2Fixture* fixture = body->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext()) {
@@ -170,9 +170,8 @@ void Box2DCreator::RenderFixture(b2Fixture* fixture, b2Color color)
 		int screenY = (int)(METERS_TO_PIXELS(center.y));
 		int screenRadius = (int)(METERS_TO_PIXELS(radius));
 
-		int scale = Engine::GetInstance().window->GetScale();
 		// Draw the circle using the custom DrawCircle method
-		render->DrawCircle(screenX, screenY, screenRadius * scale, color.r, color.g, color.b, color.a, true);
+		render->DrawCircle(screenX, screenY, screenRadius , color.r, color.g, color.b, color.a, true);
 	}
 }
 

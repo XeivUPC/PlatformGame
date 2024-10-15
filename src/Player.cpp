@@ -7,8 +7,9 @@
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
-#include "Scene.h"
+#include "Physics.h"
 #include "Log.h"
+#include "UI.h"
 
 
 
@@ -113,7 +114,7 @@ void Player::InitAnimations() {
 void Player::InitColliders() {
 
 	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
-	b2World* world = Engine::GetInstance().scene->world;
+	b2World* world = Engine::GetInstance().physics->world;
 
 	///PlayerCollider
 	
@@ -134,7 +135,7 @@ void Player::InitColliders() {
 	emptyFilter.maskBits = 0x0000;
 	emptyFilter.categoryBits = 0x0000;
 
-	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(11), PIXEL_TO_METERS(29));
+	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(11), PIXEL_TO_METERS(30));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
@@ -207,6 +208,13 @@ bool Player::Update(float dt)
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
 		magic.Add(1);
+
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
+			Engine::GetInstance().ui->pauseMenuUI.Activate();
+		else
+			Engine::GetInstance().ui->pauseMenuUI.Deactivate();
+	}
 
 
 	bool previousGroundedValue = isGrounded;
@@ -354,6 +362,7 @@ bool Player::Update(float dt)
 		}
 	}
 
+	Engine::GetInstance().render->SelectLayer(3);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
@@ -443,7 +452,7 @@ bool Player::CleanUp()
 {
 	LOG("Cleanup player");
 	delete animator;
-	Engine::GetInstance().scene->world->DestroyBody(playerCollider);
+	Engine::GetInstance().physics->world->DestroyBody(playerCollider);
 	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }

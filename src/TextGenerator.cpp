@@ -139,13 +139,26 @@ bool TextGenerator::CleanUp()
 	return true;
 }
 
-void TextGenerator::Write(const char* text, int x, int y)
+void TextGenerator::Write(const char* text, int x, int y, int layer)
 {
 	int i = 0;
 	while (text[i] != '\0')
 	{
 		SDL_Rect letter = GetCharRect(text[i]);
+		Engine::GetInstance().render->SelectLayer(layer);
 		Engine::GetInstance().render->DrawTexture(fontTexture, x + size.getX() * i, y, SDL_FLIP_NONE, &letter);
+		i++;
+	}
+}
+
+void TextGenerator::Write(const char* text, int x, int y, SDL_Color color, int layer)
+{
+	int i = 0;
+	while (text[i] != '\0')
+	{
+		SDL_Rect letter = GetCharRect(text[i]);
+		Engine::GetInstance().render->SelectLayer(layer);
+		Engine::GetInstance().render->DrawTexture(fontTexture, x + size.getX() * i, y, SDL_FLIP_NONE, &letter, color);
 		i++;
 	}
 }

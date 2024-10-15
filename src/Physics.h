@@ -1,17 +1,16 @@
 #pragma once
-
 #include "Module.h"
-#include "Player.h"
 #include <box2d/box2d.h>
 
-class Scene : public Module
+
+class Physics : public Module
 {
 public:
 
-	Scene();
+	Physics();
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~Physics();
 
 	// Called before render is available
 	bool Awake();
@@ -31,10 +30,6 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Load Parameters from config file
-	bool LoadParameters(xml_node parameters);
-
-	Player* player;
-private:
-	xml_node configParameters;
+public:
+	b2World* world;
 };
