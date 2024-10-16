@@ -30,6 +30,8 @@ bool LevelSection::Update(float dt)
     
     for (const auto& mapLayer : mapData.layers) {
         int layerIndex = mapLayer->layerIndex+1;
+
+        Engine::GetInstance().render->LockLayer((Render::RenderLayers)layerIndex);
         for (int i = 0; i < mapData.width; i++) {
             for (int j = 0; j < mapData.height; j++) {
                 //Get the gid from tile
@@ -46,12 +48,12 @@ bool LevelSection::Update(float dt)
                 Vector2D mapCoord = MapToWorld(i, j);
 
                 // Complete the draw function
-                Engine::GetInstance().render->SelectLayer(layerIndex);
                 Engine::GetInstance().render->DrawTexture(mapData.tilesets.front()->texture, mapCoord.getX() + sectionOffset.x , mapCoord.getY() + sectionOffset.y, SDL_FLIP_NONE, &tileRect);
 
             }
         }
     }
+    Engine::GetInstance().render->UnlockLayer();
 
     for (auto*& collider : colliders)
     {

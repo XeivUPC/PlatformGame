@@ -26,6 +26,7 @@ public:
 
 	bool CleanUp();
 
+	void Damage(int amount, Vector2D direction = {0,0});
 
 public:
 
@@ -48,6 +49,7 @@ public:
 private:
 
 	bool TryJump();
+
 	void DoJump(float force);
 
 	bool TryShovelAttack();
@@ -65,6 +67,7 @@ private:
 	bool isDoingShovelAttack = false;
 	bool isFlipped=false;
 	bool isInLadder = false;
+	bool isInvulnerable = false;
 
 	/// MAX VALUES
 	const float MAX_FALL_SPEED = 100.0f;
@@ -91,7 +94,13 @@ private:
 
 	float jumpRecoverMS= 150;
 	Timer jumpRecoverTimer;
+
+	float hurtAnimEffectMS = 20;
+	Timer hurtAnimEffectTimer;
 	
+	float hurtAnimTimeMS = 2500;
+	Timer hurtAnimTimeTimer;
+
 	//// Texture
 	b2Vec2 textureOffset{-35,-35};
 

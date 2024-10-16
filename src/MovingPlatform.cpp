@@ -107,17 +107,21 @@ bool MovingPlatform::Update(float dt)
 	position.setY(body->GetPosition().y);
 
 
+	//Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 	//if (isVertical) {
 	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
 	//}
 	//else {
 	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
 	//}
+	//Engine::GetInstance().render->UnlockLayer();
 
-	Engine::GetInstance().render->SelectLayer(2);
+
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
+	//Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 	//Engine::GetInstance().box2DCreator->RenderBody(body, { 255,255,0,255 });
 
 	if (!isVertical)

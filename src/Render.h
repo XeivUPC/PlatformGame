@@ -7,7 +7,24 @@
 
 class Render : public Module
 {
+
+
 public:
+	enum RenderLayers
+	{
+		Layer0,
+		Layer1,
+		Layer2,
+		Layer3,
+		Layer4,
+		Layer5,
+		Layer6,
+		Layer7,
+
+
+		////////
+		LAST_DONT_USE
+	};
 
 	Render();
 
@@ -38,12 +55,15 @@ public:
 	bool DrawCircle(int x1, int y1, int redius, Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255, bool useCamera = true) const;
 
 	// Layers
-	void SelectLayer(int layerIndex);
+	void SelectLayer(RenderLayers layerIndex);
 	void DeselectLayer() const;
 
-	void CreateLayer(int layerIndex);
-	void CleanLayer(int layerIndex);
-	void RenderLayer(int layerIndex);
+	void CreateLayer(RenderLayers layerIndex);
+	void CleanLayer(RenderLayers layerIndex);
+	void RenderLayer(RenderLayers layerIndex);
+
+	void LockLayer(RenderLayers layerIndex);
+	void UnlockLayer();
 
 	// Set background color
 	void SetBackgroundColor(SDL_Color color);
@@ -64,9 +84,10 @@ private:
 	void FollowPlayer();
 
 	float cameraSpeed = 600;
-	Vector2D minRangeConfinePosition{0,0};
-	Vector2D maxRangeConfinePosition{100,0};
+	Vector2D minRangeConfinePosition{ 0,0 };
+	Vector2D maxRangeConfinePosition{ 100,0 };
 
 
-	std::unordered_map<int, SDL_Texture*> layers;
+	std::unordered_map<RenderLayers, SDL_Texture*> layers;
+	bool isLayerBlocked = false;
 };

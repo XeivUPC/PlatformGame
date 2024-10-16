@@ -142,12 +142,13 @@ void Player::InitColliders() {
 		fixture->SetFriction(0);
 		fixture->SetFilterData(playerFilters);
 	}
-	
+
 	b2FixtureUserData groundCheckData;
 	groundCheckData.pointer = (uintptr_t)(&groundCheckController);
 	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(10), groundCheckData);
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
+
 	groundCheck->SetFilterData(groundCheckFilters);
 
 
@@ -189,18 +190,10 @@ void Player::InitColliders() {
 
 bool Player::Update(float dt)
 {
+	playerCollider->SetAwake(true);
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		playerHealth.Hurt(1);
-		if (!playerHealth.IsAlive()) {
-			Vector2D spawnPos = Engine::GetInstance().levelManager->GetClosestCheckPointPosition();
-			playerCollider->SetTransform({ (spawnPos .getX()),(spawnPos .getY()-1)},0);
-			position.setX(playerCollider->GetPosition().x);
-			position.setY(playerCollider->GetPosition().y);
-			Engine::GetInstance().levelManager->GoToClosestCheckPoint();
-			playerCollider->SetAwake(true);
-			playerHealth.ResetHealth();
-		}
+		Damage(10, {isFlipped ? -1.0f : 1.0f, 1.0f });
 	}
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT)
@@ -239,6 +232,12 @@ bool Player::Update(float dt)
 	}
 	else {
 		shovelFallAttackCheck->SetFilterData(emptyFilter);
+	}
+
+	if (isInvulnerable) {
+		if (hurtAnimTimeMS <= hurtAnimTimeTimer.ReadMSec()) {
+			isInvulnerable = false;
+		}
 	}
 
 
@@ -280,8 +279,6 @@ bool Player::Update(float dt)
 
 	if (ladderCheckController.IsBeingTriggered() && Engine::GetInstance().input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) {
 		isInLadder = !isInLadder;
-		if (!isInLadder)
-			playerCollider->SetAwake(true);
 	}
 	else if(!ladderCheckController.IsBeingTriggered()){
 		isInLadder = false;
@@ -335,7 +332,18 @@ bool Player::Update(float dt)
 	}
 
 
+	
 	animator->SetIfPlaying(true);
+
+	if (isInvulnerable) {
+		if (hurtAnimEffectTimer.ReadMSec() >= hurtAnimEffectMS) {
+			animator->SetIfCanDraw(!animator->CanDraw());
+			hurtAnimEffectTimer.Start();
+		}
+	}
+	else
+		animator->SetIfCanDraw(true);
+
 	if (isInLadder) {
 		animator->SetIfPlaying(velocity.y != 0);
 		animator->SelectAnimation("Player_Climb", true);
@@ -362,21 +370,26 @@ bool Player::Update(float dt)
 		}
 	}
 
-	Engine::GetInstance().render->SelectLayer(3);
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer3);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
 
-
+	// Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 	//Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
 	//Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
 	//Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
-	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped)
+
+	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
 	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckRight, b2Color{255,255,255,255});
-	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped)
+	//}	 
+	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
 	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckLeft, b2Color{255,255,255,255});
-	//if(isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack)
+	//}
+	//if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
 	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
+	//}
+	//Engine::GetInstance().render->UnlockLayer();
 
 
 	return true;
@@ -455,6 +468,31 @@ bool Player::CleanUp()
 	Engine::GetInstance().physics->world->DestroyBody(playerCollider);
 	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
+}
+
+void Player::Damage(int amount, Vector2D direction)
+{
+	if (isInvulnerable)
+		return;
+
+	playerHealth.Hurt(amount);
+	hurtAnimEffectTimer.Start();
+	hurtAnimTimeTimer.Start();
+
+	playerCollider->ApplyForceToCenter({50.0f * direction.getX(),-120 * direction.getY()}, true);
+
+	isInvulnerable = true;
+
+	if (!playerHealth.IsAlive()) {
+		Vector2D spawnPos = Engine::GetInstance().levelManager->GetClosestCheckPointPosition();
+		playerCollider->SetTransform({ (spawnPos.getX()),(spawnPos.getY() - 1) }, 0);
+		position.setX(playerCollider->GetPosition().x);
+		position.setY(playerCollider->GetPosition().y);
+		Engine::GetInstance().levelManager->GoToClosestCheckPoint();
+		playerCollider->SetAwake(true);
+		playerHealth.ResetHealth();
+		isInvulnerable = false;
+	}
 }
 
 
