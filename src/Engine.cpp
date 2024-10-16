@@ -63,10 +63,10 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
+    AddModule(std::static_pointer_cast<UI>(ui));
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
-    AddModule(std::static_pointer_cast<UI>(ui));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
 }

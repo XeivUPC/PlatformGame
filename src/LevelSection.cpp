@@ -18,15 +18,12 @@ LevelSection::LevelSection()
 
 LevelSection::~LevelSection()
 {
-    for (const auto& animatedTile : animatedTiles) {
-        delete animatedTile.second;
-    }
-    animatedTiles.clear();
+    
 }
 
 bool LevelSection::Update(float dt)
 {
-
+    printf("");
     for (const auto& animatedTile : animatedTiles) {
         animatedTile.second->Update(dt);
     }
@@ -85,6 +82,18 @@ bool LevelSection::CleanUp()
     {
         Engine::GetInstance().physics->world->DestroyBody(collider);
     }
+
+    for (const auto& animatedTile : animatedTiles) {
+        delete animatedTile.second;
+    }
+    animatedTiles.clear();
+
+    for (const auto& object : objects)
+    {
+        Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(object);
+        
+    }
+    objects.clear();
 
     return true;
 }
@@ -267,6 +276,8 @@ void LevelSection::LoadObjects()
             Vector2D postion{ PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS(y) + PIXEL_TO_METERS(sectionOffset.y) };
             CheckPoint* checkPoint = new CheckPoint(sectionNumber, postion);
             Engine::GetInstance().entityManager->AddEntity((Entity*)checkPoint);
+
+            objects.emplace_back((Entity*)checkPoint);
         }
 
         if (type == "DirtBlock") {
@@ -279,6 +290,9 @@ void LevelSection::LoadObjects()
             Vector2D postion{ PIXEL_TO_METERS(x) + PIXEL_TO_METERS(sectionOffset.x), PIXEL_TO_METERS(y) + PIXEL_TO_METERS(sectionOffset.y) };
             DirtBlock* dirtBlock = new DirtBlock((DirtBlock::DirtSize)size, postion);
             Engine::GetInstance().entityManager->AddEntity((Entity*)dirtBlock);
+
+
+            objects.emplace_back((Entity*)dirtBlock);
         }
 
         if (type == "BubbleGenerator") {
@@ -317,6 +331,8 @@ void LevelSection::LoadObjects()
 
             MovingPlatform* movingPlatform = new MovingPlatform(sectionNumber, leftSide, rightSide, platformType, isVertical);
             Engine::GetInstance().entityManager->AddEntity((Entity*)movingPlatform);
+
+            objects.emplace_back((Entity*)movingPlatform);
         }
     }
 }

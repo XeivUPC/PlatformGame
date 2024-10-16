@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "pugixml.hpp"
 #include "Vector2D.h"
+#include "Entity.h"
 #include "AnimationSystem.h"
 #include <string>
 #include <unordered_map>
@@ -106,6 +107,7 @@ private:
     pugi::xml_node mapNode;
 
     std::unordered_map<int, Animator*> animatedTiles;
+    std::vector<Entity*> objects;
 };
 
 

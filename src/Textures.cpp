@@ -57,10 +57,12 @@ bool Textures::CleanUp()
 // Load new texture from file path
 SDL_Texture* const Textures::Load(std::string path)
 {
+
 	if (textures.count(path) != 0) {
 		//LOG("Texture is already loaded: %s", path.c_str());
 		return textures[path];
 	}
+
 
 	SDL_Texture* texture = NULL;
 	SDL_Surface* surface = IMG_Load(path.c_str());

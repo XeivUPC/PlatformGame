@@ -136,12 +136,9 @@ void Animator::SelectAnimation(const char* animName, bool l, int indexInit, int 
 {
 	if (currentAnimation == animName)
 		return;
-
-
 	currentAnimation = animName;
 	loop = l;
-	customSpriteRangeStart = indexInit;
-	
+	customSpriteRangeStart = indexInit;	
 	customSpriteRangeEnd = indexEnd;
 }
 
