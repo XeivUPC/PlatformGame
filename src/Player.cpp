@@ -3,11 +3,13 @@
 #include "Textures.h"
 #include "Box2DCreator.h"
 #include "CollidersManager.h"
+#include "LevelManager.h"
 #include "Audio.h"
 #include "Input.h"
 #include "Render.h"
-#include "Scene.h"
+#include "Physics.h"
 #include "Log.h"
+#include "UI.h"
 
 
 
@@ -17,17 +19,17 @@ Player::Player() : Entity(EntityType::PLAYER)
 }
 
 Player::~Player() {
-
+	
 }
 
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(8, 8);
+	position = Vector2D(16*8, 16*8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
-	enemyCheckController.SetSensor(enemyCheck);
+	shovelFallAttackCheckController.SetSensor(shovelFallAttackCheck);
 	ladderCheckController.SetSensor(ladderCheck);
 
 	attackRecoverTimer = Timer();
@@ -36,6 +38,7 @@ bool Player::Awake() {
 	/// Texture, index, size, pivot
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
 	
+
 
 	return true;
 }
@@ -51,7 +54,7 @@ bool Player::Start() {
 
 void Player::InitAnimations() {
 
-
+	animator = new Animator();
 	AnimationData idle = AnimationData("Player_Idle");
 	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
 
@@ -93,31 +96,35 @@ void Player::InitAnimations() {
 	climb_exit.AddSprite(Sprite{ texture,{0.0f, 6.0f}, {70, 70} });
 
 
-	animator.AddAnimation(idle);
-	animator.AddAnimation(idle2);
-	animator.AddAnimation(move);
-	animator.AddAnimation(jump_rise);
-	animator.AddAnimation(jump_fall);
-	animator.AddAnimation(fall_attack);
-	animator.AddAnimation(attack);
-	animator.AddAnimation(climb);
-	animator.AddAnimation(climb_exit);
-	animator.SelectAnimation("Player_Idle", true);
+	
+	animator->AddAnimation(idle);
+	animator->AddAnimation(idle2);
+	animator->AddAnimation(move);
+	animator->AddAnimation(jump_rise);
+	animator->AddAnimation(jump_fall);
+	animator->AddAnimation(fall_attack);
+	animator->AddAnimation(attack);
+	animator->AddAnimation(climb);
+	animator->AddAnimation(climb_exit);
+	animator->SelectAnimation("Player_Idle", true);
 
-	animator.SetSpeed(100);
+	animator->SetSpeed(100);
 }
 
 void Player::InitColliders() {
 
 	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
-	b2World* world = Engine::GetInstance().scene->world;
+	b2World* world = Engine::GetInstance().physics->world;
 
 	///PlayerCollider
-
-	b2Vec2 playerColliderPosition{ position.getX(), position.getY() };
+	
+	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
 	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
-	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
+	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER |Engine::GetInstance().INTERACTABLE_LAYER;
+
+	groundCheckFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
+	groundCheckFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
 
 	enemyCheckFilters.categoryBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
 	enemyCheckFilters.maskBits = Engine::GetInstance().ENEMY_LAYER;
@@ -128,27 +135,44 @@ void Player::InitColliders() {
 	emptyFilter.maskBits = 0x0000;
 	emptyFilter.categoryBits = 0x0000;
 
-	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, 0.8f, 1.8f);
+	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(11), PIXEL_TO_METERS(30));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
 		fixture->SetFriction(0);
 		fixture->SetFilterData(playerFilters);
 	}
-
-	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0.9f), 0.7f, 0.1f);
+	
+	b2FixtureUserData groundCheckData;
+	groundCheckData.pointer = (uintptr_t)(&groundCheckController);
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(10), groundCheckData);
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
-	groundCheck->SetFilterData(playerFilters);
+	groundCheck->SetFilterData(groundCheckFilters);
 
 
-	enemyCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 1.0f), 0.4f, 0.1f);
-	enemyCheck->SetFilterData(enemyCheckFilters);
-	enemyCheck->SetFriction(0);
-	enemyCheck->SetDensity(0);
-	enemyCheckController.AcceptOnlyTriggers(false);
+	b2FixtureUserData shovelFallAttackData;
+	shovelFallAttackData.pointer = (uintptr_t)(&shovelFallAttackCheckController);
+	shovelFallAttackCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(2), shovelFallAttackData);
+	shovelFallAttackCheck->SetFilterData(enemyCheckFilters);
+	shovelFallAttackCheck->SetFriction(0);
+	shovelFallAttackCheck->SetDensity(0);
+	shovelFallAttackCheckController.AcceptOnlyTriggers(false);
 
-	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, 0.45f), 0.4f, 0.9f);
+	shovelAttackCheckRight = colliderCreator->AddBox(playerCollider, b2Vec2(PIXEL_TO_METERS(20), PIXEL_TO_METERS(3)), PIXEL_TO_METERS(25), PIXEL_TO_METERS(10));
+	shovelAttackCheckRight->SetFilterData(enemyCheckFilters);
+	shovelAttackCheckRight->SetFriction(0);
+	shovelAttackCheckRight->SetDensity(0);
+
+	shovelAttackCheckLeft = colliderCreator->AddBox(playerCollider, b2Vec2(PIXEL_TO_METERS(-20), PIXEL_TO_METERS(3)), PIXEL_TO_METERS(25), PIXEL_TO_METERS(10));
+	shovelAttackCheckLeft->SetFilterData(enemyCheckFilters);
+	shovelAttackCheckLeft->SetFriction(0);
+	shovelAttackCheckLeft->SetDensity(0);
+
+
+	b2FixtureUserData ladderCheckData;
+	ladderCheckData.pointer = (uintptr_t)(&ladderCheckController);
+	ladderCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(7)), PIXEL_TO_METERS(8), PIXEL_TO_METERS(15), ladderCheckData);
 	ladderCheck->SetFilterData(playerLadderFilters);
 	ladderCheck->SetFriction(0);
 	ladderCheck->SetDensity(0);
@@ -156,27 +180,42 @@ void Player::InitColliders() {
 
 	playerCollider->ResetMassData();
 
-	//No necesario
-	Engine::GetInstance().box2DSensors->AddSensor(&groundCheckController);
-	Engine::GetInstance().box2DSensors->AddSensor(&enemyCheckController);
-	Engine::GetInstance().box2DSensors->AddSensor(&ladderCheckController);
+	b2MassData massData;
+	massData.mass = playerMass;
+	massData.center = playerCollider->GetLocalCenter();
+	playerCollider->SetMassData(&massData);
 }
 
 
 bool Player::Update(float dt)
 {
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.x -= PIXEL_TO_METERS(speed / 3) * dt;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		playerHealth.Hurt(1);
+		if (!playerHealth.IsAlive()) {
+			Vector2D spawnPos = Engine::GetInstance().levelManager->GetClosestCheckPointPosition();
+			playerCollider->SetTransform({ (spawnPos .getX()),(spawnPos .getY()-1)},0);
+			position.setX(playerCollider->GetPosition().x);
+			position.setY(playerCollider->GetPosition().y);
+			Engine::GetInstance().levelManager->GoToClosestCheckPoint();
+			playerCollider->SetAwake(true);
+			playerHealth.ResetHealth();
+		}
+	}
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.x += PIXEL_TO_METERS(speed / 3) * dt;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_G) == KEY_REPEAT)
+		coins.Add(1);
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.y += PIXEL_TO_METERS(speed / 3) * dt;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
+		magic.Add(1);
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		Engine::GetInstance().render->camera.y -= PIXEL_TO_METERS(speed/3) * dt;
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
+		if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
+			Engine::GetInstance().ui->pauseMenuUI.Activate();
+		else
+			Engine::GetInstance().ui->pauseMenuUI.Deactivate();
+	}
+
 
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
@@ -194,23 +233,22 @@ bool Player::Update(float dt)
 	if (TryShovelAttack())
 		isDoingShovelAttack = false;
 
-	if (isDoingFallAttack && !isDoingShovelAttack)
+	if (isDoingFallAttack && !isDoingShovelAttack && playerCollider->GetLinearVelocity().y>0)
 	{
-		enemyCheck->SetFilterData(enemyCheckFilters);
+		shovelFallAttackCheck->SetFilterData(enemyCheckFilters);
 	}
 	else {
-		enemyCheck->SetFilterData(emptyFilter);
+		shovelFallAttackCheck->SetFilterData(emptyFilter);
 	}
+
+
+
 
 	b2Vec2 inputValue = GetMoveInput();
 
-	b2Vec2 velocity{ inputValue.x * dt, playerCollider->GetLinearVelocity().y };
-	if (isInLadder) {
-		velocity.y = inputValue.y * dt;
-		velocity.y = PIXEL_TO_METERS(velocity.y);
-	}
-
-	velocity.x = PIXEL_TO_METERS(velocity.x);
+	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
+	if (isInLadder)
+		velocity.y = inputValue.y * dt / 1000;
 
 
 	if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
@@ -225,6 +263,9 @@ bool Player::Update(float dt)
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_DOWN) {
 		if (TryFallAttack()) {
 			DoFallAttack();
+		}
+		else {
+			isDoingFallAttack = false;
 		}
 	}
 
@@ -246,7 +287,7 @@ bool Player::Update(float dt)
 		isInLadder = false;
 	}
 
-	if (enemyCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
+	if (shovelFallAttackCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
 	{
 		velocity.y = 0;
 		playerCollider->SetLinearVelocity(velocity);
@@ -274,42 +315,70 @@ bool Player::Update(float dt)
 			isFlipped = true;
 	}
 
-	animator.SetIfPlaying(true);
+
+
+	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped)
+	{
+		shovelAttackCheckRight->SetFilterData(enemyCheckFilters);
+	}
+	else {
+		shovelAttackCheckRight->SetFilterData(emptyFilter);
+	}
+
+
+	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped)
+	{
+		shovelAttackCheckLeft->SetFilterData(enemyCheckFilters);
+	}
+	else {
+		shovelAttackCheckLeft->SetFilterData(emptyFilter);
+	}
+
+
+	animator->SetIfPlaying(true);
 	if (isInLadder) {
-		animator.SetIfPlaying(velocity.y != 0);
-		animator.SelectAnimation("Player_Climb", true);
+		animator->SetIfPlaying(velocity.y != 0);
+		animator->SelectAnimation("Player_Climb", true);
 	}
 	else if(isDoingShovelAttack)
-		animator.SelectAnimation("Player_Attack", true);
+		animator->SelectAnimation("Player_Attack", true);
 	else if (isGrounded) {
 		if (velocity.x == 0)
 		{
-			animator.SelectAnimation("Player_Idle", true);
+			animator->SelectAnimation("Player_Idle", true);
 		}
 		else
-			animator.SelectAnimation("Player_Move", true);
+			animator->SelectAnimation("Player_Move", true);
 	}
 	else {
 		if (isDoingFallAttack) {
-			animator.SelectAnimation("Player_Fall_Attack", true);
+			animator->SelectAnimation("Player_Fall_Attack", true);
 		}
 		else {
 			if (playerCollider->GetLinearVelocity().y > 0)
-				animator.SelectAnimation("Player_Jump_Fall", true);
+				animator->SelectAnimation("Player_Jump_Fall", true);
 			else
-				animator.SelectAnimation("Player_Jump_Rise", true);
+				animator->SelectAnimation("Player_Jump_Rise", true);
 		}
 	}
 
+	Engine::GetInstance().render->SelectLayer(3);
+	animator->Update(dt);
+	animator->Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
-	animator.Update(dt);
-	animator.Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
 
-	Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
-	Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
-	if(isDoingFallAttack)
-		Engine::GetInstance().box2DCreator->RenderFixture(enemyCheck, b2Color{0,255,0,255});
+
+	//Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+	//Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	//Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
+	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped)
+	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckRight, b2Color{255,255,255,255});
+	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped)
+	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckLeft, b2Color{255,255,255,255});
+	//if(isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack)
+	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
+
+
 	return true;
 }
 
@@ -382,7 +451,8 @@ void Player::SetGravityValue(float verticalVelocity) {
 bool Player::CleanUp()
 {
 	LOG("Cleanup player");
-	Engine::GetInstance().scene->world->DestroyBody(playerCollider);
+	delete animator;
+	Engine::GetInstance().physics->world->DestroyBody(playerCollider);
 	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }

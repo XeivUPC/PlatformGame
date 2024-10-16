@@ -27,9 +27,6 @@ public:
 	// Retrive window size
 	void GetWindowSize(int& width, int& height) const;
 
-	// Retrieve window scale
-	int GetScale() const;
-
 	// Load Parameters from config file
 	bool LoadParameters(xml_node parameters);
 
@@ -40,6 +37,8 @@ public:
 	std::string title;
 	int width = 1280;
 	int height = 720;
-	int scale = 1;
 	bool fullscreen_window = false;
+	bool fullscreen = false;
+	bool borderless = false;
+	bool resizable = false;
 };

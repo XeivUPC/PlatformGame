@@ -3,6 +3,7 @@
     <app>
         <title>Shovel Knight</title>
         <maxFrameDuration value="16"/>
+		<debug status ="true"/>
     </app>
 
      <render>
@@ -10,13 +11,18 @@
     </render>
 
     <window>
-        <resolution width="400" height="240" scale="1"/>
-        <fullscreen_window value="true"/>
+        <resolution width="400" height="224"/>
+		<fullscreen value="false"/>
+		<borderless value="false"/>
+		<resizable value="true"/>
+        <fullscreen_window value="false"/>
+
     </window>
 
 	<audio>
 		<music path ="Assets/Musics/"/>
 		<sfx path ="Assets/Sounds/"/>
+		<volume value="32"/>
 	</audio>
 
     <scene>

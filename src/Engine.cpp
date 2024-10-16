@@ -10,11 +10,13 @@
 #include "Render.h"
 #include "Textures.h"
 #include "Audio.h"
+#include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
 #include "LevelManager.h"
 #include "Parallax.h"
-
+#include "TextGenerator.h"
+#include "UI.h"
 
 
 
@@ -36,14 +38,17 @@ Engine::Engine() {
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
+    physics = std::make_shared<Physics>();
     scene = std::make_shared<Scene>();
     parallax = std::make_shared<Parallax>();
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
     parallax = std::make_shared<Parallax>();
+    text = std::make_shared<TextGenerator>();
 
     box2DCreator = std::make_shared<Box2DCreator>();
     box2DSensors = std::make_shared<CollidersManager>();
+    ui = std::make_shared<UI>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -51,16 +56,19 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(input));
     AddModule(std::static_pointer_cast<Module>(textures));
     AddModule(std::static_pointer_cast<Module>(audio));
+    AddModule(std::static_pointer_cast<Module>(physics));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
     //// Add the map module
     
     AddModule(std::static_pointer_cast<Module>(levelManager));
+    AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
 
     // Render last
     AddModule(std::static_pointer_cast<Module>(render));
+    AddModule(std::static_pointer_cast<UI>(ui));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
 }

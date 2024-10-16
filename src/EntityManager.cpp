@@ -95,6 +95,11 @@ void EntityManager::DestroyEntity(Entity* entity)
 	}
 }
 
+void EntityManager::DestroyEntityAtUpdateEnd(Entity* entity)
+{
+	entitiesToDestroyAtUpdateEnd.emplace_back(entity);
+}
+
 void EntityManager::AddEntity(Entity* entity)
 {
 	if ( entity != nullptr) entities.push_back(entity);
@@ -102,11 +107,19 @@ void EntityManager::AddEntity(Entity* entity)
 
 bool EntityManager::Update(float dt)
 {
+	entitiesToDestroyAtUpdateEnd.clear();
 	bool ret = true;
 	for(const auto entity : entities)
 	{
+		if (entity == nullptr) continue;
 		if (entity->active == false) continue;
 		ret = entity->Update(dt);
 	}
+
+	for (const auto entity : entitiesToDestroyAtUpdateEnd)
+	{
+		DestroyEntity(entity);
+	}
+
 	return ret;
 }

@@ -1,16 +1,10 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Textures.h"
-#include "Audio.h"
-#include "Render.h"
-#include "Window.h"
-#include "LevelManager.h"
 #include "Scene.h"
 #include "Log.h"
 #include "Entity.h"
 #include "EntityManager.h"
-#include "Box2DCreator.h"
-#include "CollidersManager.h"
 #include "Player.h"
 
 
@@ -22,7 +16,7 @@ Scene::Scene() : Module()
 // Destructor
 Scene::~Scene()
 {
-	delete world;
+	
 }
 
 // Called before render is available
@@ -31,12 +25,7 @@ bool Scene::Awake()
 	LOG("Loading Scene");
 	bool ret = true;
 
-	//Get the player texture name from the config file and assigns the value
-
-	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-	const std::shared_ptr<CollidersManager>& box2DSensor = Engine::GetInstance().box2DSensors;
-	world->SetContactListener(box2DSensor.get());
-
+	//Get the player texture name from the config file and assigns the value	
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
 	player->textureName = configParameters.child("player").attribute("texturePath").as_string();
@@ -60,7 +49,7 @@ bool Scene::LoadParameters(xml_node parameters) {
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-	world->Step(1.0f / 60.0f, 8, 3);
+
 	return true;
 }
 

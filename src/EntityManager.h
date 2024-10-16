@@ -29,11 +29,14 @@ public:
 	Entity* CreateEntity(EntityType type);
 
 	void DestroyEntity(Entity* entity);
+	void DestroyEntityAtUpdateEnd(Entity* entity);
 
 	void AddEntity(Entity* entity);
 
 public:
 
 	std::list<Entity*> entities;
+private:
+	std::list<Entity*> entitiesToDestroyAtUpdateEnd;
 
 };

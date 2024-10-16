@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 #include <box2d/box2d.h>
 #include "Timer.h"
+#include "Player.h"
 #include "AnimationSystem.h"
 #include "ColliderHandler.h"
 #include "HealthSystem.h"
@@ -18,6 +19,8 @@ private:
 	float attackRecoverMS = 50;
 	b2Vec2 textureOffset{ 0,0 };
 	Timer attackCooldown;
+
+	Player* player;
 
 protected:
 	Animator animator;

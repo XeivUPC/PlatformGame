@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Window.h"
 #include "Render.h"
+#include "Scene.h"
 #include "LevelManager.h"
 #include "Log.h"
 
@@ -49,16 +50,15 @@ bool Render::Awake()
 		if (SDL_GetCurrentDisplayMode(0, &displayMode) != 0)
 			SDL_Log("No se pudo obtener el modo de pantalla: %s", SDL_GetError());
 
-		int scale = Engine::GetInstance().window->GetScale();
 		int windowWidth = Engine::GetInstance().window->width;  
 		int windowHeight = Engine::GetInstance().window->height;
 
-		cameraGameOffset = { 0, (float)METERS_TO_PIXELS(2)};
+		cameraGameOffset = { 0, 16 * 1.0f};
 
-		camera.x = cameraGameOffset.getX()*scale;
-		camera.y = cameraGameOffset.getY()*scale;
+		camera.x = cameraGameOffset.getX();
+		camera.y = cameraGameOffset.getY();
 		
-		SDL_RenderSetLogicalSize(renderer, windowWidth * scale, windowHeight * scale);
+		SDL_RenderSetLogicalSize(renderer, windowWidth, windowHeight );
 	}
 
 	return ret;
@@ -71,6 +71,16 @@ bool Render::Start()
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
 
+	CreateLayer(0);/// Paralax
+	CreateLayer(1);/// Map Behind
+	CreateLayer(2);/// Default
+	CreateLayer(3);/// Player
+	CreateLayer(4);/// Map Front
+	CreateLayer(5);/// UI
+	CreateLayer(6);
+	CreateLayer(7);
+
+
 
 
 	return true;
@@ -80,25 +90,44 @@ bool Render::Start()
 bool Render::PreUpdate()
 {
 	SDL_RenderClear(renderer);
+	for (const auto layer : layers)
+	{
+		CleanLayer(layer.first);
+	}
+
 	return true;
 }
 
 bool Render::Update(float dt)
 {
-
+	ConfineCameraBetweenRange(dt);
 	return true;
 }
 
 bool Render::PostUpdate()
 {
+	FollowPlayer();
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
+
+
+	for (const auto layer : layers)
+	{
+		RenderLayer(layer.first);
+	}
 	SDL_RenderPresent(renderer);
+
 	return true;
 }
 
 // Called before quitting
 bool Render::CleanUp()
 {
+	for (const auto layer : layers)
+	{
+		SDL_DestroyTexture(layer.second);
+	}
+
 	LOG("Destroying SDL render");
 	SDL_DestroyRenderer(renderer);
 	return true;
@@ -107,6 +136,107 @@ bool Render::CleanUp()
 void Render::SetBackgroundColor(SDL_Color color)
 {
 	background = color;
+}
+
+void Render::ConfineCameraBetweenRange(float dt)
+{
+	float minX =- METERS_TO_PIXELS(minRangeConfinePosition.getX());
+	float maxX =- METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
+
+	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY())+ cameraGameOffset.getY();
+	float maxY = minY;
+
+	if (camera.x > minX) {
+		camera.x -= cameraSpeed*dt/1000;
+		if(abs(camera.x - minX) < 5)
+			camera.x = minX;
+	}
+	if (camera.x < maxX) {
+		camera.x += cameraSpeed * dt / 1000;
+		if (abs(camera.x - maxX) < 5)
+			camera.x = maxX;
+	}
+	if (camera.y < minY) {
+		camera.y += cameraSpeed * dt / 1000;
+		if (abs(camera.y - minY) < 5)
+			camera.y = minY;
+	}
+	if (camera.y > maxY) {
+		camera.y -= cameraSpeed * dt / 1000;
+		if (abs(camera.y - maxY) < 5)
+			camera.y = maxY;
+	}
+
+	float playerPosX = Engine::GetInstance().scene->player->position.getX();
+	float playerPosY = Engine::GetInstance().scene->player->position.getY();
+
+	if (playerPosX > maxRangeConfinePosition.getX())
+		Engine::GetInstance().levelManager->GoToNextSection({ 1,0 });
+	if (playerPosX < minRangeConfinePosition.getX())
+		Engine::GetInstance().levelManager->GoToNextSection({ -1,0 });
+
+
+	
+	if (playerPosY < minRangeConfinePosition.getY())
+		Engine::GetInstance().levelManager->GoToNextSection({0, 1 });
+	if (playerPosY > maxRangeConfinePosition.getY())
+		Engine::GetInstance().levelManager->GoToNextSection({ 0,-1 });
+}
+
+void Render::ConfineCameraBetweenRange()
+{
+	float minX = -METERS_TO_PIXELS(minRangeConfinePosition.getX());
+	float maxX = -METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
+
+	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY()) + cameraGameOffset.getY();
+	float maxY = minY;
+
+
+	float targetPos = METERS_TO_PIXELS((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
+
+	camera.x = targetPos;
+
+	if (camera.x > minX) {
+		camera.x = minX;		
+	}
+	if (camera.x < maxX) {
+		camera.x = maxX;
+	}
+	if (camera.y < minY) {
+		camera.y = minY;
+	}
+	if (camera.y > maxY) {
+		camera.y = maxY;
+	}
+
+	}
+
+
+void Render::FollowPlayer()
+{
+	float minX = -METERS_TO_PIXELS_RAW(minRangeConfinePosition.getX());
+	float maxX = -METERS_TO_PIXELS_RAW(maxRangeConfinePosition.getX()) + viewport.w;
+
+	float minY = METERS_TO_PIXELS_RAW(-minRangeConfinePosition.getY()) + 32;
+	float maxY = minY;
+
+	float targetPos = METERS_TO_PIXELS_RAW((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
+
+	if (targetPos > minX) {
+		return;
+	}
+	if (targetPos < maxX) {
+		return;
+	}
+
+	camera.x = targetPos;
+}
+
+
+void Render::SetConfinementValues(Vector2D min, Vector2D max) {
+	minRangeConfinePosition = min;
+	maxRangeConfinePosition = max;
+
 }
 
 void Render::SetViewPort(const SDL_Rect& rect)
@@ -120,17 +250,17 @@ void Render::ResetViewPort()
 }
 
 
-// Blit to screen
-bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip flipMode, const SDL_Rect* section, float speed, double angle, int pivotX, int pivotY) const
+bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip flipMode, const SDL_Rect* section, SDL_Color color, float speed, double angle, int pivotX, int pivotY) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window->GetScale();
+
+	SDL_SetTextureColorMod(texture, color.r, color.g, color.b);
 
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * scale;
-	rect.y = (int)(camera.y * speed) + y * scale;
+	rect.x = (int)(camera.x * speed) + x;
+	rect.y = (int)(camera.y * speed) + y;
 
-	if(section != NULL)
+	if (section != NULL)
 	{
 		rect.w = section->w;
 		rect.h = section->h;
@@ -139,9 +269,6 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip fl
 	{
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
-
-	rect.w *= scale;
-	rect.h *= scale;
 
 	SDL_Point* p = NULL;
 	SDL_Point pivot;
@@ -159,13 +286,15 @@ bool Render::DrawTexture(SDL_Texture* texture, int x, int y, SDL_RendererFlip fl
 		ret = false;
 	}
 
+	SDL_SetTextureColorMod(texture, 255, 255, 255);
+
+	DeselectLayer();
 	return ret;
 }
 
 bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool filled, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -173,10 +302,9 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 	SDL_Rect rec(rect);
 	if(use_camera)
 	{
-		rec.x = (int)(camera.x + rect.x * scale);
-		rec.y = (int)(camera.y + rect.y * scale);
-		rec.w *= scale;
-		rec.h *= scale;
+		rec.x = (int)(camera.x + rect.x);
+		rec.y = (int)(camera.y + rect.y);
+
 	}
 
 	int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
@@ -186,14 +314,13 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
-
+	DeselectLayer();
 	return ret;
 }
 
 bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -201,23 +328,22 @@ bool Render::DrawLine(int x1, int y1, int x2, int y2, Uint8 r, Uint8 g, Uint8 b,
 	int result = -1;
 
 	if(use_camera)
-		result = SDL_RenderDrawLine(renderer, camera.x + x1 * scale, camera.y + y1 * scale, camera.x + x2 * scale, camera.y + y2 * scale);
+		result = SDL_RenderDrawLine(renderer, camera.x + x1, camera.y + y1, camera.x + x2, camera.y + y2);
 	else
-		result = SDL_RenderDrawLine(renderer, x1 * scale, y1 * scale, x2 * scale, y2 * scale);
+		result = SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 
 	if(result != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
-
+	DeselectLayer();
 	return ret;
 }
 
 bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera) const
 {
 	bool ret = true;
-	int scale = Engine::GetInstance().window->GetScale();
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
@@ -229,8 +355,8 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 
 	for(int i = 0; i < 360; ++i)
 	{
-		points[i].x = (int)(x * scale + camera.x) + (int)(radius * cos(i * factor));
-		points[i].y = (int)(y * scale + camera.y) + (int)(radius * sin(i * factor));
+		points[i].x = (int)(x + camera.x) + (int)(radius * cos(i * factor));
+		points[i].y = (int)(y + camera.y) + (int)(radius * sin(i * factor));
 	}
 
 	result = SDL_RenderDrawPoints(renderer, points, 360);
@@ -240,6 +366,53 @@ bool Render::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 b, Uin
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
 	}
-
+	DeselectLayer();
 	return ret;
+}
+
+void Render::SelectLayer(int layerIndex)
+{
+	if (layers.find(layerIndex) != layers.end())
+		SDL_SetRenderTarget(renderer, layers.at(layerIndex));
+	else {
+		CreateLayer(layerIndex);
+		SelectLayer(layerIndex);
+	}
+}
+
+void Render::DeselectLayer() const
+{
+	SDL_SetRenderTarget(renderer, NULL);
+}
+
+void Render::CreateLayer(int layerIndex)
+{
+	if (layers.find(layerIndex) == layers.end())
+	{
+		int windowWidth = Engine::GetInstance().window->width;
+		int windowHeight = Engine::GetInstance().window->height;
+
+		layers[layerIndex] = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, windowWidth, windowHeight);
+
+		CleanLayer(layerIndex);
+
+	}
+	else {
+		LOG("Layer in this place is already created", SDL_GetError());
+	}
+}
+
+void Render::CleanLayer(int layerIndex)
+{
+	SDL_SetRenderTarget(renderer, layers[layerIndex]);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);  // Transparent color
+	SDL_RenderClear(renderer);
+	SDL_SetRenderTarget(renderer, NULL);
+}
+
+void Render::RenderLayer(int layerIndex)
+{
+	SDL_Texture* renderTexture = layers[layerIndex];
+	SDL_SetTextureBlendMode(renderTexture, SDL_BLENDMODE_BLEND);
+	SDL_RenderCopy(renderer, renderTexture, NULL, NULL);
 }

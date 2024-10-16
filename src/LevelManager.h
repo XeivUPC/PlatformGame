@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "LevelSection.h"
+#include "CheckPoint.h"
 #include <unordered_map>
 #include <vector>
 
@@ -33,8 +34,11 @@ public:
     bool ChargeAdjacentSections(LevelSection* mainSection);
 
     bool LoadSection(int sectionNumber);
-
     void GoToNextSection(b2Vec2 direction);
+
+    void GoToClosestCheckPoint();
+    Vector2D GetClosestCheckPointPosition();
+    void RegisterCheckPoint(CheckPoint* checkPoint);
 
     LevelSection* GetCurrentSection();
 
@@ -44,13 +48,16 @@ public:
 
 private:
 
+
     std::unordered_map<int, LevelSection*> loadedSections;
     std::vector<int> sectionsInUse;
+    std::vector<CheckPoint*> checkPoints;
 
     int currentSection=0;
     int currentLevel=0;
 
     xml_node parameters;
+
 
 };
 

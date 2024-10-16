@@ -37,6 +37,4 @@ public:
 	Player* player;
 private:
 	xml_node configParameters;
-public:
-	b2World* world;
 };

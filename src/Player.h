@@ -7,8 +7,8 @@
 #include "ColliderHandler.h"
 #include "AnimationSystem.h"
 #include "Timer.h"
+#include "Counter.h"
 #include "HealthSystem.h"
-#include "CounterSystem.h"
 
 class Player : public Entity
 {
@@ -30,17 +30,18 @@ public:
 public:
 
 	//Player Exposed Stats
-	float speed = 8;
-	float ladderSpeed = 2;
-	float jumpForce = 1800;
-	float fallAttackJumpMultiplier = 1.1f;
+	float speed = 120*3;
+	float ladderSpeed = 160;
+	float jumpForce = 160;
+	float fallAttackJumpMultiplier = 1.0f;
 
 	
 	std::string textureName; 
 	
 	SDL_Texture* texture = NULL;
 
-	Health playerHealth = Health(3);
+	Health playerHealth = Health(20);
+
 	Counter coins = Counter();
 	Counter magic = Counter();
 
@@ -66,12 +67,12 @@ private:
 	bool isInLadder = false;
 
 	/// MAX VALUES
-	const float MAX_FALL_SPEED = 60.0f;
+	const float MAX_FALL_SPEED = 100.0f;
 
 	/// Gravity Values
 	float defaultGravity = 1.0f;
-	float fallGravity = 2.25f;
-	float fallAttackGravity = 2.5f;
+	float fallGravity = 2.5f;
+	float fallAttackGravity = 2.75f;
 
 	/// Attack Values
 	int attackDamage=1;
@@ -95,7 +96,7 @@ private:
 	b2Vec2 textureOffset{-35,-35};
 
 	/// Animator
-	Animator animator;
+	Animator* animator;
 	void InitAnimations();
 
 
@@ -119,13 +120,17 @@ private:
 		
 
 		//// EnemyCollider
-		b2Fixture* enemyCheck;
-		ColliderHandler enemyCheckController;
+		b2Fixture* shovelFallAttackCheck;
+		ColliderHandler shovelFallAttackCheckController;
+
+		b2Fixture* shovelAttackCheckLeft;
+		b2Fixture* shovelAttackCheckRight;
 
 		//// LadderCollider
 		b2Fixture* ladderCheck;
 		ColliderHandler ladderCheckController;
 
 		///// Player Collider
+		float playerMass = 0.15f;
 		b2Body* playerCollider;
 };
