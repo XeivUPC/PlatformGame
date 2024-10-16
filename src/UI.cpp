@@ -139,7 +139,7 @@ void Pause::Render()
 	Engine::GetInstance().render->SelectLayer(6);
 	Engine::GetInstance().render->DrawRectangle(pause, 255, 255, 255, 255, false);
 
-	Engine::GetInstance().text->Write("-PAUSE-", 176, 40, { 44,152,213,255 },6);
+	Engine::GetInstance().text->Write("-PAUSE-", -Engine::GetInstance().render->camera.x + 176, -Engine::GetInstance().render->camera.y + 40, { 44,152,213,255 },6);
 	pause.x = 112;
 	pause.y = 0;
 	pause.w = 16;

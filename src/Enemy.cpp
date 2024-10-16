@@ -1,87 +1,85 @@
 #include "Enemy.h"
-#include "Player.h"
-#include "Scene.h"
 #include "Engine.h"
-#include "Textures.h"
-#include "Box2DCreator.h"
-#include "CollidersManager.h"
-#include "Audio.h"
-#include "Input.h"
-#include "Render.h"
 #include "Physics.h"
-#include "Log.h"
-#include "math.h"
+#include "Scene.h"
+#include "EntityManager.h"
+#include "Textures.h"
+#include "Window.h"
 
 void Enemy::InitColliders()
 {
-	const std::shared_ptr<Box2DCreator>& box2DSensor = Engine::GetInstance().box2DCreator
-		;
+	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
 	b2World* world = Engine::GetInstance().physics->world;
 
-	b2Vec2 enemyColliderposition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
+	enemyCollider->ResetMassData();
 
-	b2Filter mapCollidersFilter;
-	mapCollidersFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
-	mapCollidersFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
+	b2MassData massData;
+	massData.mass = enemyMass;
+	massData.center = enemyCollider->GetLocalCenter();
+	enemyCollider->SetMassData(&massData);
+}
 
-	b2Filter playerCollidersFilter;
-	playerCollidersFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
-	playerCollidersFilter.maskBits = Engine::GetInstance().PLAYER_LAYER;
+void Enemy::Attack()
+{
+	player->playerHealth.Hurt(hitDamage);
+}
 
-	positionCheck->SetSensor(true);
-	positionCheck->SetFilterData(mapCollidersFilter);
-	positionCheck->SetFriction(0);
+void Enemy::Hurt()
+{
+	enemyHealth.Hurt(1);
+	if (!enemyHealth.IsAlive())
+		Die();
+}
 
-	playerCheck->SetSensor(true);
-	playerCheck->SetFilterData(mapCollidersFilter);
-	playerCheck->SetFriction(0);
-	playerCheckController.AcceptOnlyTriggers(false);
+void Enemy::Die()
+{
+	Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(this);
+}
 
+Vector2D Enemy::SeekForSurfaceTile()
+{
+	return{ 0,0 };
+}
 
-	enemyCollider->SetFixedRotation(true);
+void Enemy::Move()
+{
+}
 
-};
+Vector2D Enemy::TrackPlayerPosition(bool verticalAxis, bool horizontalAxis)
+{
+	Vector2D playerPosition = position;
+	if (verticalAxis)
+	{
+		playerPosition.setY(player->position.getY());
+	}
+	if (horizontalAxis)
+	{
+		playerPosition.setX(player->position.getX());
+	}
+	return playerPosition;
+}
 
 void Enemy::Brain()
 {
-}
-
-b2Vec2 Enemy::CalculateNearestDirection(bool verticalAxis, bool horizontalAxis)
-{
-	b2Vec2 nearestDirection;
-	float nearestDistance = -1;
-
-	if (verticalAxis)
+	if (sidePlayerCheckController.OnTriggerEnter())
 	{
-		if (player->position.getX() > position.getX())
-		{
-			nearestDirection = b2Vec2{1, 0};
-			nearestDistance = player->position.getX() - position.getX();
-		}
-		else
-		{
-			nearestDirection = b2Vec2{ -1, 0 };
-			nearestDistance = position.getX() - player->position.getX();
-		}
+		if (!player->isDoingShovelAttack && attackCooldown.ReadSec() == 0)
+			Attack();
+		else if (player->isDoingShovelAttack)
+			Hurt();
 	}
-	else if (horizontalAxis)
+	else if (topPlayerCheckController.OnTriggerEnter())
 	{
-		if (player->position.getY() > position.getY())
-		{
-			nearestDirection = b2Vec2{ 0, 1 };
-			nearestDistance = player->position.getY() - position.getY();
-		}
-		else
-		{
-			nearestDirection = b2Vec2{ 0, -1};
-			nearestDistance = position.getY() - player->position.getY();
-		}
+		if (!player->isDoingFallAttack && attackCooldown.ReadSec() == 0)
+			Attack();
+		else if (player->isDoingFallAttack)
+			Hurt();
 	}
-	return nearestDirection;
 }
 
 Enemy::Enemy() : Entity(EntityType::UNKNOWN)
-{}
+{
+}
 
 Enemy::~Enemy()
 {
@@ -89,20 +87,15 @@ Enemy::~Enemy()
 
 bool Enemy::Awake()
 {
-	position = Vector2D(0, 0);
-	InitColliders();
-	positionCheckController.SetSensor(positionCheck);
-	playerCheckController.SetSensor(playerCheck);
-	attackCooldown = Timer();
 	return true;
 }
 
 bool Enemy::Start()
 {
-	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 	player = Engine::GetInstance().scene->player;
+	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 	InitAnimations();
-
+	InitColliders();
 	return true;
 }
 
@@ -114,8 +107,5 @@ bool Enemy::Update(float dt)
 
 bool Enemy::CleanUp()
 {
-	LOG("Cleanup enemy");
-	Engine::GetInstance().physics->world->DestroyBody(enemyCollider);
-	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }

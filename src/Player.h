@@ -26,7 +26,6 @@ public:
 
 	bool CleanUp();
 
-
 public:
 
 	//Player Exposed Stats
@@ -45,6 +44,9 @@ public:
 	Counter coins = Counter();
 	Counter magic = Counter();
 
+	bool isDoingFallAttack = false;
+	bool isDoingShovelAttack = false;
+
 private:
 
 	bool TryJump();
@@ -61,8 +63,6 @@ private:
 
 	/// Status
 	bool isGrounded = true;
-	bool isDoingFallAttack = false;
-	bool isDoingShovelAttack = false;
 	bool isFlipped=false;
 	bool isInLadder = false;
 
