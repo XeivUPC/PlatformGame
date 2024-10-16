@@ -6,17 +6,26 @@
 #include "Textures.h"
 #include "Window.h"
 
+void Enemy::InitAnimations()
+{
+	texture = Engine::GetInstance().textures->Load(textureName.c_str());
+}
+
 void Enemy::InitColliders()
 {
-	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
-	b2World* world = Engine::GetInstance().physics->world;
-
 	enemyCollider->ResetMassData();
 
 	b2MassData massData;
 	massData.mass = enemyMass;
 	massData.center = enemyCollider->GetLocalCenter();
 	enemyCollider->SetMassData(&massData);
+
+	playerFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
+	playerFilter.maskBits = Engine::GetInstance().PLAYER_LAYER;
+	playerFilter.maskBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
+
+	groundFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
+	groundFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
 }
 
 void Enemy::Attack()

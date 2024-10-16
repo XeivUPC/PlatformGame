@@ -28,7 +28,7 @@ protected:
 	std::string textureName;
 	SDL_Texture* texture = NULL;
 	Animator animator;
-	virtual void InitAnimations() = 0;
+	virtual void InitAnimations();
 
 	//Colliders
 	virtual void InitColliders();
@@ -56,8 +56,8 @@ protected:
 		ColliderHandler topPlayerCheckController;
 
 		//Filters
-		b2Filter groundCheckFilter;
-		b2Filter playerCheckFilter;
+		b2Filter groundFilter;
+		b2Filter playerFilter;
 
 	//Functions
 	void Attack();
