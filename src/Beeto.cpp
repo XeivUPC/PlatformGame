@@ -22,14 +22,14 @@ void Beeto::InitAnimations()
 	Enemy::InitAnimations();
 
 	AnimationData alive = AnimationData("Beeto_Alive");
-	alive.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {32, 16}});
-	alive.AddSprite(Sprite{ texture,{1.0f, 0.0f}, {32, 16}});
-	alive.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {32, 16}});
-	alive.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {32, 16}});
+	alive.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {32, 32}});
+	alive.AddSprite(Sprite{ texture,{1.0f, 0.0f}, {32, 32}});
+	alive.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {32, 32}});
+	alive.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {32, 32}});
 
 	AnimationData dead = AnimationData("Beeto_Dead");
-	dead.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {32, 16} });
-	dead.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {32, 16} });
+	dead.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {32, 32} });
+	dead.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {32, 32} });
 
 	animator->AddAnimation(alive);
 	animator->AddAnimation(dead);

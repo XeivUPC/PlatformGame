@@ -128,6 +128,6 @@ bool Enemy::CleanUp()
 	LOG("Cleanup enemy");
 	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(enemyCollider);
-	Engine::GetInstance().textures->UnLoad(texture);
+	//Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
