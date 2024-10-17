@@ -59,9 +59,13 @@ void Player::InitAnimations() {
 	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
 
 	AnimationData idle2 = AnimationData("Player_Idle_2");
-	idle2.AddSprite(Sprite{ texture,{1.0f, 0.0f}, {70, 70}});
 	idle2.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {70, 70}});
 	idle2.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {70, 70}});
+	idle2.AddSprite(Sprite{ texture,{4.0f, 0.0f}, {70, 70}});
+
+	AnimationData crouch = AnimationData("Player_Crouch");
+	crouch.AddSprite(Sprite{ texture,{6.0f, 0.0f}, {70, 70} });
+
 
 	AnimationData move = AnimationData("Player_Move");
 	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {70, 70}});
@@ -99,6 +103,7 @@ void Player::InitAnimations() {
 	
 	animator->AddAnimation(idle);
 	animator->AddAnimation(idle2);
+	animator->AddAnimation(crouch);
 	animator->AddAnimation(move);
 	animator->AddAnimation(jump_rise);
 	animator->AddAnimation(jump_fall);
@@ -135,7 +140,7 @@ void Player::InitColliders() {
 	emptyFilter.maskBits = 0x0000;
 	emptyFilter.categoryBits = 0x0000;
 
-	playerCollider = colliderCreator->CreateBox(world, playerColliderPosition, PIXEL_TO_METERS(11), PIXEL_TO_METERS(30));
+	playerCollider = colliderCreator->CreateBevelBox(world, playerColliderPosition, PIXEL_TO_METERS(15), PIXEL_TO_METERS(30), PIXEL_TO_METERS(1));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
@@ -145,7 +150,7 @@ void Player::InitColliders() {
 
 	b2FixtureUserData groundCheckData;
 	groundCheckData.pointer = (uintptr_t)(&groundCheckController);
-	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(10), groundCheckData);
+	groundCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10), groundCheckData);
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
 
@@ -154,7 +159,7 @@ void Player::InitColliders() {
 
 	b2FixtureUserData shovelFallAttackData;
 	shovelFallAttackData.pointer = (uintptr_t)(&shovelFallAttackCheckController);
-	shovelFallAttackCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(10), PIXEL_TO_METERS(2), shovelFallAttackData);
+	shovelFallAttackCheck = colliderCreator->AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(2), shovelFallAttackData);
 	shovelFallAttackCheck->SetFilterData(enemyCheckFilters);
 	shovelFallAttackCheck->SetFriction(0);
 	shovelFallAttackCheck->SetDensity(0);
@@ -277,6 +282,11 @@ bool Player::Update(float dt)
 		}
 	}
 
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		isCrouching = true;
+	else
+		isCrouching = false;
+
 	if (ladderCheckController.IsBeingTriggered() && Engine::GetInstance().input->GetKey(SDL_SCANCODE_X) == KEY_DOWN) {
 		isInLadder = !isInLadder;
 	}
@@ -353,7 +363,10 @@ bool Player::Update(float dt)
 	else if (isGrounded) {
 		if (velocity.x == 0)
 		{
-			animator->SelectAnimation("Player_Idle", true);
+			if (isCrouching)
+				animator->SelectAnimation("Player_Crouch", true);
+			else
+				animator->SelectAnimation("Player_Idle", true);
 		}
 		else
 			animator->SelectAnimation("Player_Move", true);
@@ -372,24 +385,24 @@ bool Player::Update(float dt)
 
 	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer3);
 	animator->Update(dt);
-	animator->Animate(METERS_TO_PIXELS(position.getX() + textureOffset.x), METERS_TO_PIXELS(position.getY() + textureOffset.y), (SDL_RendererFlip)isFlipped);
+	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.x, METERS_TO_PIXELS(position.getY()) + textureOffset.y, (SDL_RendererFlip)isFlipped);
 
 
-	// Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
-	//Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	//Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
-	//Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+	Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+	Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
+	Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
 
-	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
-	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckRight, b2Color{255,255,255,255});
-	//}	 
-	//if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
-	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckLeft, b2Color{255,255,255,255});
-	//}
-	//if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
-	//	Engine::GetInstance().box2DCreator->RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
-	//}
-	//Engine::GetInstance().render->UnlockLayer();
+	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
+		Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckRight, b2Color{255,255,255,255});
+	}	 
+	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
+		Engine::GetInstance().box2DCreator->RenderFixture(shovelAttackCheckLeft, b2Color{255,255,255,255});
+	}
+	if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
+		Engine::GetInstance().box2DCreator->RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
+	}
+	Engine::GetInstance().render->UnlockLayer();
 
 
 	return true;

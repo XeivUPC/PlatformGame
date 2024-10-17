@@ -100,7 +100,7 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 
 	if (mainSection->leftSection != -1 && loadedSections.count(mainSection->leftSection) == 0) {
 		LevelSection* sectionLeft = new LevelSection();
-		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false, false);
+		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false, false);
 		sectionLeft->sectionOffset.x = -sectionLeft->mapData.width * sectionLeft->mapData.tilewidth + mainSection->sectionOffset.x;
 		sectionLeft->LoadColliders();
 		sectionLeft->LoadObjects();
@@ -108,19 +108,19 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 	}
 	if (mainSection->rightSection != -1 && loadedSections.count(mainSection->rightSection) == 0) {
 		LevelSection* sectionRight = new LevelSection();
-		sectionRight->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->rightSection) + ".tmx", texturePath, b2Vec2(mainSection->mapData.width * mainSection->mapData.tilewidth + mainSection->sectionOffset.x, mainSection->sectionOffset.y));
+		sectionRight->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->rightSection) + ".tmx", texturePath, b2Vec2(mainSection->mapData.width + mainSection->sectionOffset.x, mainSection->sectionOffset.y));
 		loadedSections[mainSection->rightSection] = sectionRight;
 	}
 
 	if (mainSection->topSection != -1 && loadedSections.count(mainSection->topSection) == 0) {
 		LevelSection* sectionTop = new LevelSection();
-		sectionTop->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->topSection) + ".tmx", texturePath, b2Vec2(mainSection->sectionOffset.x, -mainSection->mapData.height * mainSection->mapData.tileheight + mainSection->sectionOffset.y));
+		sectionTop->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->topSection) + ".tmx", texturePath, b2Vec2(mainSection->sectionOffset.x, -mainSection->mapData.height + mainSection->sectionOffset.y));
 		loadedSections[mainSection->topSection] = sectionTop;
 	}
 
 	if (mainSection->bottomSection != -1 && loadedSections.count(mainSection->bottomSection) == 0) {
 		LevelSection* sectionBottom = new LevelSection();
-		sectionBottom->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->bottomSection) + ".tmx", texturePath, b2Vec2(mainSection->sectionOffset.x, mainSection->mapData.height * mainSection->mapData.tileheight + mainSection->sectionOffset.y));
+		sectionBottom->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->bottomSection) + ".tmx", texturePath, b2Vec2(mainSection->sectionOffset.x, mainSection->mapData.height + mainSection->sectionOffset.y));
 		loadedSections[mainSection->bottomSection] = sectionBottom;
 	}
 	return true;
@@ -132,7 +132,7 @@ bool LevelManager::ChargeAllLevelSection(int startingIndex)
 		
 		if (startingIndex == 1) {
 			LevelSection* section = new LevelSection();
-			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath, {0,16*1});
+			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath, {0,1});
 			loadedSections[startingIndex] = section;
 		}
 		else {
@@ -169,8 +169,8 @@ bool LevelManager::LoadSection(int sectionNumber)
 	if (sectionToLoad->bottomSection != -1)
 		sectionsInUse.push_back(sectionToLoad->bottomSection);
 
-	Vector2D minPos = { PIXEL_TO_METERS(sectionToLoad->sectionOffset.x), PIXEL_TO_METERS(sectionToLoad->sectionOffset.y ) };
-	Vector2D maxPos = { PIXEL_TO_METERS(sectionToLoad->sectionOffset.x) + sectionToLoad->mapData.width,PIXEL_TO_METERS(sectionToLoad->sectionOffset.y) + sectionToLoad->mapData.height };
+	Vector2D minPos = { (sectionToLoad->sectionOffset.x), (sectionToLoad->sectionOffset.y ) };
+	Vector2D maxPos = { (sectionToLoad->sectionOffset.x) + sectionToLoad->mapData.width,(sectionToLoad->sectionOffset.y) + sectionToLoad->mapData.height };
 	Engine::GetInstance().GetInstance().render->SetConfinementValues(minPos,maxPos);
 
 	return true;

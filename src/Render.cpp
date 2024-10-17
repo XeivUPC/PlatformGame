@@ -53,7 +53,7 @@ bool Render::Awake()
 		int windowWidth = Engine::GetInstance().window->width;
 		int windowHeight = Engine::GetInstance().window->height;
 
-		cameraGameOffset = { 0, 16 * 1.0f };
+		cameraGameOffset = { 0, 1.0f };
 
 		camera.x = cameraGameOffset.getX();
 		camera.y = cameraGameOffset.getY();
@@ -136,7 +136,7 @@ void Render::ConfineCameraBetweenRange(float dt)
 	float minX = -METERS_TO_PIXELS(minRangeConfinePosition.getX());
 	float maxX = -METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
 
-	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY()) + cameraGameOffset.getY();
+	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY() + cameraGameOffset.getY());
 	float maxY = minY;
 
 	if (camera.x > minX) {
@@ -181,7 +181,7 @@ void Render::ConfineCameraBetweenRange()
 	float minX = -METERS_TO_PIXELS(minRangeConfinePosition.getX());
 	float maxX = -METERS_TO_PIXELS(maxRangeConfinePosition.getX()) + viewport.w;
 
-	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY()) + cameraGameOffset.getY();
+	float minY = METERS_TO_PIXELS(-minRangeConfinePosition.getY() + cameraGameOffset.getY());
 	float maxY = minY;
 
 

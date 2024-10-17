@@ -63,6 +63,7 @@ private:
 
 	/// Status
 	bool isGrounded = true;
+	bool isCrouching = true;
 	bool isDoingFallAttack = false;
 	bool isDoingShovelAttack = false;
 	bool isFlipped=false;
@@ -102,7 +103,7 @@ private:
 	Timer hurtAnimTimeTimer;
 
 	//// Texture
-	b2Vec2 textureOffset{-35,-35};
+	b2Vec2 textureOffset{-35.0f,-35.0f};
 
 	/// Animator
 	Animator* animator;

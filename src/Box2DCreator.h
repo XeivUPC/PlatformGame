@@ -11,6 +11,7 @@ public:
 
 	b2Body* CreateCircle(b2World* world, b2Vec2 position,float radius, b2FixtureUserData userData = b2FixtureUserData());
 	b2Body* CreateBox(b2World* world, b2Vec2 position, float width, float height, b2FixtureUserData userData = b2FixtureUserData());
+	b2Body* CreateBevelBox(b2World* world, b2Vec2 position, float width, float height, float bevelSize, b2FixtureUserData userData = b2FixtureUserData());
 	b2Body* CreateCapsule(b2World* world, b2Vec2 position, float width, float height, float radius, b2FixtureUserData userData = b2FixtureUserData());
 
 	b2Fixture* AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float radius, b2FixtureUserData userData = b2FixtureUserData());

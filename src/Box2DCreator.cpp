@@ -43,6 +43,43 @@ b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, fl
 	return body;
 }
 
+b2Body* Box2DCreator::CreateBevelBox(b2World* world, b2Vec2 position, float width, float height, float bevelSize, b2FixtureUserData userData)
+{
+	std::vector<b2Vec2> vertices;
+
+	// Calculate half dimensions
+	float halfWidth = width / 2.0f;
+	float halfHeight = height / 2.0f;
+
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.position.Set(position.x, position.y);
+	b2Body* body = world->CreateBody(&bodyDef);
+
+	// Define vertices for the beveled box
+	vertices.push_back(b2Vec2(-halfWidth + bevelSize, -halfHeight));
+	vertices.push_back(b2Vec2(halfWidth - bevelSize, -halfHeight));
+	vertices.push_back(b2Vec2(halfWidth, -halfHeight + bevelSize));
+	vertices.push_back(b2Vec2(halfWidth, halfHeight - bevelSize));
+	vertices.push_back(b2Vec2(halfWidth - bevelSize, halfHeight));
+	vertices.push_back(b2Vec2(-halfWidth + bevelSize, halfHeight));
+	vertices.push_back(b2Vec2(-halfWidth, halfHeight - bevelSize));
+	vertices.push_back(b2Vec2(-halfWidth, -halfHeight + bevelSize));
+
+	// Create the polygon shape
+	b2PolygonShape beveledBox;
+	beveledBox.Set(&vertices[0], vertices.size());
+
+	b2FixtureDef boxFixtureDef;
+	boxFixtureDef.userData = userData;
+	boxFixtureDef.shape = &beveledBox;
+	boxFixtureDef.density = 1.0f;
+	boxFixtureDef.friction = 0.3f;
+	body->CreateFixture(&boxFixtureDef);
+
+	return body;
+}
+
 b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width, float height, float radius, b2FixtureUserData userData)
 {
 	float rectangleHeight = height - 2 * radius; // Adjust height to accommodate the circle ends
