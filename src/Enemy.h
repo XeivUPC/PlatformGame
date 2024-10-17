@@ -27,7 +27,8 @@ protected:
 	//Render
 	std::string textureName;
 	SDL_Texture* texture = NULL;
-	Animator animator;
+	Animator* animator;
+	Vector2D textureOffset;
 	virtual void InitAnimations();
 
 	//Colliders
@@ -69,55 +70,13 @@ protected:
 	virtual void Brain();
 
 public:
-	Enemy();
+	Enemy(Vector2D pos);
 	virtual ~Enemy();
 
 	bool Awake();
 	bool Start();
-	bool Update(float dt);
+	virtual bool Update(float dt);
 	bool CleanUp();
 };
 	
 	
-
-/*private:
-
-	bool canMoveSameDirection = true;
-	bool isFlipped = false;
-
-	float baseGravity = 1.0f;
-	int baseDamage = 1;
-	float attackRecoverMS = 50;
-	b2Vec2 textureOffset{ 0,0 };
-	Timer attackCooldown;
-
-	Player* player;
-
-protected:
-	Animator animator;
-	virtual void InitAnimations() = 0;
-
-	virtual void InitColliders();
-	b2Fixture* positionCheck;
-	ColliderHandler positionCheckController;
-
-	b2Fixture* playerCheck;
-	ColliderHandler playerCheckController;
-
-	b2Body* enemyCollider;
-
-	virtual void Brain();
-
-public:
-	Enemy();
-	virtual ~Enemy();
-
-	bool Awake();
-	bool Start();
-	bool Update(float dt);
-	bool CleanUp();
-
-	float speed = 120.0f;
-	std::string textureName;
-	SDL_Texture* texture = NULL;
-	Health EnemyHealth = Health(1);*/

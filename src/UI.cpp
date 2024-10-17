@@ -51,6 +51,7 @@ bool UI::PostUpdate()
 
 bool UI::CleanUp()
 {
+	Engine::GetInstance().textures->UnLoad(UITexture);
 	return true;
 }
 

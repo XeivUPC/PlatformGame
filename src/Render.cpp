@@ -107,7 +107,7 @@ bool Render::Update(float dt)
 bool Render::PostUpdate()
 {
 	FollowPlayer();
-
+	SDL_SetRenderTarget(renderer, NULL);
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 
 
@@ -382,7 +382,7 @@ void Render::SelectLayer(int layerIndex)
 
 void Render::DeselectLayer() const
 {
-	SDL_SetRenderTarget(renderer, NULL);
+	//SDL_SetRenderTarget(renderer, NULL);
 }
 
 void Render::CreateLayer(int layerIndex)
