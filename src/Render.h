@@ -15,6 +15,7 @@ public:
 		Layer0,
 		Layer1,
 		Layer2,
+		Enemy,
 		Layer3,
 		Layer4,
 		Layer5,

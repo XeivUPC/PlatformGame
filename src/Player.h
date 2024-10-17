@@ -27,6 +27,9 @@ public:
 	bool CleanUp();
 
 	void Damage(int amount, Vector2D direction = {0,0});
+	bool isDoingFallAttack = false;
+	bool isDoingShovelAttack = false;
+
 
 public:
 
@@ -64,8 +67,6 @@ private:
 	/// Status
 	bool isGrounded = true;
 	bool isCrouching = true;
-	bool isDoingFallAttack = false;
-	bool isDoingShovelAttack = false;
 	bool isFlipped=false;
 	bool isInLadder = false;
 	bool isInvulnerable = false;

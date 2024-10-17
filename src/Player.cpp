@@ -25,7 +25,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(16*8, 16*8);
+	position = Vector2D(8, 8);
 
 	InitColliders();
 	groundCheckController.SetSensor(groundCheck);
@@ -123,10 +123,10 @@ void Player::InitColliders() {
 
 	///PlayerCollider
 	
-	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
+	b2Vec2 playerColliderPosition{ (position.getX()), (position.getY()) };
 
 	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
-	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER |Engine::GetInstance().INTERACTABLE_LAYER;
+	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER | Engine::GetInstance().INTERACTABLE_LAYER | Engine::GetInstance().ENEMY_LAYER;
 
 	groundCheckFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
 	groundCheckFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
@@ -388,7 +388,7 @@ bool Player::Update(float dt)
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.x, METERS_TO_PIXELS(position.getY()) + textureOffset.y, (SDL_RendererFlip)isFlipped);
 
 
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+	/*Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 	Engine::GetInstance().box2DCreator->RenderBody(playerCollider, b2Color{ 255,0,0,255 });
 	Engine::GetInstance().box2DCreator->RenderFixture(groundCheck, b2Color{0,0,255,255});
 	Engine::GetInstance().box2DCreator->RenderFixture(ladderCheck, b2Color{255,0,255,255});
@@ -401,7 +401,7 @@ bool Player::Update(float dt)
 	}
 	if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
 		Engine::GetInstance().box2DCreator->RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
-	}
+	}*/
 	Engine::GetInstance().render->UnlockLayer();
 
 

@@ -10,6 +10,7 @@
 #include "DirtBlock.h"
 #include "EntityManager.h"
 #include "MovingPlatform.h"
+#include "Beeto.h"
 
 LevelSection::LevelSection()
 {
@@ -103,7 +104,7 @@ bool LevelSection::CleanUp()
 }
 
 
-bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset, bool loadColliders, bool loadObjects)
+bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 offset, bool loadColliders, bool loadObjects, bool loadEnemies)
 {
 
     bool ret = true;
@@ -152,6 +153,8 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
             LoadColliders();
         if (loadObjects)
             LoadObjects();
+        if (loadEnemies)
+            LoadEnemies();
 
     }
     return ret;
@@ -340,6 +343,31 @@ void LevelSection::LoadObjects()
         }
     }
 }
+
+void LevelSection::LoadEnemies()
+{
+    for (pugi::xml_node enemyNode = mapNode.find_child_by_attribute("objectgroup", "name", "Enemies").child("object"); enemyNode != NULL; enemyNode = enemyNode.next_sibling("object")) {
+
+        pugi::xml_node enemyTypePropety = enemyNode.child("properties").find_child_by_attribute("property", "name", "EnemyType");
+
+        std::string type = enemyTypePropety.attribute("value").as_string();
+
+        if (type == "Beeto") {
+            float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
+
+
+            Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+            Beeto* beeto = new Beeto(postion);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)beeto);
+
+        }
+
+    }
+
+}
+
+
 
 b2Body* LevelSection::CreateColliders(xml_node* node)
 {

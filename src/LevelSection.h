@@ -75,9 +75,10 @@ public:
 	~LevelSection();
 	bool Update(float dt);
 	bool CleanUp();
-    bool Load(std::string fileName, std::string texturePath, b2Vec2 offset  = b2Vec2_zero, bool loadColliders = true , bool loadObjects = true);
+    bool Load(std::string fileName, std::string texturePath, b2Vec2 offset  = b2Vec2_zero, bool loadColliders = true , bool loadObjects = true, bool loadEnemies=true);
     void LoadColliders();
     void LoadObjects();
+    void LoadEnemies();
 
     int sectionNumber;
 

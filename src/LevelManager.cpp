@@ -100,10 +100,11 @@ bool LevelManager::ChargeAdjacentSections(LevelSection* mainSection)
 
 	if (mainSection->leftSection != -1 && loadedSections.count(mainSection->leftSection) == 0) {
 		LevelSection* sectionLeft = new LevelSection();
-		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false, false);
+		sectionLeft->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(mainSection->leftSection) + ".tmx", texturePath, b2Vec2(-mainSection->mapData.width + mainSection->sectionOffset.x, mainSection->sectionOffset.y), false, false, false);
 		sectionLeft->sectionOffset.x = -sectionLeft->mapData.width * sectionLeft->mapData.tilewidth + mainSection->sectionOffset.x;
 		sectionLeft->LoadColliders();
 		sectionLeft->LoadObjects();
+		sectionLeft->LoadEnemies();
 		loadedSections[mainSection->leftSection] = sectionLeft;
 	}
 	if (mainSection->rightSection != -1 && loadedSections.count(mainSection->rightSection) == 0) {

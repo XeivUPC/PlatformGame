@@ -11,45 +11,70 @@
 class Enemy : public Entity
 {
 private:
-	bool canMoveSameDirection = true;
-	bool isFlipped = false;
-
+	//Physics
 	float baseGravity = 1.0f;
-	int baseDamage = 1;
-	float attackRecoverMS = 50;
-	b2Vec2 textureOffset{ 0,0 };
-	Timer attackCooldown;
-
-	Player* player;
 
 protected:
-	Animator animator;
-	virtual void InitAnimations() = 0;
+	//Game Parameters
+	int hitDamage = 1;
+	float speed = 1.0f;
+	int attackCooldownMS = 500;
+	int hurtCooldownMS = 500;
+	Timer attackCooldown;
+	Timer hurtCooldown;
+	Health enemyHealth = Health(1);
+	Player* player;
+	Vector2D enemyDirection;
 
-	void InitColliders();
-	b2Fixture* positionCheck;
-	ColliderHandler positionCheckController;
-
-	b2Fixture* playerCheck;
-	ColliderHandler playerCheckController;
-
-	b2Body* enemyCollider;
-
-	virtual void Brain();
-	b2Vec2 CalculateNearestDirection(bool verticalAxis, bool horizontalAxis);
-	void ChangeDirection(bool canGoLeft, bool canGoUp, bool canGoRight, bool canGoDown);
-
-public:
-	Enemy();
-	virtual ~Enemy();
-
-	bool Awake();
-	bool Start();
-	bool Update(float dt);
-	bool CleanUp();
-
-	float speed = 120.0f;
+	//Render
 	std::string textureName;
 	SDL_Texture* texture = NULL;
-	Health EnemyHealth = Health(1);
+	Animator* animator;
+	Vector2D textureOffset;
+	virtual void InitAnimations();
+
+	//Colliders
+	virtual void InitColliders();
+
+		//Enemy Collider
+		float enemyMass = 1.0f;
+		b2Body* enemyCollider;
+
+		//Ground Collider
+		b2Fixture* groundCheck;
+		ColliderHandler groundCheckController;
+
+		//Direction Collider
+		b2Fixture* directionRightCheck;
+		b2Fixture* directionLeftCheck;
+		ColliderHandler directionRightCheckController;
+		ColliderHandler directionLeftCheckController;
+
+		//Player Collider
+		b2Fixture* playerCheck;
+		ColliderHandler playerCheckController;
+
+		//Filters
+		b2Filter groundFilter;
+		b2Filter playerFilter;
+
+	//Functions
+	void Attack();
+	void Hurt();
+	void Die();
+	Vector2D SeekForSurfaceTile();
+	void Move();
+	Vector2D TrackPlayerPosition(bool verticalAxis, bool horizontalAxis);
+	virtual void Brain();
+	virtual void Render(float dt);
+
+public:
+	Enemy(Vector2D pos);
+	virtual ~Enemy();
+	bool Awake();
+	bool Start();
+	virtual bool Update(float dt);
+	bool CleanUp();
 };
+	
+	

@@ -1,121 +1,133 @@
 #include "Enemy.h"
-#include "Player.h"
-#include "Scene.h"
 #include "Engine.h"
-#include "Textures.h"
-#include "Box2DCreator.h"
-#include "CollidersManager.h"
-#include "Audio.h"
-#include "Input.h"
-#include "Render.h"
 #include "Physics.h"
+#include "Scene.h"
+#include "EntityManager.h"
+#include "box2DCreator.h"
+#include "Textures.h"
+#include "Window.h"
 #include "Log.h"
-#include "math.h"
+
+
+void Enemy::InitAnimations()
+{
+	texture = Engine::GetInstance().textures->Load(textureName.c_str());
+	animator = new Animator();
+}
 
 void Enemy::InitColliders()
 {
-	const std::shared_ptr<Box2DCreator>& box2DSensor = Engine::GetInstance().box2DCreator
-		;
-	b2World* world = Engine::GetInstance().physics->world;
+	playerFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
+	playerFilter.maskBits = Engine::GetInstance().PLAYER_LAYER | Engine::GetInstance().PLAYER_ATTACK_LAYER;
 
-	b2Vec2 enemyColliderposition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
+	groundFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
+	groundFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
+	
+}
 
-	b2Filter mapCollidersFilter;
-	mapCollidersFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
-	mapCollidersFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
+void Enemy::Attack()
+{
+	player->Damage(hitDamage, {0,1});
+}
 
-	b2Filter playerCollidersFilter;
-	playerCollidersFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
-	playerCollidersFilter.maskBits = Engine::GetInstance().PLAYER_LAYER;
+void Enemy::Hurt()
+{
+	enemyHealth.Hurt(1);
+	if (!enemyHealth.IsAlive())
+		Die();
+}
 
-	positionCheck->SetSensor(true);
-	positionCheck->SetFilterData(mapCollidersFilter);
-	positionCheck->SetFriction(0);
+void Enemy::Die()
+{
+	Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(this);
+}
 
-	playerCheck->SetSensor(true);
-	playerCheck->SetFilterData(mapCollidersFilter);
-	playerCheck->SetFriction(0);
-	playerCheckController.AcceptOnlyTriggers(false);
+Vector2D Enemy::SeekForSurfaceTile()
+{
+	return{ 0,0 };
+}
 
+void Enemy::Move()
+{
+}
 
-	enemyCollider->SetFixedRotation(true);
-
-};
+Vector2D Enemy::TrackPlayerPosition(bool verticalAxis, bool horizontalAxis)
+{
+	Vector2D playerPosition = position;
+	if (verticalAxis)
+	{
+		playerPosition.setY(player->position.getY());
+	}
+	if (horizontalAxis)
+	{
+		playerPosition.setX(player->position.getX());
+	}
+	return playerPosition;
+}
 
 void Enemy::Brain()
 {
+	if (playerCheckController.IsBeingTriggered())
+	{
+		if ((!player->isDoingShovelAttack && !player->isDoingFallAttack) && attackCooldown.ReadMSec() >= attackCooldownMS)
+		{
+			attackCooldown.Start();
+			Attack();
+		}
+		else if ((player->isDoingShovelAttack || player->isDoingFallAttack) && hurtCooldown.ReadMSec() >= hurtCooldownMS)
+		{
+			hurtCooldown.Start();
+			Hurt();
+			printf("Ouch\n");
+		}
+	}
 }
 
-b2Vec2 Enemy::CalculateNearestDirection(bool verticalAxis, bool horizontalAxis)
+void Enemy::Render(float dt)
 {
-	b2Vec2 nearestDirection;
-	float nearestDistance = -1;
-
-	if (verticalAxis)
-	{
-		if (player->position.getX() > position.getX())
-		{
-			nearestDirection = b2Vec2{1, 0};
-			nearestDistance = player->position.getX() - position.getX();
-		}
-		else
-		{
-			nearestDirection = b2Vec2{ -1, 0 };
-			nearestDistance = position.getX() - player->position.getX();
-		}
-	}
-	else if (horizontalAxis)
-	{
-		if (player->position.getY() > position.getY())
-		{
-			nearestDirection = b2Vec2{ 0, 1 };
-			nearestDistance = player->position.getY() - position.getY();
-		}
-		else
-		{
-			nearestDirection = b2Vec2{ 0, -1};
-			nearestDistance = position.getY() - player->position.getY();
-		}
-	}
-	return nearestDirection;
+	animator->Update(dt);
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Enemy);
+	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 }
 
-Enemy::Enemy() : Entity(EntityType::UNKNOWN)
-{}
+Enemy::Enemy(Vector2D pos) : Entity(EntityType::UNKNOWN)
+{
+	position = pos;
+}
 
 Enemy::~Enemy()
 {
+	
 }
 
 bool Enemy::Awake()
 {
-	position = Vector2D(0, 0);
-	InitColliders();
-	positionCheckController.SetSensor(positionCheck);
-	playerCheckController.SetSensor(playerCheck);
-	attackCooldown = Timer();
 	return true;
 }
 
 bool Enemy::Start()
 {
-	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 	player = Engine::GetInstance().scene->player;
 	InitAnimations();
-
+	InitColliders();
 	return true;
 }
 
 bool Enemy::Update(float dt)
 {
+	position.setX(enemyCollider->GetPosition().x);
+	position.setY(enemyCollider->GetPosition().y);
 	Brain();
+	Render(dt);
+	//Engine::GetInstance().box2DCreator->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
 	return true;
 }
 
 bool Enemy::CleanUp()
 {
 	LOG("Cleanup enemy");
+	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(enemyCollider);
-	Engine::GetInstance().textures->UnLoad(texture);
+	//Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
