@@ -210,7 +210,7 @@ void Render::FollowPlayer()
 	float minX = -METERS_TO_PIXELS_RAW(minRangeConfinePosition.getX());
 	float maxX = -METERS_TO_PIXELS_RAW(maxRangeConfinePosition.getX()) + viewport.w;
 
-	float minY = METERS_TO_PIXELS_RAW(-minRangeConfinePosition.getY()) + 32;
+	float minY = METERS_TO_PIXELS_RAW(-minRangeConfinePosition.getY()+2);
 	float maxY = minY;
 
 	float targetPos = METERS_TO_PIXELS_RAW((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
@@ -222,6 +222,7 @@ void Render::FollowPlayer()
 		return;
 	}
 
+	
 	camera.x = targetPos;
 }
 
