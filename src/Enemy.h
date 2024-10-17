@@ -18,8 +18,10 @@ protected:
 	//Game Parameters
 	int hitDamage = 1;
 	float speed = 1.0f;
-	int attackCooldownMS = 5;
+	int attackCooldownMS = 500;
+	int hurtCooldownMS = 500;
 	Timer attackCooldown;
+	Timer hurtCooldown;
 	Health enemyHealth = Health(1);
 	Player* player;
 	Vector2D enemyDirection;
@@ -46,15 +48,11 @@ protected:
 		b2Fixture* directionRightCheck;
 		b2Fixture* directionLeftCheck;
 		ColliderHandler directionRightCheckController;
-		ColliderHandler directionCheckController;
+		ColliderHandler directionLeftCheckController;
 
-		//Player Side Collider
-		b2Fixture* sidePlayerCheck;
-		ColliderHandler sidePlayerCheckController;
-
-		//Player Top Collider
-		b2Fixture* topPlayerCheck;
-		ColliderHandler topPlayerCheckController;
+		//Player Collider
+		b2Fixture* playerCheck;
+		ColliderHandler playerCheckController;
 
 		//Filters
 		b2Filter groundFilter;
@@ -68,11 +66,11 @@ protected:
 	void Move();
 	Vector2D TrackPlayerPosition(bool verticalAxis, bool horizontalAxis);
 	virtual void Brain();
+	virtual void Render(float dt);
 
 public:
 	Enemy(Vector2D pos);
 	virtual ~Enemy();
-
 	bool Awake();
 	bool Start();
 	virtual bool Update(float dt);

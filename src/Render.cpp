@@ -74,11 +74,12 @@ bool Render::Start()
 	CreateLayer(0);/// Paralax
 	CreateLayer(1);/// Map Behind
 	CreateLayer(2);/// Default
+	CreateLayer(9);/// Enemies
 	CreateLayer(3);/// Player
 	CreateLayer(4);/// Map Front
 	CreateLayer(5);/// UI
 	CreateLayer(6);
-	CreateLayer(7);
+	
 
 
 

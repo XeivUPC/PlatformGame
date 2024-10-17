@@ -121,7 +121,7 @@ void Player::InitColliders() {
 	b2Vec2 playerColliderPosition{ PIXEL_TO_METERS(position.getX()), PIXEL_TO_METERS(position.getY()) };
 
 	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
-	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER |Engine::GetInstance().INTERACTABLE_LAYER;
+	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER | Engine::GetInstance().INTERACTABLE_LAYER | Engine::GetInstance().ENEMY_LAYER;
 
 	groundCheckFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
 	groundCheckFilters.maskBits = Engine::GetInstance().GROUND_LAYER;

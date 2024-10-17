@@ -5,7 +5,6 @@
 #include "Log.h"
 #include "Entity.h"
 #include "EntityManager.h"
-#include "Cockroach.h"
 #include "Player.h"
 
 
@@ -37,9 +36,7 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-	Cockroach* c1 = new Cockroach(player->position);
-	Engine::GetInstance().entityManager->AddEntity((Entity*)c1);
-	
+
 	return true;
 }
 

@@ -18,17 +18,11 @@ void Enemy::InitAnimations()
 void Enemy::InitColliders()
 {
 	playerFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
-	playerFilter.maskBits = Engine::GetInstance().PLAYER_LAYER;
-	playerFilter.maskBits = Engine::GetInstance().PLAYER_ATTACK_LAYER;
+	playerFilter.maskBits = Engine::GetInstance().PLAYER_LAYER | Engine::GetInstance().PLAYER_ATTACK_LAYER;
 
 	groundFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
 	groundFilter.maskBits = Engine::GetInstance().GROUND_LAYER;
-	enemyCollider->ResetMassData();
-
-	b2MassData massData;
-	massData.mass = enemyMass;
-	massData.center = enemyCollider->GetLocalCenter();
-	enemyCollider->SetMassData(&massData);
+	
 }
 
 void Enemy::Attack()
@@ -73,20 +67,27 @@ Vector2D Enemy::TrackPlayerPosition(bool verticalAxis, bool horizontalAxis)
 
 void Enemy::Brain()
 {
-	if (sidePlayerCheckController.OnTriggerEnter())
+	if (playerCheckController.IsBeingTriggered())
 	{
-		if (!player->isDoingShovelAttack && attackCooldown.ReadSec() == 0)
+		if ((!player->isDoingShovelAttack && !player->isDoingFallAttack) && attackCooldown.ReadMSec() >= attackCooldownMS)
+		{
+			attackCooldown.Start();
 			Attack();
-		else if (player->isDoingShovelAttack)
+		}
+		else if ((player->isDoingShovelAttack || player->isDoingFallAttack) && hurtCooldown.ReadMSec() >= hurtCooldownMS)
+		{
+			hurtCooldown.Start();
 			Hurt();
+			printf("Ouch\n");
+		}
 	}
-	else if (topPlayerCheckController.OnTriggerEnter())
-	{
-		if (!player->isDoingFallAttack && attackCooldown.ReadSec() == 0)
-			Attack();
-		else if (player->isDoingFallAttack)
-			Hurt();
-	}
+}
+
+void Enemy::Render(float dt)
+{
+	animator->Update(dt);
+	Engine::GetInstance().render->SelectLayer(9);
+	animator->Animate(METERS_TO_PIXELS(position.getX() + textureOffset.getX()), METERS_TO_PIXELS(position.getY() + textureOffset.getY()), SDL_FLIP_NONE);
 }
 
 Enemy::Enemy(Vector2D pos) : Entity(EntityType::UNKNOWN)
@@ -114,16 +115,11 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
-	Brain();
-
 	position.setX(enemyCollider->GetPosition().x);
 	position.setY(enemyCollider->GetPosition().y);
-
-	animator->Update(dt);
-	Engine::GetInstance().render->SelectLayer(6);
-	animator->Animate(METERS_TO_PIXELS(position.getX()+textureOffset.getX()), METERS_TO_PIXELS(position.getY() + textureOffset.getY()), SDL_FLIP_NONE);
-	Engine::GetInstance().render->SelectLayer(6);
-	Engine::GetInstance().box2DCreator->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
+	Brain();
+	Render(dt);
+	//Engine::GetInstance().box2DCreator->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
 	return true;
 }
 

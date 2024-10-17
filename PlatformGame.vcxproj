@@ -149,7 +149,7 @@
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Box2DCreator.cpp" />
     <ClCompile Include="src\CheckPoint.cpp" />
-    <ClCompile Include="src\Cockroach.cpp" />
+    <ClCompile Include="src\Beeto.cpp" />
     <ClCompile Include="src\ColliderHandler.cpp" />
     <ClCompile Include="src\CollidersManager.cpp" />
     <ClCompile Include="src\Counter.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Box2DCreator.h" />
     <ClInclude Include="src\CheckPoint.h" />
-    <ClInclude Include="src\Cockroach.h" />
+    <ClInclude Include="src\Beeto.h" />
     <ClInclude Include="src\ColliderHandler.h" />
     <ClInclude Include="src\CollidersManager.h" />
     <ClInclude Include="src\Counter.h" />
