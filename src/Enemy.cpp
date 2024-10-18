@@ -68,6 +68,8 @@ Vector2D Enemy::TrackPlayerPosition(bool verticalAxis, bool horizontalAxis)
 		playerPosition.setY(0);
 	if (!verticalAxis)
 		playerPosition.setX(0);
+	if(playerPosition.getX() < 0)
+
 	return playerPosition;
 }
 
