@@ -4,7 +4,7 @@
 #include "AnimationSystem.h"
 #include "Timer.h"
 #include <box2d/box2d.h>
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 
 class CheckPoint : Entity
 {
@@ -42,7 +42,7 @@ private:
 	Timer  turnOnTimer;
 
 	b2Body* body;
-	ColliderHandler collisionController;
+	CollisionSensor collisionController;
 
 	int unlockSoundId;
 };

@@ -96,13 +96,13 @@
     <ClCompile Include="src\HealthSystem.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Box2DCreator.cpp">
+    <ClCompile Include="src\Box2DFactory.cpp">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\ColliderHandler.cpp">
+    <ClCompile Include="src\CollisionSensor.cpp">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\CollidersManager.cpp">
+    <ClCompile Include="src\CollisionsManager.cpp">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\LevelManager.cpp">
@@ -140,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="src\Beeto.cpp">
       <Filter>Source Files\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box2DRender.cpp">
+      <Filter>Source Files\Box2D_Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -194,13 +197,13 @@
     <ClInclude Include="src\HealthSystem.h">
       <Filter>Source Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\Box2DCreator.h">
+    <ClInclude Include="src\Box2DFactory.h">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\ColliderHandler.h">
+    <ClInclude Include="src\CollisionSensor.h">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\CollidersManager.h">
+    <ClInclude Include="src\CollisionsManager.h">
       <Filter>Source Files\Box2D_Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\LevelManager.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="src\Beeto.h">
       <Filter>Source Files\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Box2DRender.h">
+      <Filter>Source Files\Box2D_Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,19 @@
-#include "Box2DCreator.h"
+#include "Box2DFactory.h"
 #include "Engine.h"
 #include "Physics.h"
 #include "Render.h"
 #include "Window.h"
 
-b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius, b2FixtureUserData userData)
+Box2DFactory::Box2DFactory()
+{
+}
+
+Box2DFactory& Box2DFactory::GetInstance() {
+	static Box2DFactory instance; // Guaranteed to be destroyed and instantiated on first use
+	return instance;
+}
+
+b2Body* Box2DFactory::CreateCircle(b2World* world, b2Vec2 position, float radius, b2FixtureUserData userData)
 {
 	
 	b2BodyDef bodyDef;
@@ -24,7 +33,7 @@ b2Body* Box2DCreator::CreateCircle(b2World* world, b2Vec2 position, float radius
 	return body;
 }
 
-b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, float height, b2FixtureUserData userData)
+b2Body* Box2DFactory::CreateBox(b2World* world, b2Vec2 position, float width, float height, b2FixtureUserData userData)
 {
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
@@ -43,7 +52,7 @@ b2Body* Box2DCreator::CreateBox(b2World* world, b2Vec2 position, float width, fl
 	return body;
 }
 
-b2Body* Box2DCreator::CreateBevelBox(b2World* world, b2Vec2 position, float width, float height, float bevelSize, b2FixtureUserData userData)
+b2Body* Box2DFactory::CreateBevelBox(b2World* world, b2Vec2 position, float width, float height, float bevelSize, b2FixtureUserData userData)
 {
 	std::vector<b2Vec2> vertices;
 
@@ -80,7 +89,7 @@ b2Body* Box2DCreator::CreateBevelBox(b2World* world, b2Vec2 position, float widt
 	return body;
 }
 
-b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width, float height, float radius, b2FixtureUserData userData)
+b2Body* Box2DFactory::CreateCapsule(b2World* world, b2Vec2 position, float width, float height, float radius, b2FixtureUserData userData)
 {
 	float rectangleHeight = height - 2 * radius; // Adjust height to accommodate the circle ends
 
@@ -121,7 +130,7 @@ b2Body* Box2DCreator::CreateCapsule(b2World* world, b2Vec2 position, float width
 
 }
 
-b2Fixture* Box2DCreator::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float radius, b2FixtureUserData userData)
+b2Fixture* Box2DFactory::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float radius, b2FixtureUserData userData)
 {
 	b2CircleShape circleShape = CreateCircleShape(radius, offset);
 
@@ -135,7 +144,7 @@ b2Fixture* Box2DCreator::AddCircle(b2Body* bodyToAddTo, b2Vec2 offset, float rad
 	return bodyToAddTo->CreateFixture(&circleFixtureDef);
 }
 
-b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height, b2FixtureUserData userData)
+b2Fixture* Box2DFactory::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width, float height, b2FixtureUserData userData)
 {
 
 	b2PolygonShape boxShape = CreateBoxShape(width, height, offset);
@@ -151,69 +160,8 @@ b2Fixture* Box2DCreator::AddBox(b2Body* bodyToAddTo, b2Vec2 offset, float width,
 }
 
 
-void Box2DCreator::RenderBody(b2Body* body, b2Color color)
-{
-	b2World* world = Engine::GetInstance().physics->world;
-	const std::shared_ptr<Render>& render = Engine::GetInstance().render;
 
-	for (b2Fixture* fixture = body->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext()) {
-		// Get the shape type (polygon or circle)
-		RenderFixture(fixture, color);
-	}
-}
-
-void Box2DCreator::RenderFixture(b2Fixture* fixture, b2Color color)
-{
-	b2Body* body = fixture->GetBody();
-	b2Shape::Type shapeType = fixture->GetType();
-	const std::shared_ptr<Render>& render = Engine::GetInstance().render;
-
-	// Handle polygon shapes (for rectangles)
-	if (shapeType == b2Shape::e_polygon) {
-		// Cast to a polygon shape
-		b2PolygonShape* polygonShape = (b2PolygonShape*)fixture->GetShape();
-
-		// Get the body transform (position and rotation)
-		const b2Transform& transform = body->GetTransform();
-
-		// Get vertices of the polygon
-		SDL_Point points[b2_maxPolygonVertices];  // Max number of vertices in a Box2D polygon
-		int vertexCount = polygonShape->m_count;
-
-		// Convert Box2D world coordinates to screen coordinates using the body's transform
-		for (int i = 0; i < vertexCount; ++i) {
-			b2Vec2 vertex = b2Mul(transform, polygonShape->m_vertices[i]);
-			points[i].x = (int)(METERS_TO_PIXELS(vertex.x));
-			points[i].y = (int)(METERS_TO_PIXELS(vertex.y));
-		}
-
-		// Render the polygon as a filled shape using DrawLine to connect vertices
-		for (int i = 0; i < vertexCount; ++i) {
-			int next = (i + 1) % vertexCount;  // Wrap around to the first vertex
-			render->DrawLine(points[i].x, points[i].y, points[next].x, points[next].y, color.r, color.g, color.b, color.a, true);
-		}
-
-	}
-	else if (shapeType == b2Shape::e_circle) {
-		// Cast to a circle shape
-		b2CircleShape* circleShape = (b2CircleShape*)fixture->GetShape();
-
-		// Get the circle's position in world coordinates
-		b2Vec2 center = body->GetWorldPoint(circleShape->m_p);
-		float radius = circleShape->m_radius;
-
-		// Convert Box2D world coordinates to screen coordinates
-		int screenX = (int)(METERS_TO_PIXELS(center.x));
-		int screenY = (int)(METERS_TO_PIXELS(center.y));
-		int screenRadius = (int)(METERS_TO_PIXELS(radius));
-
-		// Draw the circle using the custom DrawCircle method
-		render->DrawCircle(screenX, screenY, screenRadius , color.r, color.g, color.b, color.a, true);
-	}
-}
-
-
-b2CircleShape Box2DCreator::CreateCircleShape(float radius, b2Vec2 offset)
+b2CircleShape Box2DFactory::CreateCircleShape(float radius, b2Vec2 offset)
 {
 	b2CircleShape circle;
 	circle.m_radius = radius;
@@ -221,7 +169,7 @@ b2CircleShape Box2DCreator::CreateCircleShape(float radius, b2Vec2 offset)
 	return circle;
 }
 
-b2PolygonShape Box2DCreator::CreateBoxShape(float width, float height, b2Vec2 offset)
+b2PolygonShape Box2DFactory::CreateBoxShape(float width, float height, b2Vec2 offset)
 {
 	b2PolygonShape rectangle;
 	rectangle.SetAsBox(width / 2.0f, height / 2.0f,offset,0);

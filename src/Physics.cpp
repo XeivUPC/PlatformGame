@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include "CollidersManager.h"
+#include "CollisionsManager.h"
 #include "Engine.h"
 
 Physics::Physics()
@@ -15,8 +15,8 @@ bool Physics::Awake()
 {
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
-	const std::shared_ptr<CollidersManager>& box2DSensor = Engine::GetInstance().box2DSensors;
-	world->SetContactListener(box2DSensor.get());
+	const std::shared_ptr<CollisionsManager>& collisionsManager = Engine::GetInstance().collisionsManager;
+	world->SetContactListener(collisionsManager.get());
 
 
 	return true;

@@ -4,7 +4,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 #include "AnimationSystem.h"
 #include "Timer.h"
 #include "Counter.h"
@@ -127,19 +127,19 @@ private:
 			
 		///// GroundCollider
 		b2Fixture* groundCheck;
-		ColliderHandler groundCheckController;
+		CollisionSensor groundCheckController;
 		
 
 		//// EnemyCollider
 		b2Fixture* shovelFallAttackCheck;
-		ColliderHandler shovelFallAttackCheckController;
+		CollisionSensor shovelFallAttackCheckController;
 
 		b2Fixture* shovelAttackCheckLeft;
 		b2Fixture* shovelAttackCheckRight;
 
 		//// LadderCollider
 		b2Fixture* ladderCheck;
-		ColliderHandler ladderCheckController;
+		CollisionSensor ladderCheckController;
 
 		///// Player Collider
 		float playerMass = 0.15f;

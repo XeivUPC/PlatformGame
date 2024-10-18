@@ -5,7 +5,8 @@
 #include "Physics.h"
 #include <sstream> 
 #include "Render.h"
-#include "Box2DCreator.h"
+#include "Box2DFactory.h"
+#include "Box2DRender.h"
 #include "CheckPoint.h"
 #include "DirtBlock.h"
 #include "EntityManager.h"
@@ -59,7 +60,7 @@ bool LevelSection::Update(float dt)
     Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
     for (auto*& collider : colliders)
     {
-        Engine::GetInstance().box2DCreator->RenderBody(collider, b2Color{ 0,255,0,255 });
+        Box2DRender::GetInstance().RenderBody(collider, b2Color{ 0,255,0,255 });
     }
     Engine::GetInstance().render->UnlockLayer();
 
@@ -395,10 +396,8 @@ b2Body* LevelSection::CreateColliders(xml_node* node)
         pugi::xml_node layersAffectingProperty = colliderProperties.find_child_by_attribute("property", "name", "AFFECTING_LAYERS");
         value = layersAffectingProperty.attribute("value").as_string();
         AddLayers(&filter.maskBits, value);
-
-
     }
-    b2Body* collider = Engine::GetInstance().box2DCreator->CreateBox(world, position, (width), (height));
+    b2Body* collider = Box2DFactory::GetInstance().CreateBox(world, position, (width), (height));
 
     collider->SetType(b2_staticBody);
     collider->GetFixtureList()[0].SetFilterData(filter);

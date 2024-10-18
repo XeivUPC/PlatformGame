@@ -4,7 +4,7 @@
 #include "AnimationSystem.h"
 #include "Timer.h"
 #include <box2d/box2d.h>
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 
 class DirtBlock : Entity
 {
@@ -49,7 +49,7 @@ private:
 
 	b2Body* body;
 	b2Fixture* hitCheck;
-	ColliderHandler collisionController;
+	CollisionSensor collisionController;
 
 	int breakSoundId;
 };

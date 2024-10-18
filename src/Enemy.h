@@ -5,7 +5,7 @@
 #include "Timer.h"
 #include "Player.h"
 #include "AnimationSystem.h"
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 #include "HealthSystem.h"
 
 class Enemy : public Entity
@@ -42,17 +42,17 @@ protected:
 
 		//Ground Collider
 		b2Fixture* groundCheck;
-		ColliderHandler groundCheckController;
+		CollisionSensor groundCheckController;
 
 		//Direction Collider
 		b2Fixture* directionRightCheck;
 		b2Fixture* directionLeftCheck;
-		ColliderHandler directionRightCheckController;
-		ColliderHandler directionLeftCheckController;
+		CollisionSensor directionRightCheckController;
+		CollisionSensor directionLeftCheckController;
 
 		//Player Collider
 		b2Fixture* playerCheck;
-		ColliderHandler playerCheckController;
+		CollisionSensor playerCheckController;
 
 		//Filters
 		b2Filter groundFilter;

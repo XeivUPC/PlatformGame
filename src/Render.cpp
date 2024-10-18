@@ -71,9 +71,9 @@ bool Render::Start()
 	// back background
 	SDL_RenderGetViewport(renderer, &viewport);
 
-	/*for (int layerIndex = 0; layerIndex < static_cast<int>(RenderLayers::LAST_DONT_USE); ++layerIndex) {
+	for (int layerIndex = 0; layerIndex < static_cast<int>(RenderLayers::LAST_DONT_USE); ++layerIndex) {
 		CreateLayer((RenderLayers)layerIndex);
-	}*/
+	}
 
 	return true;
 }

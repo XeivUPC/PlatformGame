@@ -3,7 +3,7 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
-#include "box2DCreator.h"
+#include "Box2DFactory.h"
 #include "Textures.h"
 #include "Window.h"
 #include "Log.h"
@@ -119,7 +119,8 @@ bool Enemy::Update(float dt)
 	position.setY(enemyCollider->GetPosition().y);
 	Brain();
 	Render(dt);
-	//Engine::GetInstance().box2DCreator->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
+	//Engine::GetInstance().
+	// ->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
 	return true;
 }
 

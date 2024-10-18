@@ -2,7 +2,8 @@
 #include "Engine.h"
 #include "Physics.h"
 #include "Textures.h"
-#include "Box2DCreator.h"
+#include "Box2DFactory.h"
+#include "Box2DRender.h"
 
 Beeto::Beeto(Vector2D pos) : Enemy(pos)
 {
@@ -41,47 +42,47 @@ void Beeto::InitAnimations()
 void Beeto::InitColliders()
 {
 	Enemy::InitColliders();
-	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
+	Box2DFactory& colliderCreator = Box2DFactory::GetInstance();
 	b2World* world = Engine::GetInstance().physics->world;
 	
 	b2Vec2 enemyColliderPosition{ (position.getX()), (position.getY()) };
-	enemyCollider = colliderCreator->CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(32), PIXEL_TO_METERS(16));
+	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(32), PIXEL_TO_METERS(16));
 	enemyCollider->SetFixedRotation(true);
 	
 
 	b2FixtureUserData playerCheckData;
 	playerCheckData.pointer = (uintptr_t)(&playerCheckController);
-	playerCheck = colliderCreator->AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(32), PIXEL_TO_METERS(16), playerCheckData);
+	playerCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(32), PIXEL_TO_METERS(16), playerCheckData);
 	playerCheck->SetSensor(true);
 	playerCheck->SetDensity(0);
 	playerCheck->SetFilterData(playerFilter);
 
 	b2FixtureUserData directionRightCheckData;
 	directionRightCheckData.pointer = (uintptr_t)(&directionRightCheckController);
-	directionRightCheck = colliderCreator->AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionRightCheckData);
+	directionRightCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionRightCheckData);
 	directionRightCheck->SetSensor(true);
 	directionRightCheck->SetDensity(0);
 	directionRightCheck->SetFilterData(groundFilter);
 
 	b2FixtureUserData directionLeftCheckData;
 	directionLeftCheckData.pointer = (uintptr_t)(&directionLeftCheckController);
-	directionLeftCheck = colliderCreator->AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionLeftCheckData);
+	directionLeftCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionLeftCheckData);
 	directionLeftCheck->SetSensor(true);
 	directionLeftCheck->SetDensity(0);
 	directionLeftCheck->SetFilterData(groundFilter);
 
 	b2FixtureUserData climbCheckData;
 	climbCheckData.pointer = (uintptr_t)(&climbCheckController);
-	climbCheck = colliderCreator->AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(0.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(16), PIXEL_TO_METERS(32), climbCheckData);
+	climbCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(0.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(16), PIXEL_TO_METERS(32), climbCheckData);
 	climbCheck->SetSensor(true);
 	climbCheck->SetDensity(0);
 	climbCheck->SetFilterData(groundFilter);
 
 
-	playerCheckController.SetSensor(playerCheck);
-	directionRightCheckController.SetSensor(directionRightCheck);
-	directionLeftCheckController.SetSensor(directionLeftCheck);
-	climbCheckController.SetSensor(climbCheck);
+	playerCheckController.SetBodyToTrack(playerCheck);
+	directionRightCheckController.SetBodyToTrack(directionRightCheck);
+	directionLeftCheckController.SetBodyToTrack(directionLeftCheck);
+	climbCheckController.SetBodyToTrack(climbCheck);
 
 	enemyCollider->ResetMassData();
 	b2MassData massData;
@@ -99,5 +100,5 @@ void Beeto::Render(float dt)
 {
 	Enemy::Render(dt);
 	animator->SelectAnimation("Beeto_Alive", true);
-	Engine::GetInstance().box2DCreator->RenderBody(enemyCollider, {255,0,0,255});
+	Box2DRender::GetInstance().RenderBody(enemyCollider, {255,0,0,255});
 }
