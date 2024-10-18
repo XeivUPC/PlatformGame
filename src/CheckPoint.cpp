@@ -24,7 +24,6 @@ CheckPoint::~CheckPoint()
 
 bool CheckPoint::Awake()
 {
-	
 	return true;
 }
 
@@ -49,12 +48,6 @@ bool CheckPoint::Start()
 	turnedOn.AddSprite(Sprite{ texture,{1.0f, 2.0f}, {64, 64} });
 	turnedOn.AddSprite(Sprite{ texture,{2.0f, 2.0f}, {64, 64} });
 
-
-	
-	
-	
-	
-	
 	
 	animator->AddAnimation(turnedOff);
 	animator->AddAnimation(turningOn);
@@ -117,7 +110,7 @@ bool CheckPoint::CleanUp()
 {
 	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(body);
-	Engine::GetInstance().textures->UnLoad(texture);
+	//Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 

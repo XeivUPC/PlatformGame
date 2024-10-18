@@ -30,8 +30,7 @@
         <map path="Assets/Maps/" name="MapTemplate.tmx"/>
     </scene>
 
-	<levels path="Assets/Maps/LevelsData/">
-		<firstLevel level ="0"/>
-		<startingSection section ="1"/>
-	</levels>
+	<levels path="Assets/Maps/LevelsData/"/>
+
+
 </config>

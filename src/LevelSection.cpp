@@ -100,7 +100,6 @@ bool LevelSection::CleanUp()
         
     }
     objects.clear();
-
     return true;
 }
 
@@ -283,7 +282,7 @@ void LevelSection::LoadObjects()
 
             Vector2D postion{ PIXEL_TO_METERS(x) + (sectionOffset.x), PIXEL_TO_METERS(y) + (sectionOffset.y) };
             CheckPoint* checkPoint = new CheckPoint(sectionNumber, postion);
-            Engine::GetInstance().entityManager->AddEntity((Entity*)checkPoint);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)checkPoint,true);
 
             objects.emplace_back((Entity*)checkPoint);
         }
@@ -297,7 +296,7 @@ void LevelSection::LoadObjects()
 
             Vector2D postion{ (x) + (sectionOffset.x), (y) + (sectionOffset.y) };
             DirtBlock* dirtBlock = new DirtBlock((DirtBlock::DirtSize)size, postion);
-            Engine::GetInstance().entityManager->AddEntity((Entity*)dirtBlock);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)dirtBlock,true);
 
 
             objects.emplace_back((Entity*)dirtBlock);
@@ -306,8 +305,16 @@ void LevelSection::LoadObjects()
         if (type == "BubbleGenerator") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
+
+
         }
 
+        if (type == "SpawnPoint") {
+            float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());   
+
+
+        }
         if (type == "MovingPlatform") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
@@ -338,7 +345,7 @@ void LevelSection::LoadObjects()
            
 
             MovingPlatform* movingPlatform = new MovingPlatform(sectionNumber, leftSide, rightSide, platformType, isVertical);
-            Engine::GetInstance().entityManager->AddEntity((Entity*)movingPlatform);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)movingPlatform,true);
 
             objects.emplace_back((Entity*)movingPlatform);
         }
@@ -360,14 +367,15 @@ void LevelSection::LoadEnemies()
 
             Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
             Beeto* beeto = new Beeto(postion);
-            Engine::GetInstance().entityManager->AddEntity((Entity*)beeto);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)beeto,true);
+
+            objects.emplace_back((Entity*)beeto);
 
         }
 
     }
 
 }
-
 
 
 b2Body* LevelSection::CreateColliders(xml_node* node)

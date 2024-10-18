@@ -26,12 +26,12 @@ public:
 	bool CleanUp();
 
 	// Additional methods
-	Entity* CreateEntity(EntityType type);
+	Entity* CreateEntity(EntityType type, bool doEarlyCalls=false);
 
 	void DestroyEntity(Entity* entity);
 	void DestroyEntityAtUpdateEnd(Entity* entity);
 
-	void AddEntity(Entity* entity);
+	void AddEntity(Entity* entity, bool doEarlyCalls=false);
 
 public:
 

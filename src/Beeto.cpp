@@ -100,5 +100,9 @@ void Beeto::Render(float dt)
 {
 	Enemy::Render(dt);
 	animator->SelectAnimation("Beeto_Alive", true);
+
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 	Box2DRender::GetInstance().RenderBody(enemyCollider, {255,0,0,255});
+	Engine::GetInstance().render->UnlockLayer();
+
 }

@@ -26,7 +26,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(8, 8);
+	SetPosition({ 100,100 });
 
 	InitColliders();
 	groundCheckController.SetBodyToTrack(groundCheck);
@@ -49,6 +49,8 @@ bool Player::Start() {
 	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
 	InitAnimations();
+
+
 
 	return true;
 }
@@ -508,6 +510,13 @@ void Player::Damage(int amount, Vector2D direction)
 		playerHealth.ResetHealth();
 		isInvulnerable = false;
 	}
+}
+
+void Player::SetPosition(Vector2D pos)
+{
+	if(playerCollider!=nullptr)
+		playerCollider->SetTransform({ pos.getX(), pos.getY() }, 0);
+	position = pos;
 }
 
 
