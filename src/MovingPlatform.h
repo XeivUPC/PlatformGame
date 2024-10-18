@@ -4,7 +4,7 @@
 #include "AnimationSystem.h"
 #include "Timer.h"
 #include <box2d/box2d.h>
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 
 class MovingPlatform : Entity
 {
@@ -41,5 +41,5 @@ private:
 	float speed = 130;
 
 	b2Body* body;
-	ColliderHandler collisionController;
+	CollisionSensor collisionController;
 };

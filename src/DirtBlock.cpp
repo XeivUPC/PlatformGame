@@ -3,8 +3,9 @@
 #include "Physics.h"
 #include "Audio.h"
 #include "Textures.h"
-#include "Box2DCreator.h"
-#include "CollidersManager.h"
+#include "Box2DFactory.h"
+#include "Box2DRender.h"
+#include "CollisionsManager.h"
 #include "EntityManager.h"
 
 DirtBlock::DirtBlock(DirtSize type, Vector2D position) : Entity(EntityType::UNKNOWN)
@@ -60,11 +61,11 @@ bool DirtBlock::Start()
 	filter.maskBits = Engine::GetInstance().PLAYER_LAYER;
 
 
-	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
+	Box2DFactory& colliderCreator = Box2DFactory::GetInstance();
 	b2World* world = Engine::GetInstance().physics->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()) };
 
-	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY()));
+	body = colliderCreator.CreateBox(world, colliderPosition, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY()));
 	body->GetFixtureList()[0].SetFilterData(filter);
 	body->SetType(b2_staticBody);
 
@@ -73,11 +74,11 @@ bool DirtBlock::Start()
 
 	b2FixtureUserData fixtureData;
 	fixtureData.pointer = (uintptr_t)(&collisionController);
-	hitCheck = colliderCreator->AddBox(body, { 0,0}, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY())+0.7f, fixtureData);
+	hitCheck = colliderCreator.AddBox(body, { 0,0}, PIXEL_TO_METERS(blockSizeTile.getX()), PIXEL_TO_METERS(blockSizeTile.getY())+0.7f, fixtureData);
 	hitCheck->SetSensor(true);
 	hitCheck->SetFilterData(filter);
 
-	collisionController.SetSensor(&body->GetFixtureList()[0]);
+	collisionController.SetBodyToTrack(&body->GetFixtureList()[0]);
 
 
 
@@ -124,12 +125,15 @@ bool DirtBlock::Update(float dt)
 		animator->SelectAnimation("Default", true);
 	}
 
-	Engine::GetInstance().render->SelectLayer(2);
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	/*if(!isBroken)
-		Engine::GetInstance().box2DCreator->RenderBody(body, { 0,255,0,255 });*/
+	/*if(!isBroken){
+	{
+		Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer7);
+		Box2DRender::GetInstance().RenderBody(body, { 0,255,0,255 });
+	}*/
 
 	return true;
 }

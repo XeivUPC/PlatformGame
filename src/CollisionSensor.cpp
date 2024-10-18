@@ -1,32 +1,32 @@
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 
 
-ColliderHandler::ColliderHandler()
+CollisionSensor::CollisionSensor()
 {
 
 }
 
-ColliderHandler::~ColliderHandler()
+CollisionSensor::~CollisionSensor()
 {
     bodiesColliding.clear();
 }
 
-void ColliderHandler::SetSensor(b2Fixture* bodyToTrack)
+void CollisionSensor::SetBodyToTrack(b2Fixture* bodyToTrack)
 {
     this->bodyToTrack = bodyToTrack;
 }
 
-bool ColliderHandler::IsBeingTriggered()
+bool CollisionSensor::IsBeingTriggered()
 {
     return bodiesInside!=0;
 }
 
-void ColliderHandler::AcceptOnlyTriggers(bool acceptOnlyTriggers)
+void CollisionSensor::AcceptOnlyTriggers(bool acceptOnlyTriggers)
 {
     onlyTriggers = acceptOnlyTriggers;
 }
 
-bool ColliderHandler::OnTriggerEnter()
+bool CollisionSensor::OnTriggerEnter()
 {
     if (lastBodyEnter != nullptr) {
         lastBodyEnter = nullptr;
@@ -35,7 +35,7 @@ bool ColliderHandler::OnTriggerEnter()
     return false;
 }
 
-bool ColliderHandler::OnTriggerExit()
+bool CollisionSensor::OnTriggerExit()
 {
     if (lastBodyExit != nullptr) {
         lastBodyExit = nullptr;
@@ -44,7 +44,7 @@ bool ColliderHandler::OnTriggerExit()
     return false;
 }
 
-void ColliderHandler::BeginContact(b2Contact* contact)
+void CollisionSensor::BeginContact(b2Contact* contact)
 {
     // Get the two fixtures involved in the contact
     b2Fixture* fixtureA = contact->GetFixtureA();
@@ -62,7 +62,7 @@ void ColliderHandler::BeginContact(b2Contact* contact)
     }
 }
 
-void ColliderHandler::EndContact(b2Contact* contact)
+void CollisionSensor::EndContact(b2Contact* contact)
 {
     b2Fixture* fixtureA = contact->GetFixtureA();
     b2Fixture* fixtureB = contact->GetFixtureB();
@@ -79,12 +79,12 @@ void ColliderHandler::EndContact(b2Contact* contact)
     }
 }
 
-std::set<b2Body*> ColliderHandler::GetBodiesColliding()
+std::set<b2Body*> CollisionSensor::GetBodiesColliding()
 {
     return bodiesColliding;
 }
 
-b2Body* ColliderHandler::GetDifferentBody(b2Body* body1, b2Body* body2, b2Body* bodyToBeDifferentFrom)
+b2Body* CollisionSensor::GetDifferentBody(b2Body* body1, b2Body* body2, b2Body* bodyToBeDifferentFrom)
 {
     if (body1 != bodyToBeDifferentFrom)
         return body1;

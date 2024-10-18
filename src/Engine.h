@@ -20,8 +20,7 @@ class Physics;
 class Scene;
 class EntityManager;
 class LevelManager;
-class Box2DCreator;
-class CollidersManager;
+class CollisionsManager;
 class Parallax;
 class TextGenerator;
 class UI;
@@ -33,9 +32,9 @@ class UI;
 #define PIXELS_PER_METER 16.0f // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL 1.0f/PIXELS_PER_METER // this is 1 / PIXELS_PER_METER !
 
-#define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
-#define METERS_TO_PIXELS_RAW(m) (PIXELS_PER_METER * m)
-#define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
+#define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * (m)))
+#define METERS_TO_PIXELS_RAW(m) (PIXELS_PER_METER * (m))
+#define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * (p))
 
 
 class Engine
@@ -121,8 +120,7 @@ public:
 	std::shared_ptr<Scene> scene;
 	std::shared_ptr<EntityManager> entityManager;
 	std::shared_ptr<LevelManager> levelManager;
-	std::shared_ptr<Box2DCreator> box2DCreator;
-	std::shared_ptr<CollidersManager> box2DSensors;
+	std::shared_ptr<CollisionsManager> collisionsManager;
 	std::shared_ptr<Parallax> parallax;
 	std::shared_ptr<TextGenerator> text;
 	std::shared_ptr<UI> ui;

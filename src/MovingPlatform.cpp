@@ -4,8 +4,9 @@
 #include "Audio.h"
 #include <set>
 #include "Textures.h"
-#include "Box2DCreator.h"
-#include "CollidersManager.h"
+#include "Box2DFactory.h"
+#include "Box2DRender.h"
+#include "CollisionsManager.h"
 #include "LevelManager.h"
 
 MovingPlatform::MovingPlatform(int sectionPlaced, Vector2D leftPoint, Vector2D rightPoint, int platformType, bool verticalMovement) : Entity(EntityType::UNKNOWN)
@@ -46,19 +47,19 @@ bool MovingPlatform::Start()
 	filter.maskBits = Engine::GetInstance().PLAYER_LAYER;
 
 
-	const std::shared_ptr<Box2DCreator>& colliderCreator = Engine::GetInstance().box2DCreator;
+	Box2DFactory& colliderCreator = Box2DFactory::GetInstance();
 	b2World* world = Engine::GetInstance().physics->world;
 	b2Vec2 colliderPosition{ (position.getX()), (position.getY()) };
 
 	b2FixtureUserData fixtureData;
 	fixtureData.pointer = (uintptr_t)(&collisionController);
-	body = colliderCreator->CreateBox(world, colliderPosition, PIXEL_TO_METERS(16*3), PIXEL_TO_METERS(16), fixtureData);
+	body = colliderCreator.CreateBox(world, colliderPosition, PIXEL_TO_METERS(16*3), PIXEL_TO_METERS(16), fixtureData);
 	body->GetFixtureList()[0].SetFilterData(filter);
 	body->SetType(b2_kinematicBody);
 	body->SetGravityScale(0);
 	body->SetFixedRotation(true);
 
-	collisionController.SetSensor(&body->GetFixtureList()[0]);
+	collisionController.SetBodyToTrack(&body->GetFixtureList()[0]);
 
 	return true;
 }
@@ -107,18 +108,24 @@ bool MovingPlatform::Update(float dt)
 	position.setY(body->GetPosition().y);
 
 
-	//if (isVertical) {
-	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
-	//}
-	//else {
-	//	Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
-	//}
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+	if (isVertical) {
+		Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
+	}
+	else {
+		Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
+	}
+	Engine::GetInstance().render->UnlockLayer();
 
-	Engine::GetInstance().render->SelectLayer(2);
+
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	//Engine::GetInstance().box2DCreator->RenderBody(body, { 255,255,0,255 });
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+	Box2DRender::GetInstance().RenderBody(body, { 255,255,0,255 });
+	Engine::GetInstance().render->UnlockLayer();
+
 
 	if (!isVertical)
 	{

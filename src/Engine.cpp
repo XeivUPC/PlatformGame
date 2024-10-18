@@ -4,8 +4,8 @@
 #include <iomanip>
 #include "Log.h"
 #include "Window.h"
-#include "Box2DCreator.h"
-#include "CollidersManager.h"
+#include "Box2DFactory.h"
+#include "CollisionsManager.h"
 #include "Input.h"
 #include "Render.h"
 #include "Textures.h"
@@ -46,8 +46,7 @@ Engine::Engine() {
     parallax = std::make_shared<Parallax>();
     text = std::make_shared<TextGenerator>();
 
-    box2DCreator = std::make_shared<Box2DCreator>();
-    box2DSensors = std::make_shared<CollidersManager>();
+    collisionsManager = std::make_shared<CollisionsManager>();
     ui = std::make_shared<UI>();
 
     // Ordered for awake / Start / Update
@@ -65,10 +64,10 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
+    AddModule(std::static_pointer_cast<UI>(ui));
 
     // Render last
     AddModule(std::static_pointer_cast<Module>(render));
-    AddModule(std::static_pointer_cast<UI>(ui));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
 }

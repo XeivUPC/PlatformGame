@@ -3,7 +3,7 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
-#include "box2DCreator.h"
+#include "Box2DFactory.h"
 #include "Textures.h"
 #include "Window.h"
 #include "Log.h"
@@ -27,7 +27,7 @@ void Enemy::InitColliders()
 
 void Enemy::Attack()
 {
-	player->playerHealth.Hurt(hitDamage);
+	player->Damage(hitDamage, {0,1});
 }
 
 void Enemy::Hurt()
@@ -86,8 +86,8 @@ void Enemy::Brain()
 void Enemy::Render(float dt)
 {
 	animator->Update(dt);
-	Engine::GetInstance().render->SelectLayer(9);
-	animator->Animate(METERS_TO_PIXELS(position.getX() + textureOffset.getX()), METERS_TO_PIXELS(position.getY() + textureOffset.getY()), SDL_FLIP_NONE);
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Enemy);
+	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 }
 
 Enemy::Enemy(Vector2D pos) : Entity(EntityType::UNKNOWN)
@@ -119,7 +119,8 @@ bool Enemy::Update(float dt)
 	position.setY(enemyCollider->GetPosition().y);
 	Brain();
 	Render(dt);
-	//Engine::GetInstance().box2DCreator->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
+	//Engine::GetInstance().
+	// ->RenderBody(enemyCollider, b2Color{ 255,0,0,255 });
 	return true;
 }
 

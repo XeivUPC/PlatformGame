@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include "pugixml.hpp"
 #include "Vector2D.h"
+#include "Entity.h"
 #include "AnimationSystem.h"
 #include <string>
 #include <unordered_map>
@@ -75,7 +76,6 @@ public:
 	bool Update(float dt);
 	bool CleanUp();
     bool Load(std::string fileName, std::string texturePath, b2Vec2 offset  = b2Vec2_zero, bool loadColliders = true , bool loadObjects = true, bool loadEnemies=true);
-
     void LoadColliders();
     void LoadObjects();
     void LoadEnemies();
@@ -108,6 +108,7 @@ private:
     pugi::xml_node mapNode;
 
     std::unordered_map<int, Animator*> animatedTiles;
+    std::vector<Entity*> objects;
 };
 
 

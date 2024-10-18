@@ -2,12 +2,12 @@
 #include <box2d/box2d.h>
 #include <set>
 
-class ColliderHandler
+class CollisionSensor
 {
 public:
-    ColliderHandler();
-    ~ColliderHandler();
-    void SetSensor(b2Fixture* bodyToTrack);
+    CollisionSensor();
+    ~CollisionSensor();
+    void SetBodyToTrack(b2Fixture* bodyToTrack);
     bool IsBeingTriggered();
     void AcceptOnlyTriggers(bool acceptOnlyTriggers);
     bool OnTriggerEnter();

@@ -9,7 +9,7 @@
 int main(int argc, char* argv[]) {
 
 	LOG("Engine starting ...");
-	ReportMemoryLeaks();
+	//ReportMemoryLeaks();
 
 	//Initializes the engine state
 	Engine::EngineState state = Engine::EngineState::CREATE;

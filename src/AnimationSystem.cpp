@@ -136,12 +136,9 @@ void Animator::SelectAnimation(const char* animName, bool l, int indexInit, int 
 {
 	if (currentAnimation == animName)
 		return;
-
-
 	currentAnimation = animName;
 	loop = l;
-	customSpriteRangeStart = indexInit;
-	
+	customSpriteRangeStart = indexInit;	
 	customSpriteRangeEnd = indexEnd;
 }
 
@@ -165,6 +162,8 @@ void Animator::Update(float dt)
 
 void Animator::Animate(int x, int y, SDL_RendererFlip flip)
 {	
+	if (!canDraw)
+		return;
 	SDL_Rect rect = animations[currentAnimation].GetSpriteRect(currentSprite);
 	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect);
 }
@@ -172,6 +171,21 @@ void Animator::Animate(int x, int y, SDL_RendererFlip flip)
 void Animator::SetIfPlaying(bool isPlaying)
 {
 	this->isPlaying = isPlaying;
+}
+
+bool Animator::IsPlaying()
+{
+	return isPlaying;
+}
+
+void Animator::SetIfCanDraw(bool canDraw)
+{
+	this->canDraw = canDraw;
+}
+
+bool Animator::CanDraw()
+{
+	return canDraw;
 }
 
 const char* Animator::GetCurrentAnimationName()

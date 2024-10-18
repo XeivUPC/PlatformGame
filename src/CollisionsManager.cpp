@@ -1,41 +1,41 @@
-#include "CollidersManager.h"
-#include "ColliderHandler.h"
+#include "CollisionsManager.h"
+#include "CollisionSensor.h"
 
-CollidersManager::CollidersManager()
+CollisionsManager::CollisionsManager()
 {
 
 }
 
-CollidersManager::~CollidersManager()
+CollisionsManager::~CollisionsManager()
 {
    
 }
 
-void CollidersManager::BeginContact(b2Contact* contact)
+void CollisionsManager::BeginContact(b2Contact* contact)
 {
 
     b2FixtureUserData dataA = contact->GetFixtureA()->GetUserData();
-    ColliderHandler* sensorA = (ColliderHandler*)dataA.pointer;
+    CollisionSensor* sensorA = (CollisionSensor*)dataA.pointer;
     if (sensorA != nullptr)
         sensorA->BeginContact(contact);
 
     b2FixtureUserData dataB = contact->GetFixtureB()->GetUserData();
-    ColliderHandler* sensorB = (ColliderHandler*)dataB.pointer;
+    CollisionSensor* sensorB = (CollisionSensor*)dataB.pointer;
     if (sensorB != nullptr)
         sensorB->BeginContact(contact);
 
 }
 
-void CollidersManager::EndContact(b2Contact* contact)
+void CollisionsManager::EndContact(b2Contact* contact)
 {
 
     b2FixtureUserData dataA = contact->GetFixtureA()->GetUserData();
-    ColliderHandler* sensorA = (ColliderHandler*)dataA.pointer;
+    CollisionSensor* sensorA = (CollisionSensor*)dataA.pointer;
     if (sensorA != nullptr)
         sensorA->EndContact(contact);
 
     b2FixtureUserData dataB = contact->GetFixtureB()->GetUserData();
-    ColliderHandler* sensorB = (ColliderHandler*)dataB.pointer;
+    CollisionSensor* sensorB = (CollisionSensor*)dataB.pointer;
     if (sensorB != nullptr)
         sensorB->EndContact(contact);
 }

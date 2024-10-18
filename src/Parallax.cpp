@@ -58,14 +58,13 @@ bool Parallax::Update(float dt)
                 ParallaxLayers[i].offset.setX(0);
         }
         
-        Engine::GetInstance().render->SelectLayer(0);
+        Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer0);
         Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX(), cameraY, SDL_FLIP_NONE, &rect);
         if (ParallaxLayers[i].speed != 0) {
-            Engine::GetInstance().render->SelectLayer(0);
             Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX() - textureWidth, cameraY, SDL_FLIP_NONE, &rect);
-            Engine::GetInstance().render->SelectLayer(0);
             Engine::GetInstance().render->DrawTexture(ParallaxLayers[i].texture, cameraX + ParallaxLayers[i].offset.getX() + textureWidth, cameraY, SDL_FLIP_NONE, &rect);
         }
+        Engine::GetInstance().render->UnlockLayer();
     }
 
     lastCameraX = cameraX;

@@ -13,5 +13,5 @@ private:
 	void Render(float dt);
 
 	b2Fixture* climbCheck;
-	ColliderHandler climbCheckController;
+	CollisionSensor climbCheckController;
 };

@@ -2,12 +2,12 @@
 #include <vector>
 #include <box2d/box2d.h>
 
-class ColliderHandler;
+class CollisionSensor;
 
-class CollidersManager : public b2ContactListener { //collisionmanager, collisiondector
+class CollisionsManager : public b2ContactListener { //collisionmanager, collisiondector
 public:
-    CollidersManager();
-    ~CollidersManager(); 
+    CollisionsManager();
+    ~CollisionsManager(); 
 
 private:
     void BeginContact(b2Contact* contact) override;

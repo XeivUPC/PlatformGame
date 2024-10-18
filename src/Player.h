@@ -4,7 +4,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_render.h"
 #include <box2d/box2d.h>
-#include "ColliderHandler.h"
+#include "CollisionSensor.h"
 #include "AnimationSystem.h"
 #include "Timer.h"
 #include "Counter.h"
@@ -26,6 +26,11 @@ public:
 
 	bool CleanUp();
 
+	void Damage(int amount, Vector2D direction = {0,0});
+	bool isDoingFallAttack = false;
+	bool isDoingShovelAttack = false;
+
+
 public:
 
 	//Player Exposed Stats
@@ -44,12 +49,10 @@ public:
 	Counter coins = Counter();
 	Counter magic = Counter();
 
-	bool isDoingFallAttack = false;
-	bool isDoingShovelAttack = false;
-
 private:
 
 	bool TryJump();
+
 	void DoJump(float force);
 
 	bool TryShovelAttack();
@@ -63,8 +66,10 @@ private:
 
 	/// Status
 	bool isGrounded = true;
+	bool isCrouching = true;
 	bool isFlipped=false;
 	bool isInLadder = false;
+	bool isInvulnerable = false;
 
 	/// MAX VALUES
 	const float MAX_FALL_SPEED = 100.0f;
@@ -91,9 +96,15 @@ private:
 
 	float jumpRecoverMS= 150;
 	Timer jumpRecoverTimer;
+
+	float hurtAnimEffectMS = 20;
+	Timer hurtAnimEffectTimer;
 	
+	float hurtAnimTimeMS = 2500;
+	Timer hurtAnimTimeTimer;
+
 	//// Texture
-	b2Vec2 textureOffset{-35,-35};
+	b2Vec2 textureOffset{-35.0f,-35.0f};
 
 	/// Animator
 	Animator* animator;
@@ -116,19 +127,19 @@ private:
 			
 		///// GroundCollider
 		b2Fixture* groundCheck;
-		ColliderHandler groundCheckController;
+		CollisionSensor groundCheckController;
 		
 
 		//// EnemyCollider
 		b2Fixture* shovelFallAttackCheck;
-		ColliderHandler shovelFallAttackCheckController;
+		CollisionSensor shovelFallAttackCheckController;
 
 		b2Fixture* shovelAttackCheckLeft;
 		b2Fixture* shovelAttackCheckRight;
 
 		//// LadderCollider
 		b2Fixture* ladderCheck;
-		ColliderHandler ladderCheckController;
+		CollisionSensor ladderCheckController;
 
 		///// Player Collider
 		float playerMass = 0.15f;

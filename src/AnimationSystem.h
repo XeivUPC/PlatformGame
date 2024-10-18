@@ -45,6 +45,7 @@ private:
 	float timer = 0;
 	void Next();
 	bool isPlaying=true;
+	bool canDraw=true;
 
 public:
 	Animator();
@@ -56,7 +57,13 @@ public:
 	void SetSpeed(float s);
 	void Update(float dt);
 	void Animate(int x, int y, SDL_RendererFlip flip);
+
 	void SetIfPlaying(bool isPlaying);
+	bool IsPlaying();
+
+	void SetIfCanDraw(bool canDraw);
+	bool CanDraw();
+
 	const char* GetCurrentAnimationName();
 	AnimationData GetCurrentAnimation();
 	Sprite GetCurrentAnimationSprite();
