@@ -13,6 +13,7 @@ public:
     void setX(float x);
     float getY() const;
     void setY(float y);
+    void set(float x, float y);
 
     // Vector operations
     float magnitude() const;

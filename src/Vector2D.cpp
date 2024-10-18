@@ -21,6 +21,12 @@ void Vector2D::setY(float y) {
     this->y = y;
 }
 
+void Vector2D::set(float x, float y)
+{
+    this->x = x;
+    this->y = y;
+}
+
 // Vector operations
 float Vector2D::magnitude() const {
     return std::sqrt(x * x + y * y);

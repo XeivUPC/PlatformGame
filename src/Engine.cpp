@@ -17,6 +17,7 @@
 #include "Parallax.h"
 #include "TextGenerator.h"
 #include "UI.h"
+#include "Debug.h"
 
 
 
@@ -48,6 +49,7 @@ Engine::Engine() {
 
     collisionsManager = std::make_shared<CollisionsManager>();
     ui = std::make_shared<UI>();
+    debug = std::make_shared<Debug>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -58,13 +60,14 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(physics));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
+    AddModule(std::static_pointer_cast<Module>(debug));
     //// Add the map module
     
     AddModule(std::static_pointer_cast<Module>(levelManager));
     AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
-    AddModule(std::static_pointer_cast<UI>(ui));
+    AddModule(std::static_pointer_cast<Module>(ui));
 
     // Render last
     AddModule(std::static_pointer_cast<Module>(render));

@@ -11,8 +11,7 @@
 #include "Physics.h"
 #include "Log.h"
 #include "UI.h"
-
-
+#include "Debug.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -196,8 +195,9 @@ void Player::InitColliders() {
 
 bool Player::Update(float dt)
 {
-	playerCollider->SetAwake(true);
 
+	playerCollider->SetAwake(true);
+#pragma region Testing
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		Damage(10, {isFlipped ? -1.0f : 1.0f, 1.0f });
 	}
@@ -214,8 +214,8 @@ bool Player::Update(float dt)
 		else
 			Engine::GetInstance().ui->pauseMenuUI.Deactivate();
 	}
-
-
+#pragma endregion
+#pragma region Ground Logic
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
 
@@ -225,7 +225,8 @@ bool Player::Update(float dt)
 		if(previousGroundedValue)
 			coyoteTimer.Start();
 	}
-
+#pragma endregion
+#pragma region Shovel Attacks Logic
 	if(isInLadder)
 		isDoingFallAttack = false;
 
@@ -239,16 +240,15 @@ bool Player::Update(float dt)
 	else {
 		shovelFallAttackCheck->SetFilterData(emptyFilter);
 	}
-
+#pragma endregion
+#pragma region Invulnerable
 	if (isInvulnerable) {
 		if (hurtAnimTimeMS <= hurtAnimTimeTimer.ReadMSec()) {
 			isInvulnerable = false;
 		}
 	}
-
-
-
-
+#pragma endregion
+#pragma region Input
 	b2Vec2 inputValue = GetMoveInput();
 
 	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
@@ -294,7 +294,8 @@ bool Player::Update(float dt)
 	else if(!ladderCheckController.IsBeingTriggered()){
 		isInLadder = false;
 	}
-
+#pragma endregion
+#pragma region Input Logic
 	if (shovelFallAttackCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
 	{
 		velocity.y = 0;
@@ -322,9 +323,8 @@ bool Player::Update(float dt)
 		else
 			isFlipped = true;
 	}
-
-
-
+#pragma endregion
+#pragma region Collision Logic
 	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped)
 	{
 		shovelAttackCheckRight->SetFilterData(enemyCheckFilters);
@@ -341,9 +341,8 @@ bool Player::Update(float dt)
 	else {
 		shovelAttackCheckLeft->SetFilterData(emptyFilter);
 	}
-
-
-	
+#pragma endregion
+#pragma region Render
 	animator->SetIfPlaying(true);
 
 	if (isInvulnerable) {
@@ -388,25 +387,26 @@ bool Player::Update(float dt)
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.x, METERS_TO_PIXELS(position.getY()) + textureOffset.y, (SDL_RendererFlip)isFlipped);
 
+	if (Engine::GetInstance().debug->HasDebug(1))
+	{
+		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+		Box2DRender::GetInstance().RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+		Box2DRender::GetInstance().RenderFixture(groundCheck, b2Color{ 0,0,255,255 });
+		Box2DRender::GetInstance().RenderFixture(ladderCheck, b2Color{ 255,0,255,255 });
 
-	Box2DRender::GetInstance().RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Box2DRender::GetInstance().RenderFixture(groundCheck, b2Color{0,0,255,255});
-	Box2DRender::GetInstance().RenderFixture(ladderCheck, b2Color{255,0,255,255});
-
-	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
-		Box2DRender::GetInstance().RenderFixture(shovelAttackCheckRight, b2Color{255,255,255,255});
-	}	 
-	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
-		Box2DRender::GetInstance().RenderFixture(shovelAttackCheckLeft, b2Color{255,255,255,255});
+		if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
+			Box2DRender::GetInstance().RenderFixture(shovelAttackCheckRight, b2Color{ 255,255,255,255 });
+		}
+		if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
+			Box2DRender::GetInstance().RenderFixture(shovelAttackCheckLeft, b2Color{ 255,255,255,255 });
+		}
+		if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
+			Box2DRender::GetInstance().RenderFixture(shovelFallAttackCheck, b2Color{ 0,255,0,255 });
+		}
+		Engine::GetInstance().render->UnlockLayer();
 	}
-	if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
-		Box2DRender::GetInstance().RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
-	}
-	Engine::GetInstance().render->UnlockLayer();
-
-
+#pragma endregion
 	return true;
 }
 

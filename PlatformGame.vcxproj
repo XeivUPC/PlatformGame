@@ -154,6 +154,7 @@
     <ClCompile Include="src\CollisionSensor.cpp" />
     <ClCompile Include="src\CollisionsManager.cpp" />
     <ClCompile Include="src\Counter.cpp" />
+    <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\DirtBlock.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="src\CollisionSensor.h" />
     <ClInclude Include="src\CollisionsManager.h" />
     <ClInclude Include="src\Counter.h" />
+    <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\DirtBlock.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Engine.h" />

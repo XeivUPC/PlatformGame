@@ -12,6 +12,7 @@
 #include "EntityManager.h"
 #include "MovingPlatform.h"
 #include "Beeto.h"
+#include "Debug.h"
 
 LevelSection::LevelSection()
 {
@@ -56,14 +57,15 @@ bool LevelSection::Update(float dt)
             }
         }
     }
-   
-    Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
-    for (auto*& collider : colliders)
+    if (Engine::GetInstance().debug->HasDebug(1))
     {
-        Box2DRender::GetInstance().RenderBody(collider, b2Color{ 0,255,0,255 });
+        Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+        for (auto*& collider : colliders)
+        {
+            Box2DRender::GetInstance().RenderBody(collider, b2Color{ 0,255,0,255 });
+        }
+        Engine::GetInstance().render->UnlockLayer();
     }
-    Engine::GetInstance().render->UnlockLayer();
-
 	return true;
 }
 
@@ -97,7 +99,6 @@ bool LevelSection::CleanUp()
     for (const auto& object : objects)
     {
         Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(object);
-        
     }
     objects.clear();
 

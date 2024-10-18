@@ -7,6 +7,7 @@
 #include "Box2DRender.h"
 #include "CollisionsManager.h"
 #include "LevelManager.h"
+#include "Debug.h"
 
 CheckPoint::CheckPoint(int sectionPlaced, Vector2D respawnPoint) : Entity(EntityType::UNKNOWN)
 {
@@ -49,13 +50,6 @@ bool CheckPoint::Start()
 	turnedOn.AddSprite(Sprite{ texture,{1.0f, 2.0f}, {64, 64} });
 	turnedOn.AddSprite(Sprite{ texture,{2.0f, 2.0f}, {64, 64} });
 
-
-	
-	
-	
-	
-	
-	
 	animator->AddAnimation(turnedOff);
 	animator->AddAnimation(turningOn);
 	animator->AddAnimation(turnedOn);
@@ -107,9 +101,12 @@ bool CheckPoint::Update(float dt)
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
-
-	//Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer7);
-	//Box2DRender::GetInstance().RenderBody(body, {0,255,0,255});
+	if (Engine::GetInstance().debug->HasDebug(1))
+	{
+		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+		Box2DRender::GetInstance().RenderBody(body, { 255,0,0,255 });
+		Engine::GetInstance().render->UnlockLayer();
+	}
 	return true;
 }
 

@@ -7,6 +7,7 @@
 #include "Box2DRender.h"
 #include "CollisionsManager.h"
 #include "EntityManager.h"
+#include "Debug.h"
 
 DirtBlock::DirtBlock(DirtSize type, Vector2D position) : Entity(EntityType::UNKNOWN)
 {
@@ -129,12 +130,15 @@ bool DirtBlock::Update(float dt)
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	/*if(!isBroken){
+	if (!isBroken)
 	{
-		Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer7);
-		Box2DRender::GetInstance().RenderBody(body, { 0,255,0,255 });
-	}*/
-
+		if (Engine::GetInstance().debug->HasDebug(1))
+		{
+			Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+			Box2DRender::GetInstance().RenderBody(body, { 255,0,0,255 });
+			Engine::GetInstance().render->UnlockLayer();
+		}
+	}
 	return true;
 }
 

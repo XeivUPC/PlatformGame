@@ -8,6 +8,7 @@
 #include "Box2DRender.h"
 #include "CollisionsManager.h"
 #include "LevelManager.h"
+#include "Debug.h"
 
 MovingPlatform::MovingPlatform(int sectionPlaced, Vector2D leftPoint, Vector2D rightPoint, int platformType, bool verticalMovement) : Entity(EntityType::UNKNOWN)
 {
@@ -107,25 +108,23 @@ bool MovingPlatform::Update(float dt)
 	position.setX(body->GetPosition().x);
 	position.setY(body->GetPosition().y);
 
-
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
-	if (isVertical) {
-		Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
-	}
-	else {
-		Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
-	}
-	Engine::GetInstance().render->UnlockLayer();
-
-
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
-	Box2DRender::GetInstance().RenderBody(body, { 255,255,0,255 });
-	Engine::GetInstance().render->UnlockLayer();
+	if (Engine::GetInstance().debug->HasDebug(1))
+	{
+		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+		if (isVertical) {
+			Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
+		}
+		else {
+			Engine::GetInstance().render->DrawLine(METERS_TO_PIXELS(leftPoint.getX()), METERS_TO_PIXELS(leftPoint.getY()), METERS_TO_PIXELS(rightPoint.getX()), METERS_TO_PIXELS(rightPoint.getY()), 255, 255, 255, 255, true);
+		}
 
+		Box2DRender::GetInstance().RenderBody(body, { 255,255,0,255 });
+		Engine::GetInstance().render->UnlockLayer();
+	}
 
 	if (!isVertical)
 	{
