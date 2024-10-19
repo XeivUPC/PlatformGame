@@ -63,7 +63,7 @@ bool EntityManager::CleanUp()
 	return ret;
 }
 
-Entity* EntityManager::CreateEntity(EntityType type)
+Entity* EntityManager::CreateEntity(EntityType type, bool doEarlyCalls)
 {
 	Entity* entity = nullptr; 
 
@@ -78,6 +78,11 @@ Entity* EntityManager::CreateEntity(EntityType type)
 	}
 
 	entities.push_back(entity);
+
+	if (doEarlyCalls) {
+		entity->Awake();
+		entity->Start();
+	}
 
 	return entity;
 }
@@ -100,14 +105,19 @@ void EntityManager::DestroyEntityAtUpdateEnd(Entity* entity)
 	entitiesToDestroyAtUpdateEnd.emplace_back(entity);
 }
 
-void EntityManager::AddEntity(Entity* entity)
+void EntityManager::AddEntity(Entity* entity, bool doEarlyCalls)
 {
-	if ( entity != nullptr) entities.push_back(entity);
+	if (entity != nullptr) {
+		entities.push_back(entity);
+		if (doEarlyCalls) {
+			entity->Awake();
+			entity->Start();
+		}
+	}
 }
 
 bool EntityManager::Update(float dt)
 {
-	entitiesToDestroyAtUpdateEnd.clear();
 	bool ret = true;
 	for(const auto entity : entities)
 	{
@@ -116,10 +126,10 @@ bool EntityManager::Update(float dt)
 		ret = entity->Update(dt);
 	}
 
-	for (const auto entity : entitiesToDestroyAtUpdateEnd)
+	for (const auto entityToDelete : entitiesToDestroyAtUpdateEnd)
 	{
-		DestroyEntity(entity);
+		DestroyEntity(entityToDelete);
 	}
-
+	entitiesToDestroyAtUpdateEnd.clear();
 	return ret;
 }

@@ -144,7 +144,7 @@ bool MovingPlatform::CleanUp()
 {
 	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(body);
-	Engine::GetInstance().textures->UnLoad(texture);
+	//Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 
