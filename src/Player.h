@@ -27,9 +27,6 @@ public:
 	bool CleanUp();
 
 	void Damage(int amount, Vector2D direction = {0,0});
-
-	void SetPosition(Vector2D pos);
-
 	bool isDoingFallAttack = false;
 	bool isDoingShovelAttack = false;
 

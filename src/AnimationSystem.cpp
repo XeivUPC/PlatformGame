@@ -165,7 +165,7 @@ void Animator::Animate(int x, int y, SDL_RendererFlip flip)
 	if (!canDraw)
 		return;
 	SDL_Rect rect = animations[currentAnimation].GetSpriteRect(currentSprite);
-	!Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect);
+	Engine::GetInstance().render->DrawTexture(animations[currentAnimation].sprites[currentSprite].texture, x, y, flip, &rect);
 }
 
 void Animator::SetIfPlaying(bool isPlaying)

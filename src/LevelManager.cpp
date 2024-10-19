@@ -35,34 +35,32 @@ bool LevelManager::LoadParameters(xml_node parameters)
 
 bool LevelManager::Start()
 {
-	
+	LoadLevel(parameters.child("firstLevel").attribute("level").as_int());
+	ChargeAllLevelSection(1);
+	LoadSection(parameters.child("startingSection").attribute("section").as_int());
+
 	return true;
 }
 
 bool LevelManager::Update(float dt)
 {
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN){
 
-		LoadLevel(1);
-	}
-
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {
-
-		LoadLevel(0);
-		
-	}
 
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
 		loadedSections[sectionsInUse[i]]->Update(dt);
 	}
 
+	//for (const auto& pair : loadedSections) {
+	//	if (pair.second != nullptr) {
+	//		pair.second->Update(dt);
+	//	}
+	//}
 	return true;
 }
 
 bool LevelManager::CleanUp()
 {
-	levelLoaded = false;
 	LOG("Unloading map");
 	for (const auto& pair : loadedSections) {
 		if (pair.second != nullptr) {
@@ -70,7 +68,6 @@ bool LevelManager::CleanUp()
 			delete pair.second;
 		}	
 	}
-
 	for (CheckPoint* checkPoint : checkPoints) {
 		if (checkPoint != nullptr) {
 			Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd((Entity*)checkPoint);
@@ -92,11 +89,6 @@ bool LevelManager::LoadLevel(int levelToPlay)
 	texturePath = path;
 
 	Engine::GetInstance().audio->PlayMusic(("Level"+ std::to_string(currentLevel) +"_Music.ogg").c_str());
-
-	ChargeAllLevelSection(1);
-	LoadSection(1);
-
-	levelLoaded = true;
 
 	return true;
 }
@@ -141,8 +133,7 @@ bool LevelManager::ChargeAllLevelSection(int startingIndex)
 		
 		if (startingIndex == 1) {
 			LevelSection* section = new LevelSection();
-			std::string sectionPath = levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx";
-			section->Load(sectionPath, texturePath, {0,1});
+			section->Load(levelsPath + "Level" + std::to_string(currentLevel) + " - Sector" + std::to_string(startingIndex) + ".tmx", texturePath, {0,1});
 			loadedSections[startingIndex] = section;
 		}
 		else {
@@ -188,7 +179,7 @@ bool LevelManager::LoadSection(int sectionNumber)
 
 void LevelManager::GoToNextSection(b2Vec2 direction)
 {
-	if (direction == b2Vec2_zero || !levelLoaded)
+	if (direction == b2Vec2_zero)
 		return;
 	if (direction.x == 1) {
 		LoadSection(loadedSections[currentSection]->rightSection);

@@ -144,8 +144,6 @@ bool DirtBlock::Update(float dt)
 
 bool DirtBlock::CleanUp()
 {
-	if(body!=nullptr)
-		Engine::GetInstance().physics->world->DestroyBody(body);
 	delete animator;
 	return true;
 }
@@ -155,7 +153,6 @@ void DirtBlock::Break()
 	isBroken = true;
 	particleRemoveTimer.Start();
 	Engine::GetInstance().physics->world->DestroyBody(body);
-	body = nullptr;
 	Engine::GetInstance().audio->PlayFx(breakSoundId);
 
 }

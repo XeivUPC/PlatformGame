@@ -46,10 +46,6 @@ public:
     std::string levelsPath;
     std::string texturePath;
 
-    bool levelLoaded = false;
-
-    static Vector2D spawnPoint;
-
 private:
 
 

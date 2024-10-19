@@ -92,6 +92,7 @@ public:
     b2Vec2 sectionOffset;
 
 private:
+
     Vector2D MapToWorld(int x, int y) const;
 
     TileSet* CreateTileset(xml_node* node, std::string texturePath);
