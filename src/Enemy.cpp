@@ -66,9 +66,17 @@ Vector2D Enemy::TrackPlayerPosition(bool verticalAxis, bool horizontalAxis)
 	playerPosition.setY(playerPosition.getY() - position.getY());
 	if (!verticalAxis)
 		playerPosition.setY(0);
-	if (!verticalAxis)
+	if (!horizontalAxis)
 		playerPosition.setX(0);
-	if(playerPosition.getX() < 0)
+
+	if(playerPosition.getX() < -1)
+		playerPosition.setX(-1);
+	if(playerPosition.getX() > 1)
+		playerPosition.setX(1);
+	if(playerPosition.getY() < -1)
+		playerPosition.setY(-1);
+	if(playerPosition.getY() > 1)
+		playerPosition.setY(1);
 
 	return playerPosition;
 }
@@ -92,7 +100,7 @@ void Enemy::Render(float dt)
 {
 	animator->Update(dt);
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Enemy);
-	if(enemyDirection.getY()>0)
+	if(enemyDirection.getX()>0)
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 	else
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_HORIZONTAL);
