@@ -10,7 +10,7 @@ Beeto::Beeto(Vector2D pos) : Enemy(pos)
 	textureOffset = { -16,-8 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
-	speed = 2;
+	speed = 5;
 }
 
 
@@ -53,14 +53,14 @@ void Beeto::InitColliders()
 
 	b2FixtureUserData playerCheckData;
 	playerCheckData.pointer = (uintptr_t)(&playerCheckController);
-	playerCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(28), PIXEL_TO_METERS(12), playerCheckData);
+	playerCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(32), PIXEL_TO_METERS(16), playerCheckData);
 	playerCheck->SetSensor(true);
 	playerCheck->SetDensity(0);
 	playerCheck->SetFilterData(playerFilter);
 
 	b2FixtureUserData playerDamageCheckData;
 	playerDamageCheckData.pointer = (uintptr_t)(&playerDamageCheckController);
-	playerDamageCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(36), PIXEL_TO_METERS(20), playerDamageCheckData);
+	playerDamageCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(32), PIXEL_TO_METERS(16), playerDamageCheckData);
 	playerDamageCheck->SetSensor(true);
 	playerDamageCheck->SetDensity(0);
 	playerDamageCheck->SetFilterData(playerDamageFilter);
