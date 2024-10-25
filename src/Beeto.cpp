@@ -10,6 +10,7 @@ Beeto::Beeto(Vector2D pos) : Enemy(pos)
 	textureOffset = { -16,-8 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
+	speed = 2;
 }
 
 
@@ -52,10 +53,17 @@ void Beeto::InitColliders()
 
 	b2FixtureUserData playerCheckData;
 	playerCheckData.pointer = (uintptr_t)(&playerCheckController);
-	playerCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(32), PIXEL_TO_METERS(16), playerCheckData);
+	playerCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(28), PIXEL_TO_METERS(12), playerCheckData);
 	playerCheck->SetSensor(true);
 	playerCheck->SetDensity(0);
 	playerCheck->SetFilterData(playerFilter);
+
+	b2FixtureUserData playerDamageCheckData;
+	playerDamageCheckData.pointer = (uintptr_t)(&playerDamageCheckController);
+	playerDamageCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(36), PIXEL_TO_METERS(20), playerDamageCheckData);
+	playerDamageCheck->SetSensor(true);
+	playerDamageCheck->SetDensity(0);
+	playerDamageCheck->SetFilterData(playerDamageFilter);
 
 	b2FixtureUserData directionRightCheckData;
 	directionRightCheckData.pointer = (uintptr_t)(&directionRightCheckController);
@@ -66,22 +74,29 @@ void Beeto::InitColliders()
 
 	b2FixtureUserData directionLeftCheckData;
 	directionLeftCheckData.pointer = (uintptr_t)(&directionLeftCheckController);
-	directionLeftCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionLeftCheckData);
+	directionLeftCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionLeftCheckData);
 	directionLeftCheck->SetSensor(true);
 	directionLeftCheck->SetDensity(0);
 	directionLeftCheck->SetFilterData(groundFilter);
+	
+	b2FixtureUserData directionBottomRightCheckData;
+	directionBottomRightCheckData.pointer = (uintptr_t)(&directionBottomRightCheckController);
+	directionBottomRightCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(24.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionBottomRightCheckData);
+	directionBottomRightCheck->SetSensor(true);
+	directionBottomRightCheck->SetDensity(0);
+	directionBottomRightCheck->SetFilterData(groundFilter);
 
-	b2FixtureUserData climbCheckData;
-	climbCheckData.pointer = (uintptr_t)(&climbCheckController);
-	climbCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(0.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(16), PIXEL_TO_METERS(32), climbCheckData);
-	climbCheck->SetSensor(true);
-	climbCheck->SetDensity(0);
-	climbCheck->SetFilterData(groundFilter);
-
+	b2FixtureUserData directionBottomLeftCheckData;
+	directionBottomLeftCheckData.pointer = (uintptr_t)(&directionBottomLeftCheckController);
+	directionBottomLeftCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionBottomLeftCheckData);
+	directionBottomLeftCheck->SetSensor(true);
+	directionBottomLeftCheck->SetDensity(0);
+	directionBottomLeftCheck->SetFilterData(groundFilter);
 
 	playerCheckController.SetBodyToTrack(playerCheck);
-	directionRightCheckController.SetBodyToTrack(directionRightCheck);
-	directionLeftCheckController.SetBodyToTrack(directionLeftCheck);
+	playerDamageCheckController.SetBodyToTrack(playerDamageCheck);
+	directionBottomRightCheckController.SetBodyToTrack(directionBottomRightCheck);
+	directionBottomLeftCheckController.SetBodyToTrack(directionBottomLeftCheck);
 	climbCheckController.SetBodyToTrack(climbCheck);
 
 	enemyCollider->ResetMassData();
@@ -93,6 +108,7 @@ void Beeto::InitColliders()
 
 void Beeto::Brain()
 {
+	enemyDirection = TrackPlayerPosition(false, true);
 	Enemy::Brain();
 }
 
@@ -100,9 +116,4 @@ void Beeto::Render(float dt)
 {
 	Enemy::Render(dt);
 	animator->SelectAnimation("Beeto_Alive", true);
-
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
-	Box2DRender::GetInstance().RenderBody(enemyCollider, {255,0,0,255});
-	Engine::GetInstance().render->UnlockLayer();
-
 }

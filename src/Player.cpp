@@ -10,6 +10,7 @@
 #include "Render.h"
 #include "Physics.h"
 #include "Log.h"
+#include "Debug.h"
 #include "UI.h"
 
 
@@ -26,7 +27,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	SetPosition({ 100,100 });
+	SetPosition({ 8,8 });
 
 	InitColliders();
 	groundCheckController.SetBodyToTrack(groundCheck);
@@ -242,7 +243,10 @@ bool Player::Update(float dt)
 		shovelFallAttackCheck->SetFilterData(emptyFilter);
 	}
 
-	if (isInvulnerable) {
+	if (Engine::GetInstance().debug->HasDebug(2))
+		isInvulnerable = true;
+
+	if (isInvulnerable && !Engine::GetInstance().debug->HasDebug(2)) {
 		if (hurtAnimTimeMS <= hurtAnimTimeTimer.ReadMSec()) {
 			isInvulnerable = false;
 		}
@@ -390,21 +394,23 @@ bool Player::Update(float dt)
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.x, METERS_TO_PIXELS(position.getY()) + textureOffset.y, (SDL_RendererFlip)isFlipped);
 
+	if (Engine::GetInstance().debug->HasDebug(1))
+	{
+		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+		Box2DRender::GetInstance().RenderBody(playerCollider, b2Color{ 255,0,0,255 });
+		Box2DRender::GetInstance().RenderFixture(groundCheck, b2Color{ 0,0,255,255 });
+		Box2DRender::GetInstance().RenderFixture(ladderCheck, b2Color{ 255,0,255,255 });
 
-	Box2DRender::GetInstance().RenderBody(playerCollider, b2Color{ 255,0,0,255 });
-	Box2DRender::GetInstance().RenderFixture(groundCheck, b2Color{0,0,255,255});
-	Box2DRender::GetInstance().RenderFixture(ladderCheck, b2Color{255,0,255,255});
-
-	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
-		Box2DRender::GetInstance().RenderFixture(shovelAttackCheckRight, b2Color{255,255,255,255});
-	}	 
-	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
-		Box2DRender::GetInstance().RenderFixture(shovelAttackCheckLeft, b2Color{255,255,255,255});
-	}
-	if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
-		Box2DRender::GetInstance().RenderFixture(shovelFallAttackCheck, b2Color{0,255,0,255});
+		if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped) {
+			Box2DRender::GetInstance().RenderFixture(shovelAttackCheckRight, b2Color{ 255,255,255,255 });
+		}
+		if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && isFlipped) {
+			Box2DRender::GetInstance().RenderFixture(shovelAttackCheckLeft, b2Color{ 255,255,255,255 });
+		}
+		if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
+			Box2DRender::GetInstance().RenderFixture(shovelFallAttackCheck, b2Color{ 0,255,0,255 });
+		}
 	}
 	Engine::GetInstance().render->UnlockLayer();
 

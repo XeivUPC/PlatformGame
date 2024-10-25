@@ -13,6 +13,7 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
+#include "Debug.h"
 #include "LevelManager.h"
 #include "Parallax.h"
 #include "TextGenerator.h"
@@ -47,6 +48,7 @@ Engine::Engine() {
 
     collisionsManager = std::make_shared<CollisionsManager>();
     ui = std::make_shared<UI>();
+    debug = std::make_shared<Debug>();
 
     // Ordered for awake / Start / Update
     // Reverse order of CleanUp
@@ -62,6 +64,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
+    AddModule(std::static_pointer_cast<Module>(debug));
     AddModule(std::static_pointer_cast<UI>(ui));
 
     // Render last 
@@ -183,6 +186,16 @@ bool Engine::CleanUp() {
     LOG("Timer App CleanUp(): %f", timer.ReadMSec());
 
     return result;
+}
+
+float Engine::GetDt() const
+{
+    return dt;
+}
+
+int Engine::GetMaxFrameDuration() const
+{
+    return maxFrameDuration;
 }
 
 // ---------------------------------------------

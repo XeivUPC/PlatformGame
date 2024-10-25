@@ -24,6 +24,7 @@ class CollisionsManager;
 class Parallax;
 class TextGenerator;
 class UI;
+class Debug;
 
 
 #define GRAVITY_X 0.0f
@@ -66,6 +67,10 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	float GetDt() const;
+
+	int GetMaxFrameDuration() const;
 
 private:
 
@@ -124,6 +129,7 @@ public:
 	std::shared_ptr<Parallax> parallax;
 	std::shared_ptr<TextGenerator> text;
 	std::shared_ptr<UI> ui;
+	std::shared_ptr<Debug> debug;
 
 private: 
 

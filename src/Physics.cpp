@@ -29,7 +29,8 @@ bool Physics::Start()
 
 bool Physics::PreUpdate()
 {
-	world->Step(1.0f / 60.0f, 8, 3);
+	float dt = Engine::GetInstance().GetDt() / 1000;
+	world->Step(1/60.0f, 8, 3);
 	return true;
 }
 

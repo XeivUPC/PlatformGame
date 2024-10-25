@@ -41,6 +41,8 @@ bool LevelManager::Start()
 
 bool LevelManager::Update(float dt)
 {
+	if(currentLevel == -1)
+		LoadLevel(0);
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_1) == KEY_DOWN){
 
 		LoadLevel(1);

@@ -47,16 +47,23 @@ protected:
 		//Direction Collider
 		b2Fixture* directionRightCheck;
 		b2Fixture* directionLeftCheck;
+		b2Fixture* directionBottomRightCheck;
+		b2Fixture* directionBottomLeftCheck;
 		CollisionSensor directionRightCheckController;
 		CollisionSensor directionLeftCheckController;
+		CollisionSensor directionBottomRightCheckController;
+		CollisionSensor directionBottomLeftCheckController;
 
 		//Player Collider
 		b2Fixture* playerCheck;
 		CollisionSensor playerCheckController;
+		b2Fixture* playerDamageCheck;
+		CollisionSensor playerDamageCheckController;
 
 		//Filters
 		b2Filter groundFilter;
 		b2Filter playerFilter;
+		b2Filter playerDamageFilter;
 
 	//Functions
 	void Attack();
