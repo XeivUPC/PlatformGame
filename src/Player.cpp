@@ -242,7 +242,10 @@ bool Player::Update(float dt)
 	}
 #pragma endregion
 #pragma region Invulnerable
-	if (isInvulnerable) {
+	if (Engine::GetInstance().debug->HasDebug(2))
+		isInvulnerable = true;
+
+	if (isInvulnerable && !Engine::GetInstance().debug->HasDebug(2)) {
 		if (hurtAnimTimeMS <= hurtAnimTimeTimer.ReadMSec()) {
 			isInvulnerable = false;
 		}

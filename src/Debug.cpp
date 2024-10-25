@@ -1,6 +1,7 @@
 #include "Debug.h"
 #include "Input.h"
 #include "Scene.h"
+#include "TextGenerator.h"
 #include "Box2DRender.h"
 
 Debug::Debug()
@@ -61,6 +62,7 @@ bool Debug::Update(float dt)
 	//F11 Enable / Disable FPS cap to 30
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
 		debug[3] = !debug[3];
+	DrawDebugMenu();
 	return true;
 }
 
@@ -73,6 +75,36 @@ bool Debug::CleanUp()
 {
 	debug.clear();
 	return true;
+}
+
+void Debug::DrawDebugMenu()
+{
+	if (!HasDebug(0))return;
+	
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
+	Engine::GetInstance().render->DrawRectangle({ -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y, 128, -Engine::GetInstance().render->camera.x + -Engine::GetInstance().render->camera.h},0,0,0, 255*0.5f);
+	Engine::GetInstance().text->Write("DEBUG MENU", -Engine::GetInstance().render->camera.x + 32, -Engine::GetInstance().render->camera.y + 8);
+	Engine::GetInstance().text->Write("(F1) prev level", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 2);
+	Engine::GetInstance().text->Write("(F2) next level", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 3);
+	Engine::GetInstance().text->Write("(F3) restart", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 4);
+	Engine::GetInstance().text->Write("(F5) save", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 5);
+	Engine::GetInstance().text->Write("(F6) load", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 6);
+	Engine::GetInstance().text->Write("(F7) navigate", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 7);
+	Engine::GetInstance().text->Write("(F8) palette", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 8);
+	if(HasDebug(1))
+		Engine::GetInstance().text->Write("(F9) colliders", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16*9, { 0,255,0,255 });
+	else
+		Engine::GetInstance().text->Write("(F9) colliders", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16*9);
+	if (HasDebug(2))
+		Engine::GetInstance().text->Write("(F10) GOD mode", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 10, { 0,255,0,255 });
+	else
+		Engine::GetInstance().text->Write("(F10) GOD mode", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 10);
+	if (HasDebug(3))
+		Engine::GetInstance().text->Write("(F11) VSync", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 11, { 0,255,0,255 });
+	else
+		Engine::GetInstance().text->Write("(F11) VSync", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 11);
+
+	Engine::GetInstance().render->UnlockLayer();
 }
 
 bool Debug::HasDebug(int option)

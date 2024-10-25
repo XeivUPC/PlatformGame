@@ -145,7 +145,6 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Path.cpp" />
     <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Beeto.cpp" />
@@ -167,6 +166,7 @@
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\MovingPlatform.cpp" />
     <ClCompile Include="src\Parallax.cpp" />
+    <ClCompile Include="src\Path.cpp" />
     <ClCompile Include="src\Pathfinding.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\Physics.cpp" />

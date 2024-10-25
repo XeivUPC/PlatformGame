@@ -17,5 +17,6 @@ public:
 	bool Update(float dt);
 	bool PostUpdate();
 	bool CleanUp();
+	void DrawDebugMenu();
 	bool HasDebug(int option);
 };

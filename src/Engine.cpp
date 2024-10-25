@@ -60,7 +60,6 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(physics));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
-    AddModule(std::static_pointer_cast<Module>(debug));
     //// Add the map module
     
     AddModule(std::static_pointer_cast<Module>(levelManager));
@@ -68,6 +67,7 @@ Engine::Engine() {
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(ui));
+    AddModule(std::static_pointer_cast<Module>(debug));
 
     // Render last
     AddModule(std::static_pointer_cast<Module>(render));
