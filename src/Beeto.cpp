@@ -10,7 +10,7 @@ Beeto::Beeto(Vector2D pos) : Enemy(pos)
 	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
-	speed = 2;
+	speed = 80.0f * 3;
 }
 
 
@@ -94,6 +94,7 @@ void Beeto::InitColliders()
 	directionBottomLeftCheck->SetFilterData(groundFilter);
 
 	playerCheckController.SetBodyToTrack(playerCheck);
+
 	playerDamageCheckController.SetBodyToTrack(playerDamageCheck);
 	directionBottomRightCheckController.SetBodyToTrack(directionBottomRightCheck);
 	directionBottomLeftCheckController.SetBodyToTrack(directionBottomLeftCheck);

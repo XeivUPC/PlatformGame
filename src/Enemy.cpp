@@ -20,7 +20,7 @@ void Enemy::InitAnimations()
 
 void Enemy::InitColliders()
 {
-	playerFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
+	playerFilter.categoryBits = Engine::GetInstance().ENEMY_ATTACK_LAYER;
 	playerFilter.maskBits = Engine::GetInstance().PLAYER_LAYER;
 	
 	playerDamageFilter.categoryBits = Engine::GetInstance().ENEMY_LAYER;
@@ -55,7 +55,8 @@ Vector2D Enemy::SeekForSurfaceTile()
 
 void Enemy::Move()
 {
-	b2Vec2 bodyDirection = b2Vec2{ enemyDirection.getX()*speed, enemyDirection.getY()*speed };
+	float fixedDt = 16 / 1000.0f;
+	b2Vec2 bodyDirection = b2Vec2{ enemyDirection.getX()*speed * fixedDt, enemyDirection.getY()*speed* fixedDt };
 	enemyCollider->SetLinearVelocity(bodyDirection);
 }
 
@@ -88,7 +89,7 @@ void Enemy::Brain()
 		hurtCooldown.Start();
 		Hurt();
 	}
-	if (playerCheckController.IsBeingTriggered() && attackCooldown.ReadMSec() >= attackCooldownMS)
+	else if (playerCheckController.IsBeingTriggered() && attackCooldown.ReadMSec() >= attackCooldownMS)
 	{
 		attackCooldown.Start();
 		Attack();

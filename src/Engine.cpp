@@ -198,6 +198,11 @@ int Engine::GetMaxFrameDuration() const
     return maxFrameDuration;
 }
 
+void Engine::SetMaxFrameDuration(int value)
+{
+    maxFrameDuration = value;
+}
+
 // ---------------------------------------------
 void Engine::PrepareUpdate()
 {
@@ -245,7 +250,8 @@ void Engine::FinishUpdate()
         << " Last sec frames: " << framesPerSecond
         << " Last dt: " << std::fixed << std::setprecision(3) << dt
         << " Time since startup: " << secondsSinceStartup
-        << " Frame Count: " << frameCount;
+        << " Frame Count: " << frameCount
+        << "V-sync: " << frameCount;
 
     std::string titleStr = ss.str();
 

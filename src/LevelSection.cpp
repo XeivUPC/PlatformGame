@@ -11,6 +11,7 @@
 #include "DirtBlock.h"
 #include "EntityManager.h"
 #include "MovingPlatform.h"
+#include "InstaKillObject.h"
 #include "Beeto.h"
 #include "Debug.h"
 
@@ -316,6 +317,24 @@ void LevelSection::LoadObjects()
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());   
 
+
+        }
+        if (type == "InstaKillObject") {
+            float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());   
+
+            float width = PIXEL_TO_METERS(objectNode.attribute("width").as_int());
+            float height = PIXEL_TO_METERS(objectNode.attribute("height").as_int());
+
+            x += width / 2;
+            y += height / 2;
+
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+
+            InstaKillObject* instaKillObj = new InstaKillObject(position, {width,height});
+            Engine::GetInstance().entityManager->AddEntity((Entity*)instaKillObj, true);
+
+            objects.emplace_back((Entity*)instaKillObj);
 
         }
         if (type == "MovingPlatform") {

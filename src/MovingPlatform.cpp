@@ -67,17 +67,18 @@ bool MovingPlatform::Start()
 
 bool MovingPlatform::Update(float dt)
 {
+	float fixedDt = 16 / 1000.0f;
 	if (movingBackwards) {
 		if(isVertical)
-			body->SetLinearVelocity({ 0,-speed * dt / 1000 });
+			body->SetLinearVelocity({ 0,-speed * fixedDt });
 		else
-			body->SetLinearVelocity({ -speed * dt / 1000,0 });
+			body->SetLinearVelocity({ -speed * fixedDt,0 });
 	}
 	else {
 		if (isVertical)
-			body->SetLinearVelocity({ 0,+speed * dt / 1000 });
+			body->SetLinearVelocity({ 0,+speed * fixedDt });
 		else
-			body->SetLinearVelocity({ +speed * dt / 1000,0 });
+			body->SetLinearVelocity({ +speed * fixedDt,0 });
 	}
 
 	if (isVertical) {

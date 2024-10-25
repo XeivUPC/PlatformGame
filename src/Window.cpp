@@ -91,6 +91,7 @@ bool Window::LoadParameters(xml_node parameters)
 
 	width = parameters.child("resolution").attribute("width").as_int(1280);
 	height = parameters.child("resolution").attribute("height").as_int(720);
+	height = parameters.child("resolution").attribute("height").as_int(720);
 
 	return ret;
 }

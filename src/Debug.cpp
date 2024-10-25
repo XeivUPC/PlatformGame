@@ -60,8 +60,11 @@ bool Debug::Update(float dt)
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		debug[2] = !debug[2];
 	//F11 Enable / Disable FPS cap to 30
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
 		debug[3] = !debug[3];
+		Engine::GetInstance().SetMaxFrameDuration(debug[3] ? 32 : 16);
+
+	}
 	DrawDebugMenu();
 	return true;
 }
@@ -84,8 +87,8 @@ void Debug::DrawDebugMenu()
 	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 
 
-	Engine::GetInstance().render->DrawRectangle({ -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y, 128, -Engine::GetInstance().render->camera.y + Engine::GetInstance().render->camera.h},0,0,0, 255*0.5f, true);
 
+	Engine::GetInstance().render->DrawRectangle({ -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y, 128,Engine::GetInstance().render->camera.h},0,0,0, (int)(255*0.5f), true);
 	Engine::GetInstance().text->Write("DEBUG MENU", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16*2);
 	Engine::GetInstance().text->Write("(F1) prev level", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 3);
 	Engine::GetInstance().text->Write("(F2) next level", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 *4);
@@ -103,9 +106,9 @@ void Debug::DrawDebugMenu()
 	else
 		Engine::GetInstance().text->Write("(F10) GOD mode", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 11);
 	if (HasDebug(3))
-		Engine::GetInstance().text->Write("(F11) VSync", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 12, { 0,255,0,255 });
+		Engine::GetInstance().text->Write("(F11) FPS CAP 30", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 12, { 0,255,0,255 });
 	else
-		Engine::GetInstance().text->Write("(F11) VSync", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 12);
+		Engine::GetInstance().text->Write("(F11) FPS CAP 30", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 12);
 
 	Engine::GetInstance().render->UnlockLayer();
 }

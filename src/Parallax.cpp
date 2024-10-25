@@ -34,7 +34,7 @@ bool Parallax::PreUpdate()
     return true;
 }
 
-bool Parallax::Update(float dt)
+bool Parallax::Update(float d)
 {
     int textureWidth;
     int textureHeight;

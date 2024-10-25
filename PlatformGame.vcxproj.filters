@@ -153,6 +153,9 @@
     <ClCompile Include="src\Path.cpp">
       <Filter>Source Files\Game\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="src\InstaKillObject.cpp">
+      <Filter>Source Files\Game\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -265,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="src\Pathfinding.h">
       <Filter>Source Files\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InstaKillObject.h">
+      <Filter>Source Files\Game\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
