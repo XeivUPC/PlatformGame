@@ -7,7 +7,7 @@
 
 Beeto::Beeto(Vector2D pos) : Enemy(pos)
 {
-	textureOffset = { -16,-8 };
+	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
 	speed = 2;

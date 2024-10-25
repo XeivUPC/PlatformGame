@@ -199,6 +199,7 @@ void Player::InitColliders() {
 
 bool Player::Update(float dt)
 {
+	float fixedDt = Engine::GetInstance().GetMaxFrameDuration()/1000.0f;
 	playerCollider->SetAwake(true);
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
@@ -257,9 +258,9 @@ bool Player::Update(float dt)
 
 	b2Vec2 inputValue = GetMoveInput();
 
-	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
+	b2Vec2 velocity{ inputValue.x * fixedDt, playerCollider->GetLinearVelocity().y };
 	if (isInLadder)
-		velocity.y = inputValue.y * dt / 1000;
+		velocity.y = inputValue.y * fixedDt;
 
 
 	if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {

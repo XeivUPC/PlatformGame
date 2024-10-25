@@ -29,8 +29,9 @@ bool Physics::Start()
 
 bool Physics::PreUpdate()
 {
-	float dt = Engine::GetInstance().GetDt() / 1000;
-	world->Step(1/60.0f, 8, 3);
+	float dt = Engine::GetInstance().GetMaxFrameDuration() / 1000.0f;
+
+	world->Step(dt, 8, 3);
 	return true;
 }
 
