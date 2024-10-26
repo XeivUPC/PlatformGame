@@ -1,7 +1,5 @@
 # Shovel Knight Recreation
 
-
-
 A recreation of the classic retro-inspired action game *Shovel Knight*.
 
 ![Shovel Knight Logo](https://static.wikia.nocookie.net/logopedia/images/3/34/1200px-ShovelKnightLogo.png/revision/latest?cb=20220929162715)  
@@ -23,6 +21,7 @@ A recreation of the classic retro-inspired action game *Shovel Knight*.
 | Shovel Attack         | `Left Mouse Click`      |
 | Downward Shovel Thrust| `Down Arrow`            |
 | Debug Menu            | `H`                     |
+> *Note:* Debug keys especified inside the `Debug Menu`.
 
 ## Features
 
