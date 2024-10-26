@@ -250,8 +250,7 @@ void Engine::FinishUpdate()
         << " Last sec frames: " << framesPerSecond
         << " Last dt: " << std::fixed << std::setprecision(3) << dt
         << " Time since startup: " << secondsSinceStartup
-        << " Frame Count: " << frameCount
-        << "V-sync: " << frameCount;
+        << " Frame Count: " << frameCount;
 
     std::string titleStr = ss.str();
 
