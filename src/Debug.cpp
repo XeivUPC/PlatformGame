@@ -1,12 +1,13 @@
 #include "Debug.h"
 #include "Input.h"
 #include "Scene.h"
+#include "Window.h"
 #include "TextGenerator.h"
 #include "Box2DRender.h"
 
 Debug::Debug()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		debug.push_back(false);
 	}
@@ -50,6 +51,12 @@ bool Debug::Update(float dt)
 
 	//F6 Load the previous state(even across levels)
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN){}
+
+	//F8 Full Screen
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
+		debug[4] = !debug[4];
+		Engine::GetInstance().window->SetFullScreen(debug[4]);
+	}
 
 	//F9 View colliders / logic / paths
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
@@ -96,7 +103,11 @@ void Debug::DrawDebugMenu()
 	Engine::GetInstance().text->Write("(F5) save", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 6);
 	Engine::GetInstance().text->Write("(F6) load", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 7);
 	Engine::GetInstance().text->Write("(F7) navigate", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 8);
-	Engine::GetInstance().text->Write("(F8) palette", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 9);
+
+	if (HasDebug(4))
+		Engine::GetInstance().text->Write("(F8) full screen", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 9, { 0,255,0,255 });
+	else
+		Engine::GetInstance().text->Write("(F8) full screen", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16 * 9);
 	if(HasDebug(1))
 		Engine::GetInstance().text->Write("(F9) colliders", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 16*10, { 0,255,0,255 });
 	else

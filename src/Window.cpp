@@ -76,6 +76,11 @@ void Window::GetWindowSize(int& width, int& height) const
 	height = this->height;
 }
 
+void Window::SetFullScreen(bool active)
+{
+	SDL_SetWindowFullscreen(window, active ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+}
+
 bool Window::LoadParameters(xml_node parameters)
 {
 	bool ret = true;
