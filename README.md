@@ -1,5 +1,7 @@
 # Shovel Knight Recreation
 
+
+
 A recreation of the classic retro-inspired action game *Shovel Knight*.
 
 ![Shovel Knight Logo](https://static.wikia.nocookie.net/logopedia/images/3/34/1200px-ShovelKnightLogo.png/revision/latest?cb=20220929162715)  
@@ -45,6 +47,6 @@ A recreation of the classic retro-inspired action game *Shovel Knight*.
 - **Sound Effects**: Action-packed effects to enrich gameplay, including attack and object-breaking sounds.
 ## Contributors
 
-- Adria Garcia - [GitHub](https://github.com/your-username)
-- Ana Alcazar - [GitHub](https://github.com/teammate-username)
+- Adria Garcia - [GitHub](https://github.com/XeivUPC)
+- Ana Alcazar - [GitHub](https://github.com/AnaAlcazarCobo)
 
