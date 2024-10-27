@@ -5,7 +5,7 @@
 #include "LevelManager.h"
 #include "Log.h"
 
-#define VSYNC true
+#define VSYNC false
 
 Render::Render() : Module()
 {
@@ -28,8 +28,10 @@ bool Render::Awake()
 
 	Uint32 flags = SDL_RENDERER_ACCELERATED;
 
-	//flags |= SDL_RENDERER_PRESENTVSYNC;
-	LOG("Using vsync");
+	if (VSYNC) {
+		flags |= SDL_RENDERER_PRESENTVSYNC;
+		LOG("Using vsync");	
+	}
 
 	SDL_Window* window = Engine::GetInstance().window
 
@@ -300,7 +302,6 @@ bool Render::DrawRectangle(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint
 		rec.y = (int)(camera.y + rect.y);
 
 	}
-
 	int result = (filled) ? SDL_RenderFillRect(renderer, &rec) : SDL_RenderDrawRect(renderer, &rec);
 
 	if (result != 0)

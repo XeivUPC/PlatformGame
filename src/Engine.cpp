@@ -13,11 +13,11 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
+#include "Debug.h"
 #include "LevelManager.h"
 #include "Parallax.h"
 #include "TextGenerator.h"
 #include "UI.h"
-#include "Debug.h"
 
 
 
@@ -41,7 +41,6 @@ Engine::Engine() {
     audio = std::make_shared<Audio>();
     physics = std::make_shared<Physics>();
     scene = std::make_shared<Scene>();
-    parallax = std::make_shared<Parallax>();
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
     parallax = std::make_shared<Parallax>();
@@ -61,15 +60,14 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
     //// Add the map module
-    
     AddModule(std::static_pointer_cast<Module>(levelManager));
     AddModule(std::static_pointer_cast<Module>(text));
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
-    AddModule(std::static_pointer_cast<Module>(ui));
     AddModule(std::static_pointer_cast<Module>(debug));
+    AddModule(std::static_pointer_cast<UI>(ui));
 
-    // Render last
+    // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
 
     LOG("Timer App Constructor: %f", timer.ReadMSec());
@@ -190,6 +188,21 @@ bool Engine::CleanUp() {
     return result;
 }
 
+float Engine::GetDt() const
+{
+    return dt;
+}
+
+int Engine::GetMaxFrameDuration() const
+{
+    return maxFrameDuration;
+}
+
+void Engine::SetMaxFrameDuration(int value)
+{
+    maxFrameDuration = value;
+}
+
 // ---------------------------------------------
 void Engine::PrepareUpdate()
 {
@@ -237,7 +250,8 @@ void Engine::FinishUpdate()
         << " Last sec frames: " << framesPerSecond
         << " Last dt: " << std::fixed << std::setprecision(3) << dt
         << " Time since startup: " << secondsSinceStartup
-        << " Frame Count: " << frameCount;
+        << " Frame Count: " << frameCount
+        << "V-sync: " << frameCount;
 
     std::string titleStr = ss.str();
 

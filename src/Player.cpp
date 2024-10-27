@@ -10,8 +10,10 @@
 #include "Render.h"
 #include "Physics.h"
 #include "Log.h"
-#include "UI.h"
 #include "Debug.h"
+#include "UI.h"
+
+
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -25,7 +27,7 @@ Player::~Player() {
 bool Player::Awake() {
 
 	//Initialize Player parameters
-	position = Vector2D(8, 8);
+	SetPosition({ 8,8 });
 
 	InitColliders();
 	groundCheckController.SetBodyToTrack(groundCheck);
@@ -37,6 +39,8 @@ bool Player::Awake() {
 
 	/// Texture, index, size, pivot
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
+	hurtSoundId = Engine::GetInstance().audio->LoadFx("Player_Hurt.wav");
+	dieSoundId = Engine::GetInstance().audio->LoadFx("Player_Die.wav");
 	
 
 
@@ -48,6 +52,8 @@ bool Player::Start() {
 	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
 	InitAnimations();
+
+
 
 	return true;
 }
@@ -99,6 +105,14 @@ void Player::InitAnimations() {
 	AnimationData climb_exit = AnimationData("Player_Exit_Climb");
 	climb_exit.AddSprite(Sprite{ texture,{0.0f, 6.0f}, {70, 70} });
 
+	AnimationData dead_air = AnimationData("Player_Dead_Air");
+	dead_air.AddSprite(Sprite{ texture,{0.0f, 7.0f}, {70, 70} });
+
+	AnimationData dead_ground = AnimationData("Player_Dead_Ground");
+	dead_ground.AddSprite(Sprite{ texture,{1.0f, 7.0f}, {70, 70} });
+	dead_ground.AddSprite(Sprite{ texture,{2.0f, 7.0f}, {70, 70} });
+	dead_ground.AddSprite(Sprite{ texture,{3.0f, 7.0f}, {70, 70} });
+
 
 	
 	animator->AddAnimation(idle);
@@ -111,6 +125,8 @@ void Player::InitAnimations() {
 	animator->AddAnimation(attack);
 	animator->AddAnimation(climb);
 	animator->AddAnimation(climb_exit);
+	animator->AddAnimation(dead_ground);
+	animator->AddAnimation(dead_air);
 	animator->SelectAnimation("Player_Idle", true);
 
 	animator->SetSpeed(100);
@@ -126,7 +142,7 @@ void Player::InitColliders() {
 	b2Vec2 playerColliderPosition{ (position.getX()), (position.getY()) };
 
 	playerFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
-	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER | Engine::GetInstance().INTERACTABLE_LAYER | Engine::GetInstance().ENEMY_LAYER;
+	playerFilters.maskBits = Engine::GetInstance().GROUND_LAYER | Engine::GetInstance().INTERACTABLE_LAYER | Engine::GetInstance().ENEMY_ATTACK_LAYER;
 
 	groundCheckFilters.categoryBits = Engine::GetInstance().PLAYER_LAYER;
 	groundCheckFilters.maskBits = Engine::GetInstance().GROUND_LAYER;
@@ -195,9 +211,9 @@ void Player::InitColliders() {
 
 bool Player::Update(float dt)
 {
-
+	float fixedDt = 16/1000.0f;
 	playerCollider->SetAwake(true);
-#pragma region Testing
+
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		Damage(10, {isFlipped ? -1.0f : 1.0f, 1.0f });
 	}
@@ -214,8 +230,8 @@ bool Player::Update(float dt)
 		else
 			Engine::GetInstance().ui->pauseMenuUI.Deactivate();
 	}
-#pragma endregion
-#pragma region Ground Logic
+
+
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
 
@@ -225,8 +241,7 @@ bool Player::Update(float dt)
 		if(previousGroundedValue)
 			coyoteTimer.Start();
 	}
-#pragma endregion
-#pragma region Shovel Attacks Logic
+
 	if(isInLadder)
 		isDoingFallAttack = false;
 
@@ -240,8 +255,7 @@ bool Player::Update(float dt)
 	else {
 		shovelFallAttackCheck->SetFilterData(emptyFilter);
 	}
-#pragma endregion
-#pragma region Invulnerable
+
 	if (Engine::GetInstance().debug->HasDebug(2))
 		isInvulnerable = true;
 
@@ -250,13 +264,27 @@ bool Player::Update(float dt)
 			isInvulnerable = false;
 		}
 	}
-#pragma endregion
-#pragma region Input
-	b2Vec2 inputValue = GetMoveInput();
 
-	b2Vec2 velocity{ inputValue.x * dt / 1000, playerCollider->GetLinearVelocity().y };
-	if (isInLadder)
-		velocity.y = inputValue.y * dt / 1000;
+
+	if (isDead && deathTimeTimer.ReadMSec() >= deathTimeMS) {
+		Respawn();
+	}
+
+	b2Vec2 inputValue = GetMoveInput();
+	if (isDead) {
+		inputValue = { 0,0 };
+	}
+
+	b2Vec2 velocity{ inputValue.x * fixedDt, playerCollider->GetLinearVelocity().y };
+	if (isInLadder && !isDead)
+		velocity.y = inputValue.y * fixedDt;
+
+	if (Engine::GetInstance().debug->HasDebug(2)) {
+		velocity.x = inputValue.x * fixedDt;
+		velocity.y = inputValue.y * fixedDt;
+	}
+
+	
 
 
 	if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
@@ -283,6 +311,7 @@ bool Player::Update(float dt)
 			velocity.y = 0;			
 			playerCollider->SetLinearVelocity(velocity);
 			DoJump(-jumpForce);
+			velocity.y = playerCollider->GetLinearVelocity().y;
 		}
 	}
 
@@ -297,14 +326,14 @@ bool Player::Update(float dt)
 	else if(!ladderCheckController.IsBeingTriggered()){
 		isInLadder = false;
 	}
-#pragma endregion
-#pragma region Input Logic
+
 	if (shovelFallAttackCheckController.OnTriggerEnter() && isDoingFallAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
 	{
 		velocity.y = 0;
 		playerCollider->SetLinearVelocity(velocity);
 
 		DoJump(-jumpForce * fallAttackJumpMultiplier);
+		velocity.y = playerCollider->GetLinearVelocity().y;
 	}
 
 	playerCollider->SetLinearVelocity(velocity);
@@ -326,8 +355,9 @@ bool Player::Update(float dt)
 		else
 			isFlipped = true;
 	}
-#pragma endregion
-#pragma region Collision Logic
+	
+
+
 	if (isDoingShovelAttack && attackRecoverTimer.ReadMSec() <= attackRecoverMS / 2 && !isFlipped)
 	{
 		shovelAttackCheckRight->SetFilterData(enemyCheckFilters);
@@ -344,8 +374,9 @@ bool Player::Update(float dt)
 	else {
 		shovelAttackCheckLeft->SetFilterData(emptyFilter);
 	}
-#pragma endregion
-#pragma region Render
+
+
+	
 	animator->SetIfPlaying(true);
 
 	if (isInvulnerable) {
@@ -357,7 +388,17 @@ bool Player::Update(float dt)
 	else
 		animator->SetIfCanDraw(true);
 
-	if (isInLadder) {
+	animator->SetSpeed(100);
+	if (isDead) {
+		animator->SetSpeed(1200);
+		if (isGrounded) {
+			animator->SelectAnimation("Player_Dead_Ground", false);
+		}
+		else {
+			animator->SelectAnimation("Player_Dead_Air", true);
+		}
+	}
+	else if (isInLadder) {
 		animator->SetIfPlaying(velocity.y != 0);
 		animator->SelectAnimation("Player_Climb", true);
 	}
@@ -407,9 +448,9 @@ bool Player::Update(float dt)
 		if (isDoingFallAttack && playerCollider->GetLinearVelocity().y > 0 && !isDoingShovelAttack) {
 			Box2DRender::GetInstance().RenderFixture(shovelFallAttackCheck, b2Color{ 0,255,0,255 });
 		}
-		Engine::GetInstance().render->UnlockLayer();
 	}
-#pragma endregion
+	Engine::GetInstance().render->UnlockLayer();
+	
 	return true;
 }
 
@@ -429,11 +470,19 @@ b2Vec2 Player::GetMoveInput() {
 			velocity.y += (ladderSpeed);
 	}
 
+	if (Engine::GetInstance().debug->HasDebug(2)) {
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			velocity.y -= (speed);
+
+		if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+			velocity.y += (speed);
+	}
+
 	return velocity;
 
 }
 bool Player::TryShovelAttack() {
-	if (attackRecoverTimer.ReadMSec() >= attackRecoverMS && !isInLadder)
+	if (attackRecoverTimer.ReadMSec() >= attackRecoverMS && !isInLadder && !isDead)
 		return true;
 	return false;
 }
@@ -443,7 +492,7 @@ void Player::DoShovelAttack() {
 }
 
 bool Player::TryFallAttack() {
-	if (!isGrounded && !isDoingFallAttack && !isInLadder)
+	if (!isGrounded && !isDoingFallAttack && !isInLadder && !isDead)
 		return true;
 	return false;
 }
@@ -453,14 +502,14 @@ void Player::DoFallAttack() {
 
 
 bool Player::TryJump() {
-	if ((isGrounded || coyoteTimer.ReadMSec() <= coyoteReactionMS) && !isDoingShovelAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS)
+	if ((isGrounded || coyoteTimer.ReadMSec() <= coyoteReactionMS) && !isDoingShovelAttack && jumpRecoverTimer.ReadMSec() >= jumpRecoverMS && !isDead)
 		return true;
 	return false;
 }
 
 void Player::DoJump(float force) {
+	playerCollider->ApplyLinearImpulseToCenter(b2Vec2{ 0,force }, true);
 	
-	playerCollider->ApplyForceToCenter(b2Vec2{ 0,force }, true);
 	jumpRecoverTimer.Start();
 }
 
@@ -476,6 +525,12 @@ void Player::SetGravityValue(float verticalVelocity) {
 	if (isInLadder) {
 		gravityValue = 0;
 	}
+
+	if (Engine::GetInstance().debug->HasDebug(2)) {
+		gravityValue = 0;
+	}
+
+
 	playerCollider->SetGravityScale(gravityValue);
 }
 
@@ -490,27 +545,46 @@ bool Player::CleanUp()
 
 void Player::Damage(int amount, Vector2D direction)
 {
-	if (isInvulnerable)
+	if (isInvulnerable || isDead)
 		return;
 
 	playerHealth.Hurt(amount);
 	hurtAnimEffectTimer.Start();
 	hurtAnimTimeTimer.Start();
 
-	playerCollider->ApplyForceToCenter({50.0f * direction.getX(),-120 * direction.getY()}, true);
+	playerCollider->ApplyLinearImpulseToCenter({50.0f * direction.getX(),-2 * direction.getY()}, true);
 
 	isInvulnerable = true;
-
+	Engine::GetInstance().audio->PlayFx(hurtSoundId);
 	if (!playerHealth.IsAlive()) {
-		Vector2D spawnPos = Engine::GetInstance().levelManager->GetClosestCheckPointPosition();
-		playerCollider->SetTransform({ (spawnPos.getX()),(spawnPos.getY() - 1) }, 0);
-		position.setX(playerCollider->GetPosition().x);
-		position.setY(playerCollider->GetPosition().y);
-		Engine::GetInstance().levelManager->GoToClosestCheckPoint();
-		playerCollider->SetAwake(true);
-		playerHealth.ResetHealth();
+
+		Engine::GetInstance().audio->PlayFx(dieSoundId);
+
 		isInvulnerable = false;
+		isDead = true;
+		deathTimeTimer.Start();
 	}
+
+}
+
+void Player::Respawn()
+{
+	isDead = false;
+	Vector2D spawnPos = Engine::GetInstance().levelManager->GetClosestCheckPointPosition();
+	playerCollider->SetTransform({ (spawnPos.getX()),(spawnPos.getY() - 1) }, 0);
+	position.setX(playerCollider->GetPosition().x);
+	position.setY(playerCollider->GetPosition().y);
+	Engine::GetInstance().levelManager->GoToClosestCheckPoint();
+	playerCollider->SetAwake(true);
+	playerHealth.ResetHealth();
+	isInvulnerable = false;
+}
+
+void Player::SetPosition(Vector2D pos)
+{
+	if(playerCollider!=nullptr)
+		playerCollider->SetTransform({ pos.getX(), pos.getY() }, 0);
+	position = pos;
 }
 
 

@@ -17,7 +17,7 @@ private:
 protected:
 	//Game Parameters
 	int hitDamage = 1;
-	float speed = 1.0f;
+	float speed = 100.0f * 3;
 	int attackCooldownMS = 500;
 	int hurtCooldownMS = 500;
 	Timer attackCooldown;

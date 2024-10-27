@@ -27,6 +27,8 @@ public:
 	// Retrive window size
 	void GetWindowSize(int& width, int& height) const;
 
+	void SetFullScreen(bool active);
+
 	// Load Parameters from config file
 	bool LoadParameters(xml_node parameters);
 

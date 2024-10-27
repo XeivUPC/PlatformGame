@@ -161,6 +161,7 @@
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\HealthSystem.cpp" />
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\InstaKillObject.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LevelSection.cpp" />
     <ClCompile Include="src\Log.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\HealthSystem.h" />
     <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\InstaKillObject.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\LevelSection.h" />
     <ClInclude Include="src\Log.h" />

@@ -67,17 +67,18 @@ bool MovingPlatform::Start()
 
 bool MovingPlatform::Update(float dt)
 {
+	float fixedDt = 16 / 1000.0f;
 	if (movingBackwards) {
 		if(isVertical)
-			body->SetLinearVelocity({ 0,-speed * dt / 1000 });
+			body->SetLinearVelocity({ 0,-speed * fixedDt });
 		else
-			body->SetLinearVelocity({ -speed * dt / 1000,0 });
+			body->SetLinearVelocity({ -speed * fixedDt,0 });
 	}
 	else {
 		if (isVertical)
-			body->SetLinearVelocity({ 0,+speed * dt / 1000 });
+			body->SetLinearVelocity({ 0,+speed * fixedDt });
 		else
-			body->SetLinearVelocity({ +speed * dt / 1000,0 });
+			body->SetLinearVelocity({ +speed * fixedDt,0 });
 	}
 
 	if (isVertical) {
@@ -108,9 +109,22 @@ bool MovingPlatform::Update(float dt)
 	position.setX(body->GetPosition().x);
 	position.setY(body->GetPosition().y);
 
+
+
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
+
+
+	if (!isVertical)
+	{
+		b2Vec2 platVel = body->GetLinearVelocity();
+		for (b2Body* entity : collisionController.GetBodiesColliding())
+		{
+			b2Vec2 vel = entity->GetLinearVelocity();
+			entity->SetLinearVelocity({ vel.x + platVel.x, vel.y + platVel.y });
+		}
+	}
 
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
@@ -125,17 +139,6 @@ bool MovingPlatform::Update(float dt)
 		Box2DRender::GetInstance().RenderBody(body, { 255,255,0,255 });
 		Engine::GetInstance().render->UnlockLayer();
 	}
-
-	if (!isVertical)
-	{
-		b2Vec2 platVel = body->GetLinearVelocity();
-		for (b2Body* entity : collisionController.GetBodiesColliding())
-		{
-			b2Vec2 vel = entity->GetLinearVelocity();
-			entity->SetLinearVelocity({ vel.x + platVel.x, vel.y + platVel.y });
-		}
-	}
-
 	return true;
 }
 
@@ -144,7 +147,7 @@ bool MovingPlatform::CleanUp()
 {
 	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(body);
-	Engine::GetInstance().textures->UnLoad(texture);
+	//Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 
