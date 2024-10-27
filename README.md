@@ -8,7 +8,7 @@ A recreation of the classic retro-inspired action game *Shovel Knight*.
 
 *Shovel Knight* is a 2D side-scrolling platformer developed by Yacht Club Games. Players control Shovel Knight, a heroic character armed with a powerful shovel who embarks on an epic journey to rescue his beloved Shield Knight and defeat the evil Enchantress. The game is known for its tight gameplay mechanics, nostalgic 8-bit graphics, and challenging level design reminiscent of classic NES games.
 
-## Controlls
+## Controls
 
 | Action                | Key                     |
 |-----------------------|-------------------------|
