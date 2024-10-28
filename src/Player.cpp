@@ -156,7 +156,7 @@ void Player::InitColliders() {
 	emptyFilter.maskBits = 0x0000;
 	emptyFilter.categoryBits = 0x0000;
 
-	playerCollider = colliderCreator.CreateBevelBox(world, playerColliderPosition, PIXEL_TO_METERS(15), PIXEL_TO_METERS(30), PIXEL_TO_METERS(1));
+	playerCollider = colliderCreator.CreateBevelBox(world, playerColliderPosition, PIXEL_TO_METERS(14), PIXEL_TO_METERS(30), PIXEL_TO_METERS(1));
 	playerCollider->SetFixedRotation(true);
 	for (b2Fixture* fixture = playerCollider->GetFixtureList(); fixture != nullptr; fixture = fixture->GetNext())
 	{
@@ -166,7 +166,7 @@ void Player::InitColliders() {
 
 	b2FixtureUserData groundCheckData;
 	groundCheckData.pointer = (uintptr_t)(&groundCheckController);
-	groundCheck = colliderCreator.AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(14), PIXEL_TO_METERS(10), groundCheckData);
+	groundCheck = colliderCreator.AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(10.5f)), PIXEL_TO_METERS(13), PIXEL_TO_METERS(10), groundCheckData);
 	groundCheck->SetSensor(true);
 	groundCheck->SetDensity(0);
 
@@ -175,7 +175,7 @@ void Player::InitColliders() {
 
 	b2FixtureUserData shovelFallAttackData;
 	shovelFallAttackData.pointer = (uintptr_t)(&shovelFallAttackCheckController);
-	shovelFallAttackCheck = colliderCreator.AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(2), shovelFallAttackData);
+	shovelFallAttackCheck = colliderCreator.AddBox(playerCollider, b2Vec2(0.0f, PIXEL_TO_METERS(16.5f)), PIXEL_TO_METERS(12), PIXEL_TO_METERS(8), shovelFallAttackData);
 	shovelFallAttackCheck->SetFilterData(enemyCheckFilters);
 	shovelFallAttackCheck->SetFriction(0);
 	shovelFallAttackCheck->SetDensity(0);
@@ -235,11 +235,9 @@ bool Player::Update(float dt)
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
 
-	if (isGrounded)
+	if(previousGroundedValue){
 		isDoingFallAttack = false;
-	else {
-		if(previousGroundedValue)
-			coyoteTimer.Start();
+		coyoteTimer.Start();
 	}
 
 	if(isInLadder)
