@@ -54,7 +54,7 @@ private:
     std::vector<CheckPoint*> checkPoints;
 
     int currentSection=0;
-    int currentLevel=0;
+    int currentLevel=-1;
 
     xml_node parameters;
 

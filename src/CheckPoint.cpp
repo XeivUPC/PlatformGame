@@ -25,7 +25,6 @@ CheckPoint::~CheckPoint()
 
 bool CheckPoint::Awake()
 {
-	
 	return true;
 }
 
@@ -50,6 +49,7 @@ bool CheckPoint::Start()
 	turnedOn.AddSprite(Sprite{ texture,{1.0f, 2.0f}, {64, 64} });
 	turnedOn.AddSprite(Sprite{ texture,{2.0f, 2.0f}, {64, 64} });
 
+	
 	animator->AddAnimation(turnedOff);
 	animator->AddAnimation(turningOn);
 	animator->AddAnimation(turnedOn);
@@ -101,6 +101,7 @@ bool CheckPoint::Update(float dt)
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
+
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
 		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
@@ -114,7 +115,7 @@ bool CheckPoint::CleanUp()
 {
 	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(body);
-	Engine::GetInstance().textures->UnLoad(texture);
+	//Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 

@@ -29,6 +29,5 @@ public:
 	bool PostUpdate();
 
 	bool CleanUp();
-	void Write(const char* text, int x, int y);
-	void Write(const char* text, int x, int y, SDL_Color color);
+	void Write(const char* text, int x, int y, SDL_Color color = {255,255,255,255});
 };

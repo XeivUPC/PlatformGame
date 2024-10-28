@@ -46,6 +46,7 @@ public:
 	const uint16_t GROUND_LAYER =0x0002;
 	const uint16_t PLAYER_ATTACK_LAYER= 0x0004;
 	const uint16_t ENEMY_LAYER =0x0008;
+	const uint16_t ENEMY_ATTACK_LAYER =0x0080;
 	const uint16_t LADDER_LAYER =0x0010;
 	const uint16_t USE_LADDER_LAYER =0x0020;
 	const uint16_t INTERACTABLE_LAYER =0x0040;
@@ -67,6 +68,11 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	float GetDt() const;
+
+	int GetMaxFrameDuration() const;
+	void SetMaxFrameDuration(int value);
 
 private:
 

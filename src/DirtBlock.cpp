@@ -130,8 +130,7 @@ bool DirtBlock::Update(float dt)
 	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	if (!isBroken)
-	{
+	if(!isBroken){
 		if (Engine::GetInstance().debug->HasDebug(1))
 		{
 			Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
@@ -139,11 +138,14 @@ bool DirtBlock::Update(float dt)
 			Engine::GetInstance().render->UnlockLayer();
 		}
 	}
+
 	return true;
 }
 
 bool DirtBlock::CleanUp()
 {
+	if(body!=nullptr)
+		Engine::GetInstance().physics->world->DestroyBody(body);
 	delete animator;
 	return true;
 }
@@ -153,6 +155,7 @@ void DirtBlock::Break()
 	isBroken = true;
 	particleRemoveTimer.Start();
 	Engine::GetInstance().physics->world->DestroyBody(body);
+	body = nullptr;
 	Engine::GetInstance().audio->PlayFx(breakSoundId);
 
 }

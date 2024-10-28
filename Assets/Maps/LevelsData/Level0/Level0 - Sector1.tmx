@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="50">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="57">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="-1"/>
@@ -98,15 +98,26 @@
    </properties>
    <point/>
   </object>
+  <object id="50" x="80" y="160">
+   <properties>
+    <property name="Type" value="SpawnPoint"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="51" name="Insta Kill Object" x="1440" y="208" width="32" height="32">
+   <properties>
+    <property name="Type" value="InstaKillObject"/>
+   </properties>
+  </object>
  </objectgroup>
-<objectgroup id="13" name="Enemies">
-	<object id="47" x="560" y="176">
-		<properties>
-			<property name="EnemyType" value="Beeto"/>
-		</properties>
-		<point/>
-	</object>
-</objectgroup>
+ <objectgroup id="13" name="Enemies">
+  <object id="47" x="560" y="176">
+   <properties>
+    <property name="EnemyType" value="Beeto"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="8" name="Colliders">
   <object id="25" x="0" y="176" width="608" height="32">
    <properties>
@@ -175,6 +186,24 @@
    </properties>
   </object>
   <object id="39" x="-16" y="0" width="16" height="176">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="52" x="1424" y="208" width="16" height="48">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="53" x="1440" y="240" width="32" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="54" x="1472" y="208" width="16" height="48">
    <properties>
     <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
     <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>

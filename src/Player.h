@@ -36,7 +36,7 @@ public:
 	//Player Exposed Stats
 	float speed = 120*3;
 	float ladderSpeed = 160;
-	float jumpForce = 160;
+	float jumpForce = 2.7f;
 	float fallAttackJumpMultiplier = 1.0f;
 
 	
@@ -55,12 +55,16 @@ private:
 
 	void DoJump(float force);
 
+	
+
 	bool TryShovelAttack();
 	void DoShovelAttack();
 
 	bool TryFallAttack();
 	void DoFallAttack();
 	b2Vec2 GetMoveInput();
+
+	void Respawn();
 
 	void SetGravityValue(float verticalVelocity);
 
@@ -70,6 +74,7 @@ private:
 	bool isFlipped=false;
 	bool isInLadder = false;
 	bool isInvulnerable = false;
+	bool isDead=false;
 
 	/// MAX VALUES
 	const float MAX_FALL_SPEED = 100.0f;
@@ -103,6 +108,9 @@ private:
 	float hurtAnimTimeMS = 2500;
 	Timer hurtAnimTimeTimer;
 
+	float deathTimeMS = 4000;
+	Timer deathTimeTimer;
+
 	//// Texture
 	b2Vec2 textureOffset{-35.0f,-35.0f};
 
@@ -113,6 +121,8 @@ private:
 
 	//// Audio
 	int jumpSoundId;
+	int hurtSoundId;
+	int dieSoundId;
 
 
 	//// Colliders

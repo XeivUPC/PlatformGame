@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="35">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="36">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="10"/>
@@ -83,6 +83,11 @@
     <property name="Type" value="DirtBlock"/>
    </properties>
    <point/>
+  </object>
+  <object id="35" name="Insta Kill Object" x="192" y="190.909" width="48" height="17.0909">
+   <properties>
+    <property name="Type" value="InstaKillObject"/>
+   </properties>
   </object>
  </objectgroup>
  <objectgroup id="8" name="Colliders">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="36" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="43">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="36" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="48">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="13"/>
@@ -91,6 +91,11 @@
    </properties>
    <point/>
   </object>
+  <object id="43" name="Insta Kill Object" x="80" y="208" width="400" height="48">
+   <properties>
+    <property name="Type" value="InstaKillObject"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="8" name="Colliders">
   <object id="25" x="0" y="112" width="32" height="96">
@@ -145,6 +150,30 @@
    <properties>
     <property name="AFFECTING_LAYERS" value="PLAYER_ATTACK_LAYER"/>
     <property name="OBJECT_LAYERS" value="ENEMY_LAYER"/>
+   </properties>
+  </object>
+  <object id="44" x="64" y="208" width="16" height="48">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="45" x="80" y="256" width="400" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="46" x="480" y="208" width="16" height="48">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="47" x="208" y="208" width="112" height="48">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
    </properties>
   </object>
  </objectgroup>
