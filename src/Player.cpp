@@ -246,7 +246,7 @@ bool Player::Update(float dt)
 	if (TryShovelAttack())
 		isDoingShovelAttack = false;
 
-	if (isDoingFallAttack && !isDoingShovelAttack && playerCollider->GetLinearVelocity().y>0)
+	if (isDoingFallAttack && !isDoingShovelAttack && playerCollider->GetLinearVelocity().y>=0)
 	{
 		shovelFallAttackCheck->SetFilterData(enemyCheckFilters);
 	}
