@@ -45,8 +45,12 @@ A recreation of the classic retro-inspired action game *Shovel Knight*.
 ### 🎶 Audio
 - **Music**: Retro-themed background music for a nostalgic experience.
 - **Sound Effects**: Action-packed effects to enrich gameplay, including attack and object-breaking sounds.
+
+### 🛠️ Technical Details
+- **Layer Based Rendering**: Organize visual elements into separate layers (e.g., background, foreground, UI) for smoother rendering and to ensure proper depth and visibility.
+- **Custom Collision Detection**: Custom logic for handling unique interactions in various ways.
+
 ## Contributors
 
 - Adria Garcia - [GitHub](https://github.com/XeivUPC)
 - Ana Alcazar - [GitHub](https://github.com/AnaAlcazarCobo)
-
