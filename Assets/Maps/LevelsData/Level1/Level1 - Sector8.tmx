@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="40">
+ <properties>
+  <property name="BottomSection" type="int" value="9"/>
+  <property name="LeftSection" type="int" value="-1"/>
+  <property name="Level" type="int" value="8"/>
+  <property name="RightSection" type="int" value="-1"/>
+  <property name="TopSection" type="int" value="7"/>
+ </properties>
+ <tileset firstgid="1" source="../Level1_Tileset.tsx"/>
+ <layer id="11" name="Back2" width="25" height="13">
+  <data encoding="csv">
+460,0,0,0,0,460,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,460,
+460,0,460,460,460,460,460,460,0,0,460,460,460,0,0,460,460,460,460,460,0,0,0,0,460,
+460,0,460,460,460,460,460,460,0,0,460,460,0,434,434,460,460,460,460,0,434,434,434,0,460,
+460,0,0,0,0,460,460,460,0,0,460,460,0,434,434,0,460,460,460,0,434,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,0,0,434,434,0,0,0,0,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,0,434,434,0,460,460,460,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,0,434,434,0,460,460,460,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,0,434,434,0,460,460,460,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,0,0,0,0,460,460,460,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,0,0,0,0,460,460,460,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,460,460,460,460,460,460,460,0,0,434,434,0,460,
+460,0,434,434,0,460,460,460,0,0,460,460,460,460,460,460,460,460,460,0,0,434,434,0,460,
+460,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,434,434,0,460
+</data>
+ </layer>
+ <layer id="3" name="Back" width="25" height="13">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,394,395,397,398,0,0,0,394,395,396,396,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,426,427,429,430,0,0,0,426,427,0,0,0,0,
+0,0,396,396,397,0,0,0,0,0,0,0,458,0,0,462,0,0,0,458,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,458,0,0,462,0,0,0,0,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,458,0,0,462,0,0,0,0,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,458,0,0,462,0,0,0,0,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,458,0,0,462,0,0,0,0,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,490,491,493,494,0,0,0,0,0,0,0,0,0,
+0,0,0,0,462,0,0,0,0,0,0,0,522,523,525,526,0,0,0,0,0,0,0,0,0,
+0,0,0,493,494,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="2" name="Deafult" width="25" height="13">
+  <data encoding="csv">
+0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,779,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="1" name="Front" width="25" height="13">
+  <data encoding="csv">
+0,580,611,579,611,0,611,579,644,642,610,643,643,643,643,643,643,643,643,643,643,643,643,644,0,
+0,580,0,0,0,0,0,0,578,580,0,0,0,0,0,0,0,0,0,0,0,0,0,578,0,
+0,580,0,0,0,0,0,0,578,580,0,0,0,0,0,0,0,0,0,0,0,0,0,578,0,
+0,580,0,0,0,0,0,0,578,580,0,0,0,0,0,0,0,0,0,0,0,0,0,578,0,
+0,580,0,0,0,0,0,0,578,580,0,614,615,615,615,615,615,615,616,514,516,0,0,578,0,
+0,580,0,0,0,0,0,0,578,580,0,0,0,0,0,0,0,0,0,546,548,0,0,578,0,
+0,580,0,0,0,0,0,0,578,580,0,0,0,0,0,0,0,0,0,578,580,0,0,578,0,
+0,580,0,0,0,0,0,0,578,580,0,0,0,0,0,0,0,0,0,578,580,0,0,578,0,
+0,580,0,0,0,0,0,0,610,612,614,615,615,615,615,615,615,616,0,578,580,0,0,578,0,
+0,580,0,0,0,0,0,0,514,515,515,515,515,515,515,515,515,516,0,578,580,0,0,578,0,
+0,580,0,0,0,0,0,0,554,547,547,547,547,547,547,547,547,548,0,578,580,0,0,578,0,
+0,580,0,0,0,0,0,0,610,707,707,707,707,707,707,707,707,612,0,578,580,0,0,578,0,
+0,513,515,515,515,515,515,515,515,515,515,515,515,515,515,515,515,515,515,517,580,0,0,578,0
+</data>
+ </layer>
+ <objectgroup id="10" name="Objects">
+  <object id="37" x="336" y="96">
+   <properties>
+    <property name="Size" type="int" value="1"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="38" x="336" y="128">
+   <properties>
+    <property name="Size" type="int" value="1"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="39" x="336" y="160">
+   <properties>
+    <property name="Size" type="int" value="1"/>
+    <property name="Type" value="DirtBlock"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="Colliders">
+  <object id="25" x="128" y="16" width="32" height="128">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="26" x="160" y="128" width="128" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="27" x="176" y="64" width="160" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="28" x="304" y="80" width="32" height="128">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="29" x="32" y="192" width="272" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="30" x="16" y="0" width="64" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="31" x="96" y="0" width="288" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="32" x="368" y="16" width="16" height="192">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="33" x="16" y="16" width="16" height="192">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="34" x="80" y="0" width="16" height="48">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+  <object id="35" x="160" y="64" width="16" height="64">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+  <object id="36" x="288" y="128" width="16" height="64">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

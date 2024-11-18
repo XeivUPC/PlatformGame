@@ -36,7 +36,6 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-
 	return true;
 }
 
@@ -57,6 +56,12 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	//if(Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN){
+	//	if (player->active == true) player->Disable();
+	//	else player->Enable();
+	//}
+
+
 	return true;
 }
 

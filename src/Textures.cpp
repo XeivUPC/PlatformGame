@@ -89,6 +89,7 @@ bool Textures::UnLoad(SDL_Texture* texture)
 		if (_texture.second == texture) {
 			LOG("Unloading texture");
 			SDL_DestroyTexture(texture);
+			textures.erase(_texture.first);
 			return true;
 		}
 	}
