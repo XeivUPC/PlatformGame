@@ -21,3 +21,35 @@ PathfindingSystem::PathfindingSystem()
 {
 	currentPathfinder = 0;
 }
+
+Vector2D Pathfinder::toTile(Vector2D position)
+{
+	return { position.getX() / 16, position.getY() / 16 };
+}
+
+bool Pathfinder::NeedsToUpdate()
+{
+	return needsToUpdate;
+}
+
+bool PathfindingSystem::Update(float dt)
+{
+	for (size_t i = 0; i < pathfinderObjects.size(); i++)
+	{
+		if (pathfinderObjects.at(i) == nullptr)
+			continue;
+		pathfinderObjects.at(i)->Update(dt);
+		if (!pathfinderObjects.at(i)->NeedsToUpdate())
+			continue;
+		//Recalculate path
+	}
+	return true;
+}
+
+bool PathfindingSystem::CleanUp()
+{
+	pathfinderObjects.clear();
+	path.clear();
+	alreadyCheckedTiles.clear();
+	return true;
+}
