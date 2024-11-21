@@ -44,7 +44,7 @@ struct MapLayer
     std::string name;
     int width;
     int height;
-    unsigned int* tiles;
+    std::vector<int> tiles;
 
     // Short function to get the gid value of x,y
     unsigned int Get(int x, int y) const
