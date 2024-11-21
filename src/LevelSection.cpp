@@ -83,7 +83,7 @@ bool LevelSection::CleanUp()
     // clean up all layer data
     for (const auto& layer : mapData.layers)
     {
-        delete layer->tiles;
+        layer->tiles.clear();
         delete layer;
     }
     mapData.layers.clear();
@@ -234,21 +234,10 @@ MapLayer* LevelSection::CreateMapLayer(xml_node* node, int layerIndex)
     mapLayer->height = node->attribute("height").as_int();
     mapLayer->layerIndex =layerIndex;
 
-    //Reserve the memory for the data 
-    mapLayer->tiles = new unsigned int[mapLayer->width * mapLayer->height];
-    memset(mapLayer->tiles, 0, mapLayer->width * mapLayer->height);
-
     //Iterate over all the tiles and assign the values in the data array
 
-    std::string tileData = node->child("data").text().as_string();
-    std::stringstream ss(tileData);
-    std::string item;
-
-    int i = 0;
-    while (std::getline(ss, item, ',')) {
-        // Convert string to integer and store in the vector
-        mapLayer->tiles[i] = std::stoi(item);
-        i++;
+    for (pugi::xml_node tileNode = node->child("data").child("tile"); tileNode != NULL; tileNode = tileNode.next_sibling("tile")) {
+            mapLayer->tiles.emplace_back(tileNode.attribute("gid").as_int());
     }
     return mapLayer;
 }
