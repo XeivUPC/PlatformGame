@@ -27,7 +27,6 @@ LevelSection::~LevelSection()
 
 bool LevelSection::Update(float dt)
 {
-    printf("");
     for (const auto& animatedTile : animatedTiles) {
         animatedTile.second->Update(dt);
     }
@@ -142,12 +141,12 @@ bool LevelSection::Load(std::string fileName, std::string texturePath, b2Vec2 of
         CreateMapData(&mapFileXML);
         for (pugi::xml_node tilesetNode = mapFileXML.child("map").child("tileset"); tilesetNode != NULL; tilesetNode = tilesetNode.next_sibling("tileset")) {
             TileSet* tileset = CreateTileset(&tilesetNode, texturePath);
-            mapData.tilesets.push_back(tileset);
+            mapData.tilesets.emplace_back(tileset);
         }
         int layerIndex = 0;
         for (pugi::xml_node layerNode = mapFileXML.child("map").child("layer"); layerNode != NULL; layerNode = layerNode.next_sibling("layer")) {
             MapLayer* mapLayer = CreateMapLayer(&layerNode, layerIndex);
-            mapData.layers.push_back(mapLayer);
+            mapData.layers.emplace_back(mapLayer);
             layerIndex++;
         }
 
@@ -280,7 +279,7 @@ void LevelSection::LoadObjects()
             objects.emplace_back((Entity*)checkPoint);
         }
 
-        if (type == "DirtBlock") {
+        else if (type == "DirtBlock") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
 
@@ -295,20 +294,20 @@ void LevelSection::LoadObjects()
             objects.emplace_back((Entity*)dirtBlock);
         }
 
-        if (type == "BubbleGenerator") {
+        else if (type == "BubbleGenerator") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
 
 
         }
 
-        if (type == "SpawnPoint") {
+        else if (type == "SpawnPoint") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());   
 
 
         }
-        if (type == "InstaKillObject") {
+        else if (type == "InstaKillObject") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());   
 
@@ -326,7 +325,7 @@ void LevelSection::LoadObjects()
             objects.emplace_back((Entity*)instaKillObj);
 
         }
-        if (type == "MovingPlatform") {
+        else if (type == "MovingPlatform") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
 
