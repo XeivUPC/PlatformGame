@@ -167,8 +167,7 @@
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\MovingPlatform.cpp" />
     <ClCompile Include="src\Parallax.cpp" />
-    <ClCompile Include="src\Path.cpp" />
-    <ClCompile Include="src\Pathfinding.cpp" />
+    <ClCompile Include="src\PathfindingSystem.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\PlatformGame.cpp" />
@@ -208,8 +207,7 @@
     <ClInclude Include="src\Module.h" />
     <ClInclude Include="src\MovingPlatform.h" />
     <ClInclude Include="src\Parallax.h" />
-    <ClInclude Include="src\Path.h" />
-    <ClInclude Include="src\Pathfinding.h" />
+    <ClInclude Include="src\PathfindingSystem.h" />
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />
