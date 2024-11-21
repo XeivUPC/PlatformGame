@@ -80,6 +80,8 @@ public:
     void LoadObjects();
     void LoadEnemies();
 
+    MapLayer* GetLayerByIndex(int index);
+
     int sectionNumber;
 
     int leftSection;

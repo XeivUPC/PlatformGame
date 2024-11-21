@@ -387,6 +387,19 @@ void LevelSection::LoadEnemies()
 
 }
 
+MapLayer* LevelSection::GetLayerByIndex(int index)
+{
+
+    for (const auto& mapLayer : mapData.layers) {
+        if (mapLayer->layerIndex == index)
+        {
+            return mapLayer;
+        }
+
+    }
+    return  nullptr;
+}
+
 
 b2Body* LevelSection::CreateColliders(xml_node* node)
 {
