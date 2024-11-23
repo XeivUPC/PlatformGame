@@ -4,18 +4,31 @@
 #include "Textures.h"
 #include "Box2DFactory.h"
 #include "Box2DRender.h"
+#include "LevelSection.h"
 
-Beeto::Beeto(Vector2D pos) : Enemy(pos)
+Beeto::Beeto(Vector2D pos, MapData* mapData) : Enemy(pos)
 {
 	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
 	speed = 80.0f * 3;
+
+	this->mapData = mapData;
+
 }
 
 
 Beeto::~Beeto()
 {
+}
+
+bool Beeto::Start()
+{
+	Enemy::Start();
+	pathfinding = new Pathfinding(mapData->layers[4]->tiles, mapData->layers[4]->width,mapData->layers[4]->height);
+
+	pathfinding->ResetPath({ enemyCollider->GetPosition().x,enemyCollider->GetPosition().y});
+	return true;
 }
 
 void Beeto::InitAnimations()
@@ -109,6 +122,14 @@ void Beeto::InitColliders()
 
 void Beeto::Brain()
 {
+	if (timerPath.ReadMSec() > pathTimeRecalculation) {
+		timerPath.Start();
+		pathfinding->ResetPath({ (float)((int)enemyCollider->GetPosition().x),(float)((int)enemyCollider->GetPosition().y) });
+		/*while (pathfinding->pathTiles.size() == 0) {
+
+		}*/
+	}
+	pathfinding->PropagateAStar(MANHATTAN);
 	enemyDirection = TrackPlayerPosition(false, true);
 	Enemy::Brain();
 }
@@ -117,4 +138,8 @@ void Beeto::Render(float dt)
 {
 	Enemy::Render(dt);
 	animator->SelectAnimation("Beeto_Alive", true);
+
+
+	pathfinding->DrawPath();
+
 }

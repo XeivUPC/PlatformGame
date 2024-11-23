@@ -1,66 +1,65 @@
+
+#pragma once
 #include "Module.h"
 #include "LevelSection.h"
 
-enum AXIS_RESTRICTION
-{
-	AXIS_FREE,
-	AXIS_BORDER_RESTRAINT,
-	AXIS_BLOCK,
+#include <list>
+#include <queue>
+#include <functional> // for std::greater
+#include "Vector2D.h"
+#include "SDL2/SDL.h"
+
+enum ASTAR_HEURISTICS {
+    MANHATTAN = 0,
+    EUCLIDEAN,
+    SQUARED
 };
 
-class Pathfinder
+
+class Pathfinding
 {
-	friend class PathfindingSystem;
-private:
-	AXIS_RESTRICTION axis_restriction[2] = {AXIS_FREE, AXIS_FREE};
-	Entity* entityAttached = nullptr;
-	Entity* entityTarget = nullptr;
-	bool needsToUpdate = false;
-	std::vector<Vector2D> path;
-	Vector2D target;
-	bool pause;
-	bool isMoving;
-	void ShortenPath();												//Done
-	bool IsTileInPath(Vector2D tile);								//Done
-	void RefreshTargetPosition();									//Done
-	void SetNearestTileOfTarget();
-protected:
-	bool NeedsToUpdate();											//Done
-	void Update(float dt);											//Done
+
 public:
-	Pathfinder();													//Done
-	~Pathfinder();
-	Vector2D toTile(Vector2D position);
-	Vector2D getTargetTile();
-	Vector2D getPositionTile();
-	void SetTarget(Entity* entity);
-	void SetTarget(Vector2D tile);
-	void Connect(Entity* entity);
-	void Disconnect();
 
-	bool HasArrivedTarget();
-	bool IsMoving();
-	bool IsPaused();
-};
+    Pathfinding(std::vector<int> tiles, int widht, int height);
 
-class PathfindingSystem : public Module
-{
-	friend class Pathfinder;
+    ~Pathfinding();
+
+    // L11: BFS Pathfinding methods
+    void ResetPath(Vector2D pos);
+    void DrawPath();
+    bool IsWalkable(int x, int y);
+
+    // L12: Methods for BFS + Pathfinding and cost function for Dijkstra
+    int MovementCost(int x, int y);
+    void ComputePath(int x, int y);
+
+    // L13: A* Pathfinding methods
+    void PropagateAStar(ASTAR_HEURISTICS heuristic);
+
 private:
-	int currentPathfinder;
-	std::vector<Pathfinder*> pathfinderObjects;
-	std::vector<Vector2D> path;
-	std::vector<Vector2D> alreadyCheckedTiles;
-	int GetSectionTileValue(Vector2D tile);
-	int CalculateTilePriority(Vector2D tile);
-protected:
-	Vector2D GetTileOfEntity(Entity* entity);
-	std::vector<Vector2D> GetRestrictedGroupTiles();
+    int Find(std::vector<Vector2D> vector, Vector2D elem);
+    Vector2D MapToWorld(Vector2D pos);
 public:
-	PathfindingSystem();
-	~PathfindingSystem();
 
-	bool Start()override;
-	bool Update(float dt)override;
-	bool CleanUp()override;
+    // L11: BFS Pathfinding variables
+    MapLayer* layerNav;
+    std::queue<Vector2D> frontier;
+    std::vector<Vector2D> visited;
+    SDL_Texture* pathTex = nullptr;
+    Vector2D destination;
+
+    // L12: Dijkstra Pathfinding variables
+    std::priority_queue<std::pair<int, Vector2D>, std::vector<std::pair<int, Vector2D>>, std::greater<std::pair<int, Vector2D>> > frontierDijkstra;
+    std::vector<Vector2D> breadcrumbs; //list of tiles that form the path
+    std::vector<std::vector<int>> costSoFar; //matrix that stores the accumulated cost in the propagation of the Dijkstra algorithm
+    std::vector<Vector2D> pathTiles; //list of tiles that form the path
+    SDL_Texture* tileX = nullptr; //texture used to show the path 
+
+    // L13: A* Pathfinding variables
+    std::priority_queue<std::pair<int, Vector2D>, std::vector<std::pair<int, Vector2D>>, std::greater<std::pair<int, Vector2D>> > frontierAStar;
+
+    int blockedGid = 803; //Gid of the tiles that block the path - Important adjust this value to your map
+    int highCostGid = 8010; //Gid of the tiles that have high cost - Important adjust this value to your map
+
 };

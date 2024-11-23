@@ -60,10 +60,10 @@ struct MapData
     int tilewidth;
     int tileheight;
     
-    std::list<TileSet*> tilesets;
+    std::vector<TileSet*> tilesets;
 
     //Add a list/array of layers to the map
-    std::list<MapLayer*> layers;
+    std::vector<MapLayer*> layers;
 };
 
 using namespace pugi;

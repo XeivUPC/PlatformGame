@@ -35,7 +35,6 @@ bool LevelManager::LoadParameters(xml_node parameters)
 
 bool LevelManager::Start()
 {
-	
 	return true;
 }
 

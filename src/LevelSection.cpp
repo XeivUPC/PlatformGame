@@ -185,7 +185,7 @@ TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
     pugi::xml_parse_result result2 = document.load_file(tsxFilePath.c_str());
 
     tileset->name = document.child("tileset").attribute("name").as_string();
-    tileset->firstgid = document.child("tileset").attribute("firstgid").as_int();
+    tileset->firstgid = node->attribute("firstgid").as_int()-1;
     tileset->tilewidth = document.child("tileset").attribute("tilewidth").as_int();
     tileset->tileheight = document.child("tileset").attribute("tileheight").as_int();
     tileset->columns = document.child("tileset").attribute("columns").as_int();
@@ -376,7 +376,7 @@ void LevelSection::LoadEnemies()
 
 
             Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Beeto* beeto = new Beeto(postion);
+            Beeto* beeto = new Beeto(postion, &mapData);
             Engine::GetInstance().entityManager->AddEntity((Entity*)beeto,true);
 
             objects.emplace_back((Entity*)beeto);
