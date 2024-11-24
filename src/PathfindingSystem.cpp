@@ -1,6 +1,7 @@
 #include "PathfindingSystem.h"
 #include "Engine.h"
 #include "LevelManager.h"
+#include "Textures.h"
 
 void PathfindingSystem::ResetPath(Vector2D pos)
 {
@@ -87,11 +88,11 @@ void PathfindingSystem::PropagateAStar(ASTAR_HEURISTICS heuristic)
 
         if (frontierTile == target) {
             foundDestination = true;
-
+            path_status = FOUND;
             ComputePath(frontierTile.getX(), frontierTile.getY());
         }
     }
-
+    if (frontierAStar.empty())path_status = NO_PATH;
     if (frontierAStar.size() > 0 && !foundDestination) {
 
         Vector2D frontierTile = frontierAStar.top().second;
@@ -161,6 +162,7 @@ int PathfindingSystem::Find(std::vector<Vector2D> vector, Vector2D elem)
 
 PathfindingSystem::PathfindingSystem()
 {
+    pathTex = Engine::GetInstance().textures.get()->Load("Assets/Textures/PathTexture.png");
 }
 
 PathfindingSystem::~PathfindingSystem()
@@ -169,14 +171,12 @@ PathfindingSystem::~PathfindingSystem()
 
 bool PathfindingSystem::HasFinished()
 {
-    if(frontierAStar.top().second == target)return true;
-    return false;
+    return path_status != SEARCHING;
 }
 
 bool PathfindingSystem::HasFound()
 {
-    if (frontierAStar.empty() && !HasFinished())return false;
-    return true;
+    return path_status == FOUND;
 }
 
 PathData PathfindingSystem::GetData()
@@ -194,9 +194,9 @@ void PathfindingSystem::DrawPath(PathData* data)
 
     // Draw visited
     for (const auto& pathTile : data->visitedTiles) {
-        //Vector2D pathTileWorld = Engine::GetInstance().map.get()->MapToWorld(pathTile.getX(), pathTile.getY());
-        SDL_Rect rect = { 32,0,32,32 };
-        //Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), &rect);
+        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()) };
+        SDL_Rect rect = { 0,0,16,16 };
+        Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
     }
 
 
@@ -209,10 +209,10 @@ void PathfindingSystem::DrawPath(PathData* data)
         //Get the first element of the queue
         Vector2D frontierTile = frontierAStarCopy.top().second;
         //Get the position of the frontier tile in the world
-        //Vector2D pos = Engine::GetInstance().map.get()->MapToWorld(frontierTile.getX(), frontierTile.getY());
+        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(frontierTile.getX()), (float)METERS_TO_PIXELS(frontierTile.getY()) };
         //Draw the frontier tile
-        SDL_Rect rect = { 0,0,32,32 };
-        //Engine::GetInstance().render.get()->DrawTexture(pathTex, pos.getX(), pos.getY(), &rect);
+        SDL_Rect rect = { 32,0,16,16 };
+        Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
         //Remove the front element from the queue
         frontierAStarCopy.pop();
     }
@@ -220,8 +220,10 @@ void PathfindingSystem::DrawPath(PathData* data)
 
     // Draw path
     for (const auto& pathTile : data->pathTiles) {
-        //Vector2D pathTileWorld = map->MapToWorld(pathTile.getX(), pathTile.getY());
-        //Engine::GetInstance().render.get()->DrawTexture(tileX, pathTileWorld.getX(), pathTileWorld.getY());
+        SDL_Rect rect = { 16,0,16,16 };
+
+        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()) };
+        Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
     }
 }
 
@@ -232,9 +234,9 @@ void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, 
     mapHeight = height;
 
     //WorldToTile
-    Vector2D currentTile = currentPosition;
+    Vector2D currentTile = { (float)((int)currentPosition.getX()), (float)((int)currentPosition.getY()) };
 
-    target = targetPosition;
+    target = { (float)((int)targetPosition.getX()), (float)((int)targetPosition.getY()) };
     ResetPath(currentTile);
 }
 

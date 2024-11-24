@@ -8,6 +8,13 @@ enum ASTAR_HEURISTICS {
 	SQUARED
 };
 
+enum PATH_STATUS
+{
+	SEARCHING,
+	FOUND,
+	NO_PATH,
+};
+
 struct PathData
 {
 	std::vector<Vector2D> pathTiles;
@@ -20,6 +27,8 @@ class PathfindingSystem : public Module
 {
 	friend class Pathfinder;
 private:
+	SDL_Texture* pathTex;
+	PATH_STATUS path_status = SEARCHING;
 	std::vector<int> mapTiles;
 	int mapWidth;
 	int mapHeight;
