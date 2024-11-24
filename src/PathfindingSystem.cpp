@@ -25,8 +25,6 @@ bool PathfindingSystem::IsWalkable(int x, int y)
 {
     bool isWalkable = true;
 
-    
-
     if (x >= 0 && y >= 0 && x < mapWidth && y < mapHeight) {
         int gid = Get(x, y);
         for (size_t i = 0; i < blockedTiles.size(); i++)
@@ -140,7 +138,6 @@ void PathfindingSystem::PropagateAStar(ASTAR_HEURISTICS heuristic)
                 breadcrumbs.push_back(frontierTile);
             }
         }
-
     }
 }
 
@@ -162,7 +159,6 @@ int PathfindingSystem::Find(std::vector<Vector2D> vector, Vector2D elem)
 
 PathfindingSystem::PathfindingSystem()
 {
-    pathTex = Engine::GetInstance().textures.get()->Load("Assets/Textures/PathTexture.png");
 }
 
 PathfindingSystem::~PathfindingSystem()
@@ -193,6 +189,7 @@ void PathfindingSystem::DrawPath(PathData* data)
     Vector2D point;
 
     // Draw visited
+    Engine::GetInstance().render->LockLayer(Render::Layer7);
     for (const auto& pathTile : data->visitedTiles) {
         Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()) };
         SDL_Rect rect = { 0,0,16,16 };
@@ -225,6 +222,7 @@ void PathfindingSystem::DrawPath(PathData* data)
         Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()) };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
     }
+    Engine::GetInstance().render->UnlockLayer();
 }
 
 void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition)
@@ -232,16 +230,19 @@ void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, 
     mapTiles = tiles;
     mapWidth = width;
     mapHeight = height;
+    this->blockedTiles = blockedTiles;
 
     //WorldToTile
     Vector2D currentTile = { (float)((int)currentPosition.getX()), (float)((int)currentPosition.getY()) };
 
     target = { (float)((int)targetPosition.getX()), (float)((int)targetPosition.getY()) };
+    path_status = SEARCHING;
     ResetPath(currentTile);
 }
 
 bool PathfindingSystem::Start()
 {
+    pathTex = Engine::GetInstance().textures.get()->Load("Assets/Textures/PathTexture.png");
     return true;
 }
 

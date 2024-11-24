@@ -112,6 +112,7 @@ void Beeto::Brain()
 {
 	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
 	{
+		pathUpdateTimer.Start();
 		Engine::GetInstance().pathfinding->FindPath(mapData->tiles, mapData->width, mapData->height, blockedTiles, position, player->position);
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
