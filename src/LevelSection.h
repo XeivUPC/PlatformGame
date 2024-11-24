@@ -63,7 +63,7 @@ struct MapData
     std::list<TileSet*> tilesets;
 
     //Add a list/array of layers to the map
-    std::list<MapLayer*> layers;
+    std::vector<MapLayer*> layers;
 };
 
 using namespace pugi;

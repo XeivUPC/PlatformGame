@@ -374,17 +374,13 @@ void LevelSection::LoadEnemies()
             float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
 
-
             Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Beeto* beeto = new Beeto(postion);
+            Beeto* beeto = new Beeto(postion,  mapData.layers.at(4));
             Engine::GetInstance().entityManager->AddEntity((Entity*)beeto,true);
 
             objects.emplace_back((Entity*)beeto);
-
         }
-
     }
-
 }
 
 MapLayer* LevelSection::GetLayerByIndex(int index)

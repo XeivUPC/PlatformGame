@@ -5,12 +5,13 @@
 #include "Box2DFactory.h"
 #include "Box2DRender.h"
 
-Beeto::Beeto(Vector2D pos) : Enemy(pos)
+Beeto::Beeto(Vector2D pos, MapLayer* layer) : Enemy(pos)
 {
 	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
 	speed = 80.0f * 3;
+	mapData = layer;
 }
 
 
@@ -109,12 +110,26 @@ void Beeto::InitColliders()
 
 void Beeto::Brain()
 {
+	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
+	{
+		Engine::GetInstance().pathfinding->FindPath(mapData->tiles, mapData->width, mapData->height, blockedTiles, position, player->position);
+		while (!Engine::GetInstance().pathfinding->HasFinished())
+		{
+			Engine::GetInstance().pathfinding->PropagateAStar(MANHATTAN);
+		}
+		if (Engine::GetInstance().pathfinding->HasFound())
+		{
+			pathData = Engine::GetInstance().pathfinding->GetData();
+		}
+	}
 	enemyDirection = TrackPlayerPosition(false, true);
-	Enemy::Brain();
+	/*Enemy::Brain();
+	Enemy::Move();*/
 }
 
 void Beeto::Render(float dt)
 {
+	Engine::GetInstance().pathfinding->DrawPath(&pathData);
 	Enemy::Render(dt);
 	animator->SelectAnimation("Beeto_Alive", true);
 }

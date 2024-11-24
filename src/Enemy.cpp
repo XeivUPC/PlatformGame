@@ -10,8 +10,6 @@
 #include "Debug.h"
 #include "Box2DRender.h"
 
-
-
 void Enemy::InitAnimations()
 {
 	texture = Engine::GetInstance().textures->Load(textureName.c_str());
@@ -94,7 +92,6 @@ void Enemy::Brain()
 		attackCooldown.Start();
 		Attack();
 	}
-	Move();
 }
 
 void Enemy::Render(float dt)

@@ -2,161 +2,253 @@
 #include "Engine.h"
 #include "LevelManager.h"
 
-int PathfindingSystem::GetSectionTileValue(Vector2D tile)
+void PathfindingSystem::ResetPath(Vector2D pos)
 {
-	MapLayer* layer = Engine::GetInstance().levelManager->GetCurrentSection()->GetLayerByIndex(0);
-	return layer->tiles.at(tile.getY() * layer->width + tile.getX());
+
+    while (!frontierAStar.empty()) {
+        frontierAStar.pop();
+    }
+
+    visited.clear(); //Clear the visited list
+    breadcrumbs.clear(); //Clear the breadcrumbs list
+    pathTiles.clear(); //Clear the pathTiles list
+
+    frontierAStar.push(std::make_pair(0, pos)); //AStar
+    visited.push_back(pos);
+    breadcrumbs.push_back(pos);
+
+    costSoFar = std::vector<std::vector<int>>(mapWidth, std::vector<int>(mapHeight, 0));
 }
 
-int PathfindingSystem::CalculateTilePriority(Vector2D tile)
+bool PathfindingSystem::IsWalkable(int x, int y)
 {
-	Vector2D factorCalculator = pathfinderObjects.at(currentPathfinder)->getPositionTile() - tile;
-	int g = abs(factorCalculator.getX() + factorCalculator.getY());
-	factorCalculator = pathfinderObjects.at(currentPathfinder)->getTargetTile() - tile;
-	int h = abs(factorCalculator.getX() + factorCalculator.getY());
-	return g+h;
+    bool isWalkable = true;
+
+    
+
+    if (x >= 0 && y >= 0 && x < mapWidth && y < mapHeight) {
+        int gid = Get(x, y);
+        for (size_t i = 0; i < blockedTiles.size(); i++)
+        {
+            if (gid == blockedTiles.at(i))
+            {
+                isWalkable = false;
+                break;
+            }
+        }
+    }
+    else
+        isWalkable = false;
+    return isWalkable;
+}
+
+int PathfindingSystem::Get(int i, int j) const
+{
+    return mapTiles[(j * mapWidth) + i];
+}
+
+int PathfindingSystem::MovementCost(int x, int y)
+{
+    int ret = -1;
+
+    if ((x >= 0) && (x < mapWidth) && (y >= 0) && (y < mapHeight))
+    {
+        int gid = Get(x, y);
+        if (gid == -1) {
+            ret = 5;
+        }
+        else ret = 1;
+    }
+
+    return ret;
+}
+
+void PathfindingSystem::ComputePath(int x, int y)
+{
+    pathTiles.clear();
+    Vector2D currentTile = Vector2D(x, y);
+    pathTiles.push_back(currentTile);
+    int index = Find(visited, currentTile);
+
+    while ((index >= 0) && (currentTile != breadcrumbs[index]))
+    {
+        currentTile = breadcrumbs[index];
+        pathTiles.push_back(currentTile);
+        index = Find(visited, currentTile);
+    }
+}
+
+void PathfindingSystem::PropagateAStar(ASTAR_HEURISTICS heuristic)
+{
+
+    bool foundDestination = false;
+    if (frontierAStar.size() > 0) {
+        Vector2D frontierTile = frontierAStar.top().second;
+
+        if (frontierTile == target) {
+            foundDestination = true;
+
+            ComputePath(frontierTile.getX(), frontierTile.getY());
+        }
+    }
+
+    if (frontierAStar.size() > 0 && !foundDestination) {
+
+        Vector2D frontierTile = frontierAStar.top().second;
+        frontierAStar.pop();
+
+        std::list<Vector2D> neighbors;
+        if (IsWalkable(frontierTile.getX() + 1, frontierTile.getY())) {
+            neighbors.push_back(Vector2D((int)frontierTile.getX() + 1, (int)frontierTile.getY()));
+        }
+        if (IsWalkable(frontierTile.getX(), frontierTile.getY() + 1)) {
+            neighbors.push_back(Vector2D((int)frontierTile.getX(), (int)frontierTile.getY() + 1));
+        }
+        if (IsWalkable(frontierTile.getX() - 1, frontierTile.getY())) {
+            neighbors.push_back(Vector2D((int)frontierTile.getX() - 1, (int)frontierTile.getY()));
+        }
+        if (IsWalkable(frontierTile.getX(), frontierTile.getY() - 1)) {
+            neighbors.push_back(Vector2D((int)frontierTile.getX(), (int)frontierTile.getY() - 1));
+        }
+
+        for (const auto& neighbor : neighbors) {
+
+            int g = costSoFar[(int)frontierTile.getX()][(int)frontierTile.getY()] + MovementCost((int)neighbor.getX(), (int)neighbor.getY());
+
+            int h = 0;
+
+            switch (heuristic)
+            {
+            case ASTAR_HEURISTICS::MANHATTAN:
+                h = neighbor.distanceMahattan(target);
+                break;
+            case ASTAR_HEURISTICS::EUCLIDEAN:
+                h = neighbor.distanceEuclidean(target);
+                break;
+            case ASTAR_HEURISTICS::SQUARED:
+                h = neighbor.distanceSquared(target);
+                break;
+            }
+
+            int f = g + h;
+
+            if (std::find(visited.begin(), visited.end(), neighbor) == visited.end() || g < costSoFar[neighbor.getX()][neighbor.getY()]) {
+                costSoFar[neighbor.getX()][neighbor.getY()] = g;
+                frontierAStar.push(std::make_pair(f, neighbor));
+                visited.push_back(neighbor);
+                breadcrumbs.push_back(frontierTile);
+            }
+        }
+
+    }
+}
+
+int PathfindingSystem::Find(std::vector<Vector2D> vector, Vector2D elem)
+{
+    int index = 0;
+    bool found = false;
+    for (const auto& e : vector) {
+        if (e == elem) {
+            found = true;
+            break;
+        }
+        index++;
+    }
+
+    if (found) return index;
+    else return -1;
 }
 
 PathfindingSystem::PathfindingSystem()
 {
-	currentPathfinder = 0;
 }
 
 PathfindingSystem::~PathfindingSystem()
 {
 }
 
-Pathfinder::Pathfinder()
+bool PathfindingSystem::HasFinished()
 {
-	target = getPositionTile();
+    if(frontierAStar.top().second == target)return true;
+    return false;
 }
 
-Pathfinder::~Pathfinder()
+bool PathfindingSystem::HasFound()
 {
+    if (frontierAStar.empty() && !HasFinished())return false;
+    return true;
 }
 
-Vector2D Pathfinder::toTile(Vector2D position)
+PathData PathfindingSystem::GetData()
 {
-	return { position.getX() / 16, position.getY() / 16 };
+    PathData pathData;
+    pathData.pathTiles = pathTiles;
+    pathData.visitedTiles = visited;
+    pathData.frontierAStar = frontierAStar;
+    return pathData;
 }
 
-Vector2D Pathfinder::getTargetTile()
+void PathfindingSystem::DrawPath(PathData* data)
 {
-	return target;
+    Vector2D point;
+
+    // Draw visited
+    for (const auto& pathTile : data->visitedTiles) {
+        //Vector2D pathTileWorld = Engine::GetInstance().map.get()->MapToWorld(pathTile.getX(), pathTile.getY());
+        SDL_Rect rect = { 32,0,32,32 };
+        //Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), &rect);
+    }
+
+
+    // Create a copy of the queue to iterate over
+    std::priority_queue<std::pair<int, Vector2D>, std::vector<std::pair<int, Vector2D>>, std::greater<std::pair<int, Vector2D>> > frontierAStarCopy = data->frontierAStar;
+
+    // Iterate over the elements of the frontier copy
+    while (!frontierAStarCopy.empty()) {
+
+        //Get the first element of the queue
+        Vector2D frontierTile = frontierAStarCopy.top().second;
+        //Get the position of the frontier tile in the world
+        //Vector2D pos = Engine::GetInstance().map.get()->MapToWorld(frontierTile.getX(), frontierTile.getY());
+        //Draw the frontier tile
+        SDL_Rect rect = { 0,0,32,32 };
+        //Engine::GetInstance().render.get()->DrawTexture(pathTex, pos.getX(), pos.getY(), &rect);
+        //Remove the front element from the queue
+        frontierAStarCopy.pop();
+    }
+
+
+    // Draw path
+    for (const auto& pathTile : data->pathTiles) {
+        //Vector2D pathTileWorld = map->MapToWorld(pathTile.getX(), pathTile.getY());
+        //Engine::GetInstance().render.get()->DrawTexture(tileX, pathTileWorld.getX(), pathTileWorld.getY());
+    }
 }
 
-Vector2D Pathfinder::getPositionTile()
+void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition)
 {
-	return toTile(entityAttached->position);
+    mapTiles = tiles;
+    mapWidth = width;
+    mapHeight = height;
+
+    //WorldToTile
+    Vector2D currentTile = currentPosition;
+
+    target = targetPosition;
+    ResetPath(currentTile);
 }
 
-void Pathfinder::SetTarget(Entity* entity)
+bool PathfindingSystem::Start()
 {
-	entityTarget = entity;
-	RefreshTargetPosition();
-}
-
-void Pathfinder::SetTarget(Vector2D tile)
-{
-	target = tile;
-	entityTarget = nullptr;
-}
-
-void Pathfinder::Connect(Entity* entity)
-{
-	entityAttached = entity;
-	SetTarget(entity);
-	path.clear();
-}
-
-void Pathfinder::Disconnect()
-{
-	entityAttached = nullptr;
-	entityTarget = nullptr;
-}
-
-bool Pathfinder::HasArrivedTarget()
-{
-	if (entityAttached->position.getX() == target.getX() && entityAttached->position.getY() == target.getY())
-		return true;
-	return false;
-}
-
-void Pathfinder::ShortenPath()
-{
-	int size = 0;
-	for (int i = 0; i < path.size(); i++)
-	{
-		if (path.at(i).getX() == getPositionTile().getX() && path.at(i).getY() == getPositionTile().getY())
-		{
-			size = i;
-			break;
-		}
-	}
-	for (int i = 0; i < path.size() - size; i++)
-	{
-		path.at(i) = path.at(i + size);
-	}
-	size = path.size() - size;
-	for (int i = size-1; i >= 0; i--)
-	{
-		if (path.at(i).getX() == getTargetTile().getX() && path.at(i).getY() == getTargetTile().getY())
-		{
-			size -= i;
-			path.resize(size);
-			break;
-		}
-	}
-}
-
-bool Pathfinder::IsTileInPath(Vector2D tile)
-{
-	for (size_t i = 0; i < path.size(); i++)
-	{
-		if (path.at(i).getX() == tile.getX() && path.at(i).getY() == tile.getY())
-			return true;
-	}
-	return false;
-}
-
-void Pathfinder::RefreshTargetPosition()
-{
-	if (entityTarget == nullptr)return;
-	target = toTile(entityTarget->position);
-}
-
-bool Pathfinder::NeedsToUpdate()
-{
-	return needsToUpdate;
-}
-
-void Pathfinder::Update(float dt)
-{
-	RefreshTargetPosition();
-	if (IsTileInPath(target) && IsTileInPath(entityAttached->position))
-		ShortenPath();
-	else
-		needsToUpdate = true;
+    return true;
 }
 
 bool PathfindingSystem::Update(float dt)
 {
-	for (size_t i = 0; i < pathfinderObjects.size(); i++)
-	{
-		if (pathfinderObjects.at(i) == nullptr)
-			continue;
-		pathfinderObjects.at(i)->Update(dt);
-		if (!pathfinderObjects.at(i)->NeedsToUpdate())
-			continue;
-		//Recalculate path
-	}
-	return true;
+    return true;
 }
 
 bool PathfindingSystem::CleanUp()
 {
-	pathfinderObjects.clear();
-	path.clear();
-	alreadyCheckedTiles.clear();
-	return true;
+    return true;
 }

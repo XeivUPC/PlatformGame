@@ -25,6 +25,7 @@ class Parallax;
 class TextGenerator;
 class UI;
 class Debug;
+class PathfindingSystem;
 
 
 #define GRAVITY_X 0.0f
@@ -132,6 +133,7 @@ public:
 	std::shared_ptr<TextGenerator> text;
 	std::shared_ptr<UI> ui;
 	std::shared_ptr<Debug> debug;
+	std::shared_ptr<PathfindingSystem> pathfinding;
 
 private: 
 

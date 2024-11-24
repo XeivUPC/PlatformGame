@@ -1,65 +1,55 @@
 #include "Module.h"
 #include "LevelSection.h"
+#include <queue>
 
-enum AXIS_RESTRICTION
-{
-	AXIS_FREE,
-	AXIS_BORDER_RESTRAINT,
-	AXIS_BLOCK,
+enum ASTAR_HEURISTICS {
+	MANHATTAN = 0,
+	EUCLIDEAN,
+	SQUARED
 };
 
-class Pathfinder
+struct PathData
 {
-	friend class PathfindingSystem;
-private:
-	AXIS_RESTRICTION axis_restriction[2] = {AXIS_FREE, AXIS_FREE};
-	Entity* entityAttached = nullptr;
-	Entity* entityTarget = nullptr;
-	bool needsToUpdate = false;
-	std::vector<Vector2D> path;
-	Vector2D target;
-	bool pause;
-	bool isMoving;
-	void ShortenPath();												//Done
-	bool IsTileInPath(Vector2D tile);								//Done
-	void RefreshTargetPosition();									//Done
-	void SetNearestTileOfTarget();
-protected:
-	bool NeedsToUpdate();											//Done
-	void Update(float dt);											//Done
-public:
-	Pathfinder();													//Done
-	~Pathfinder();
-	Vector2D toTile(Vector2D position);
-	Vector2D getTargetTile();
-	Vector2D getPositionTile();
-	void SetTarget(Entity* entity);
-	void SetTarget(Vector2D tile);
-	void Connect(Entity* entity);
-	void Disconnect();
+	std::vector<Vector2D> pathTiles;
+	std::vector<Vector2D> visitedTiles;
+	std::priority_queue<std::pair<int, Vector2D>, std::vector<std::pair<int, Vector2D>>, std::greater<std::pair<int, Vector2D>> > frontierAStar;
 
-	bool HasArrivedTarget();
-	bool IsMoving();
-	bool IsPaused();
 };
 
 class PathfindingSystem : public Module
 {
 	friend class Pathfinder;
 private:
-	int currentPathfinder;
-	std::vector<Pathfinder*> pathfinderObjects;
-	std::vector<Vector2D> path;
-	std::vector<Vector2D> alreadyCheckedTiles;
-	int GetSectionTileValue(Vector2D tile);
-	int CalculateTilePriority(Vector2D tile);
-protected:
-	Vector2D GetTileOfEntity(Entity* entity);
-	std::vector<Vector2D> GetRestrictedGroupTiles();
+	std::vector<int> mapTiles;
+	int mapWidth;
+	int mapHeight;
+	std::vector<int> blockedTiles;
+	Vector2D target;
+	std::vector<Vector2D> breadcrumbs;
+	std::vector<std::vector<int>> costSoFar;
+	std::vector<Vector2D> pathTiles;
+	std::vector<Vector2D> visited;
+	std::priority_queue<std::pair<int, Vector2D>, std::vector<std::pair<int, Vector2D>>, std::greater<std::pair<int, Vector2D>> > frontierAStar;
+
+
+	void ResetPath(Vector2D pos);
+	bool IsWalkable(int x, int y);
+	int Get(int i, int j)const;
+	int MovementCost(int x, int y);
+	void ComputePath(int x, int y);
+
+	int Find(std::vector<Vector2D> vector, Vector2D elem);
 public:
 	PathfindingSystem();
 	~PathfindingSystem();
 
+	bool HasFinished();
+	bool HasFound();
+	void PropagateAStar(ASTAR_HEURISTICS heuristic);
+
+	PathData GetData();
+	void DrawPath(PathData* data);
+	void FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition);
 	bool Start()override;
 	bool Update(float dt)override;
 	bool CleanUp()override;

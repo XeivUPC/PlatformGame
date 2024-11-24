@@ -18,6 +18,8 @@
 #include "Parallax.h"
 #include "TextGenerator.h"
 #include "UI.h"
+#include "PathfindingSystem.h"
+
 
 
 
@@ -45,6 +47,7 @@ Engine::Engine() {
     entityManager = std::make_shared<EntityManager>();
     parallax = std::make_shared<Parallax>();
     text = std::make_shared<TextGenerator>();
+    pathfinding = std::make_shared<PathfindingSystem>();
 
     collisionsManager = std::make_shared<CollisionsManager>();
     ui = std::make_shared<UI>();
@@ -59,6 +62,7 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(physics));
     AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(parallax));
+    AddModule(std::static_pointer_cast<Module>(pathfinding));
     //// Add the map module
     AddModule(std::static_pointer_cast<Module>(levelManager));
     AddModule(std::static_pointer_cast<Module>(text));
