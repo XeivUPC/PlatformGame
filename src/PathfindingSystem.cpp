@@ -216,13 +216,13 @@ void PathfindingSystem::DrawPath(PathData* data)
         frontierAStarCopy.pop();
     }
 
-
     // Draw path
     for (const auto& pathTile : data->pathTiles) {
         SDL_Rect rect = { 16,0,16,16 };
 
         Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY() + 1) };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
+        if(Get(pathTile.getX(), pathTile.getY()) != 803)printf("%d\n", Get(pathTile.getX(), pathTile.getY()));
     }
     Engine::GetInstance().render->UnlockLayer();
 }

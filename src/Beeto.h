@@ -8,7 +8,7 @@ public:
 	virtual ~Beeto();
 
 private:
-	std::vector<int> blockedTiles = { 801, 803 };
+	std::vector<int> blockedTiles = { 801, 803};
 	PathData pathData;
 	MapLayer* mapData = nullptr;
 	Timer pathUpdateTimer;
