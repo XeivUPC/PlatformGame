@@ -113,10 +113,10 @@ void Beeto::Brain()
 	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
 	{
 		pathUpdateTimer.Start();
-		Engine::GetInstance().pathfinding->FindPath(mapData->tiles, mapData->width, mapData->height, blockedTiles, position, player->position);
+		Engine::GetInstance().pathfinding->FindPath(mapData->tiles, mapData->width, mapData->height, blockedTiles, { position.getX(), position.getY()-1}, { player->position.getX(), player->position.getY() - 1 });
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
-			Engine::GetInstance().pathfinding->PropagateAStar(MANHATTAN);
+			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
 		}
 		if (Engine::GetInstance().pathfinding->HasFound())
 		{

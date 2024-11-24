@@ -38,6 +38,8 @@ bool PathfindingSystem::IsWalkable(int x, int y)
     }
     else
         isWalkable = false;
+
+
     return isWalkable;
 }
 
@@ -191,7 +193,7 @@ void PathfindingSystem::DrawPath(PathData* data)
     // Draw visited
     Engine::GetInstance().render->LockLayer(Render::Layer7);
     for (const auto& pathTile : data->visitedTiles) {
-        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()) };
+        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()+1) };
         SDL_Rect rect = { 0,0,16,16 };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
     }
@@ -206,7 +208,7 @@ void PathfindingSystem::DrawPath(PathData* data)
         //Get the first element of the queue
         Vector2D frontierTile = frontierAStarCopy.top().second;
         //Get the position of the frontier tile in the world
-        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(frontierTile.getX()), (float)METERS_TO_PIXELS(frontierTile.getY()) };
+        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(frontierTile.getX()), (float)METERS_TO_PIXELS(frontierTile.getY() + 1) };
         //Draw the frontier tile
         SDL_Rect rect = { 32,0,16,16 };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
@@ -219,7 +221,7 @@ void PathfindingSystem::DrawPath(PathData* data)
     for (const auto& pathTile : data->pathTiles) {
         SDL_Rect rect = { 16,0,16,16 };
 
-        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY()) };
+        Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY() + 1) };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
     }
     Engine::GetInstance().render->UnlockLayer();

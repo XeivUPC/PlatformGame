@@ -12,7 +12,7 @@ private:
 	PathData pathData;
 	MapLayer* mapData = nullptr;
 	Timer pathUpdateTimer;
-	float pathUpdateTime = 2000;
+	float pathUpdateTime = 1000;
 	void InitAnimations();
 	void InitColliders();
 	void Brain();
