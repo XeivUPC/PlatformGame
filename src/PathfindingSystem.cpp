@@ -222,7 +222,7 @@ void PathfindingSystem::DrawPath(PathData* data)
 
         Vector2D pathTileWorld = { (float)METERS_TO_PIXELS(pathTile.getX()), (float)METERS_TO_PIXELS(pathTile.getY() + 1) };
         Engine::GetInstance().render.get()->DrawTexture(pathTex, pathTileWorld.getX(), pathTileWorld.getY(), SDL_FLIP_NONE, &rect);
-        if(Get(pathTile.getX(), pathTile.getY()) != 803)printf("%d\n", Get(pathTile.getX(), pathTile.getY()));
+      
     }
     Engine::GetInstance().render->UnlockLayer();
 }
