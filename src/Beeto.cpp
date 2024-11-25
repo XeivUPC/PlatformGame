@@ -49,8 +49,13 @@ void Beeto::InitColliders()
 	b2World* world = Engine::GetInstance().physics->world;
 	
 	b2Vec2 enemyColliderPosition{ (position.getX()), (position.getY()) };
-	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(32), PIXEL_TO_METERS(16));
+	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(26), PIXEL_TO_METERS(16));
 	enemyCollider->SetFixedRotation(true);
+
+	b2Filter enemyFilter;
+	enemyFilter.maskBits  &= ~Engine::GetInstance().PLAYER_LAYER;
+	enemyFilter.maskBits  &= ~Engine::GetInstance().ENEMY_ATTACK_LAYER;
+	enemyCollider->GetFixtureList()[0].SetFilterData(enemyFilter);
 	
 
 	b2FixtureUserData playerCheckData;
@@ -121,11 +126,13 @@ void Beeto::Brain()
 		}
 		if (Engine::GetInstance().pathfinding->HasFound())
 		{
-			pathData = Engine::GetInstance().pathfinding->GetData();
+			
 		}
+		pathData = Engine::GetInstance().pathfinding->GetData();
 	}
-	Enemy::Brain();
+	FindCurrentTileInPath();
 	SetPathDirection();
+	Enemy::Brain();
 	Enemy::Move();
 }
 

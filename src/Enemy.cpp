@@ -12,7 +12,8 @@
 
 void Enemy::FindCurrentTileInPath()
 {
-	Vector2D tile = { (float)((int)position.getX()), (float)((int)position.getY()-1.f) };
+	Vector2D tile = { (float)((int)position.getX()), (float)((int)(position.getY()-0.5f)) };
+	currentPathTileIndex = 0;
 	for (size_t i = 0; i < pathData.pathTiles.size(); i++)
 	{
 		if (tile == pathData.pathTiles.at(i))
@@ -108,12 +109,21 @@ void Enemy::Render(float dt)
 
 void Enemy::SetPathDirection()
 {
+	enemyDirection = { 0,0 };
 	if (pathData.pathTiles.size() == 0)
 	{
-		enemyDirection = { 0,0 };
-		return;
+
 	}
-	enemyDirection = Vector2D{pathData.pathTiles.at(currentPathTileIndex).getX() - pathData.pathTiles.at(currentPathTileIndex+1).getX(), pathData.pathTiles.at(currentPathTileIndex).getY() - pathData.pathTiles.at(currentPathTileIndex + 1).getY() };
+	if (currentPathTileIndex - 1 > 0 && currentPathTileIndex< pathData.pathTiles.size()) {
+		enemyDirection = Vector2D{pathData.pathTiles.at(currentPathTileIndex-1).getX() - pathData.pathTiles.at(currentPathTileIndex).getX(), pathData.pathTiles.at(currentPathTileIndex-1).getY() - pathData.pathTiles.at(currentPathTileIndex).getY() };
+	}
+	if (enemyDirection.getX() == 0 && enemyDirection.getY() ==0) {
+		Vector2D playerPosition = Engine::GetInstance().scene->player->position;
+		if (playerPosition.getX() > position.getX()) {
+			enemyDirection.setX(1);
+		}else
+			enemyDirection.setX(-1);
+	}
 }
 
 Enemy::Enemy(Vector2D pos, MapLayer* pathLayer) : Entity(EntityType::UNKNOWN)
@@ -144,8 +154,8 @@ bool Enemy::Update(float dt)
 {
 	position.setX(enemyCollider->GetPosition().x);
 	position.setY(enemyCollider->GetPosition().y);
+
 	Brain();
-	FindCurrentTileInPath();
 	Render(dt);
 	return true;
 }

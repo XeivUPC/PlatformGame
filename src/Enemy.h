@@ -15,7 +15,6 @@ private:
 	//Physics
 	float baseGravity = 1.0f;
 	int currentPathTileIndex;
-	void FindCurrentTileInPath();
 
 protected:
 	//Game Parameters
@@ -85,6 +84,7 @@ protected:
 	virtual void Brain();
 	virtual void Render(float dt);
 	void SetPathDirection();
+	void FindCurrentTileInPath();
 
 public:
 	Enemy(Vector2D pos, MapLayer* pathLayer);
