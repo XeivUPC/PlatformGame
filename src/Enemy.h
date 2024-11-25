@@ -7,12 +7,15 @@
 #include "AnimationSystem.h"
 #include "CollisionSensor.h"
 #include "HealthSystem.h"
+#include "PathfindingSystem.h"
 
 class Enemy : public Entity
 {
 private:
 	//Physics
 	float baseGravity = 1.0f;
+	int currentPathTileIndex;
+	void FindCurrentTileInPath();
 
 protected:
 	//Game Parameters
@@ -31,6 +34,15 @@ protected:
 	SDL_Texture* texture = NULL;
 	Animator* animator;
 	Vector2D textureOffset;
+
+	//Path
+	std::vector<int> blockedTiles;
+	Timer pathUpdateTimer;
+	float pathUpdateTime = 1000;
+	PathData pathData;
+	MapLayer* mapData = nullptr;
+
+
 	virtual void InitAnimations();
 
 	//Colliders
@@ -69,19 +81,16 @@ protected:
 	void Attack();
 	void Hurt();
 	void Die();
-	Vector2D SeekForSurfaceTile();
 	void Move();
-	Vector2D TrackPlayerPosition(bool verticalAxis, bool horizontalAxis);
 	virtual void Brain();
 	virtual void Render(float dt);
+	void SetPathDirection();
 
 public:
-	Enemy(Vector2D pos);
+	Enemy(Vector2D pos, MapLayer* pathLayer);
 	virtual ~Enemy();
 	bool Awake();
 	bool Start();
 	virtual bool Update(float dt);
 	bool CleanUp();
 };
-	
-	

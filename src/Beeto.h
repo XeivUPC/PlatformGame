@@ -1,6 +1,6 @@
 #pragma once
 #include "Enemy.h"
-#include "PathfindingSystem.h"
+
 class Beeto : public Enemy
 {
 public:
@@ -8,11 +8,7 @@ public:
 	virtual ~Beeto();
 
 private:
-	std::vector<int> blockedTiles = { 801, 803};
-	PathData pathData;
-	MapLayer* mapData = nullptr;
-	Timer pathUpdateTimer;
-	float pathUpdateTime = 1000;
+	
 	void InitAnimations();
 	void InitColliders();
 	void Brain();

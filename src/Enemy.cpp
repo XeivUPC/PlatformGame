@@ -10,6 +10,19 @@
 #include "Debug.h"
 #include "Box2DRender.h"
 
+void Enemy::FindCurrentTileInPath()
+{
+	Vector2D tile = { (float)((int)position.getX()), (float)((int)position.getY()-1.f) };
+	for (size_t i = 0; i < pathData.pathTiles.size(); i++)
+	{
+		if (tile == pathData.pathTiles.at(i))
+		{
+			currentPathTileIndex = i;
+			return;
+		}
+	}
+}
+
 void Enemy::InitAnimations()
 {
 	texture = Engine::GetInstance().textures->Load(textureName.c_str());
@@ -46,38 +59,11 @@ void Enemy::Die()
 	Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(this);
 }
 
-Vector2D Enemy::SeekForSurfaceTile()
-{
-	return{ 0,0 };
-}
-
 void Enemy::Move()
 {
 	float fixedDt = 16 / 1000.0f;
 	b2Vec2 bodyDirection = b2Vec2{ enemyDirection.getX()*speed * fixedDt, enemyDirection.getY()*speed* fixedDt };
 	enemyCollider->SetLinearVelocity(bodyDirection);
-}
-
-Vector2D Enemy::TrackPlayerPosition(bool verticalAxis, bool horizontalAxis)
-{
-	Vector2D playerPosition = Engine::GetInstance().scene->player->position;
-	playerPosition.setX(playerPosition.getX() - position.getX());
-	playerPosition.setY(playerPosition.getY() - position.getY());
-	if (!verticalAxis)
-		playerPosition.setY(0);
-	if (!horizontalAxis)
-		playerPosition.setX(0);
-
-	if(playerPosition.getX() < -1)
-		playerPosition.setX(-1);
-	if(playerPosition.getX() > 1)
-		playerPosition.setX(1);
-	if(playerPosition.getY() < -1)
-		playerPosition.setY(-1);
-	if(playerPosition.getY() > 1)
-		playerPosition.setY(1);
-
-	return playerPosition;
 }
 
 void Enemy::Brain()
@@ -92,6 +78,9 @@ void Enemy::Brain()
 		attackCooldown.Start();
 		Attack();
 	}
+
+	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
+	else enemyCollider->SetGravityScale(1);
 }
 
 void Enemy::Render(float dt)
@@ -102,6 +91,12 @@ void Enemy::Render(float dt)
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 	else
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_HORIZONTAL);
+	if (pathData.pathTiles.size() > 0)
+	{
+		Engine::GetInstance().render->LockLayer(Render::Layer7);
+		Engine::GetInstance().render->DrawCircle(METERS_TO_PIXELS(pathData.pathTiles.at(currentPathTileIndex).getX() + 0.5f), METERS_TO_PIXELS(pathData.pathTiles.at(currentPathTileIndex).getY()+1.5f), 8, 255, 255, 255);
+		Engine::GetInstance().render->UnlockLayer();
+	}
 
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
@@ -111,9 +106,20 @@ void Enemy::Render(float dt)
 	}
 }
 
-Enemy::Enemy(Vector2D pos) : Entity(EntityType::UNKNOWN)
+void Enemy::SetPathDirection()
+{
+	if (pathData.pathTiles.size() == 0)
+	{
+		enemyDirection = { 0,0 };
+		return;
+	}
+	enemyDirection = Vector2D{pathData.pathTiles.at(currentPathTileIndex).getX() - pathData.pathTiles.at(currentPathTileIndex+1).getX(), pathData.pathTiles.at(currentPathTileIndex).getY() - pathData.pathTiles.at(currentPathTileIndex + 1).getY() };
+}
+
+Enemy::Enemy(Vector2D pos, MapLayer* pathLayer) : Entity(EntityType::UNKNOWN)
 {
 	position = pos;
+	mapData = pathLayer;
 }
 
 Enemy::~Enemy()
@@ -139,6 +145,7 @@ bool Enemy::Update(float dt)
 	position.setX(enemyCollider->GetPosition().x);
 	position.setY(enemyCollider->GetPosition().y);
 	Brain();
+	FindCurrentTileInPath();
 	Render(dt);
 	return true;
 }
