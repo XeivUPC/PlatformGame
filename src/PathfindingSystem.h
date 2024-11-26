@@ -57,7 +57,7 @@ public:
 	void PropagateAStar(ASTAR_HEURISTICS heuristic);
 
 	PathData GetData();
-	void DrawPath(PathData* data);
+	void DrawPath(PathData* data, Vector2D offset);
 	void FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition);
 	bool Start()override;
 	bool Update(float dt)override;

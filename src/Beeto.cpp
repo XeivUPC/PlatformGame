@@ -5,7 +5,7 @@
 #include "Box2DFactory.h"
 #include "Box2DRender.h"
 
-Beeto::Beeto(Vector2D pos, MapLayer* layer) : Enemy(pos, layer)
+Beeto::Beeto(Vector2D pos, LevelSection* layer) : Enemy(pos, layer)
 {
 	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
@@ -119,7 +119,10 @@ void Beeto::Brain()
 	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
 	{
 		pathUpdateTimer.Start();
-		Engine::GetInstance().pathfinding->FindPath(mapData->tiles, mapData->width, mapData->height, blockedTiles, { position.getX(), position.getY()-1}, { player->position.getX(), player->position.getY() - 1 });
+		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+		Vector2D startPos = { position.getX() - offset.getX(), position.getY() - offset.getY()};
+		Vector2D targetPos = { player->position.getX() - offset.getX(), player->position.getY() - offset.getY() };
+		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, targetPos);
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
 			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
@@ -128,6 +131,7 @@ void Beeto::Brain()
 		{
 			
 		}
+
 		pathData = Engine::GetInstance().pathfinding->GetData();
 	}
 	FindCurrentTileInPath();
@@ -138,7 +142,7 @@ void Beeto::Brain()
 
 void Beeto::Render(float dt)
 {
-	Engine::GetInstance().pathfinding->DrawPath(&pathData);
+	Engine::GetInstance().pathfinding->DrawPath(&pathData, { levelSection->sectionOffset.x, levelSection->sectionOffset.y});
 	Enemy::Render(dt);
 	animator->SelectAnimation("Beeto_Alive", true);
 }

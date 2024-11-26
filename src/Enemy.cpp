@@ -12,7 +12,10 @@
 
 void Enemy::FindCurrentTileInPath()
 {
-	Vector2D tile = { (float)((int)position.getX()), (float)((int)(position.getY()-0.5f)) };
+	Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+	Vector2D positionEnemy = { position.getX() - offset.getX(), position.getY() - offset.getY() };
+
+	Vector2D tile = { (float)((int)positionEnemy.getX()), (float)((int)(positionEnemy.getY()+0.5f)) };
 	currentPathTileIndex = 0;
 	for (size_t i = 0; i < pathData.pathTiles.size(); i++)
 	{
@@ -126,10 +129,10 @@ void Enemy::SetPathDirection()
 	}
 }
 
-Enemy::Enemy(Vector2D pos, MapLayer* pathLayer) : Entity(EntityType::UNKNOWN)
+Enemy::Enemy(Vector2D pos, LevelSection* levelSection) : Entity(EntityType::UNKNOWN)
 {
 	position = pos;
-	mapData = pathLayer;
+	this->levelSection = levelSection;
 }
 
 Enemy::~Enemy()

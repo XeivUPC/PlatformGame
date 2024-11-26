@@ -39,7 +39,7 @@ protected:
 	Timer pathUpdateTimer;
 	float pathUpdateTime = 1000;
 	PathData pathData;
-	MapLayer* mapData = nullptr;
+	LevelSection* levelSection = nullptr;
 
 
 	virtual void InitAnimations();
@@ -87,7 +87,7 @@ protected:
 	void FindCurrentTileInPath();
 
 public:
-	Enemy(Vector2D pos, MapLayer* pathLayer);
+	Enemy(Vector2D pos, LevelSection* levelSection);
 	virtual ~Enemy();
 	bool Awake();
 	bool Start();
