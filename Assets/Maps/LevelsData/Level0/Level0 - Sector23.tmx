@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="25">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="30">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
-  <property name="LeftSection" type="int" value="-1"/>
-  <property name="Level" type="int" value="0"/>
-  <property name="RightSection" type="int" value="-1"/>
+  <property name="LeftSection" type="int" value="21"/>
+  <property name="Level" type="int" value="23"/>
+  <property name="RightSection" type="int" value="24"/>
   <property name="TopSection" type="int" value="-1"/>
  </properties>
  <tileset firstgid="1" source="../Level0_Tileset.tsx"/>
+ <tileset firstgid="801" source="../PathfindingLayout.tsx"/>
  <layer id="11" name="Back2" width="25" height="13">
   <data>
    <tile/>
@@ -246,6 +247,9 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
    <tile/>
    <tile/>
    <tile/>
@@ -267,6 +271,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
    <tile/>
    <tile/>
    <tile/>
@@ -285,6 +294,15 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
    <tile/>
    <tile/>
    <tile/>
@@ -300,34 +318,17 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
+   <tile gid="460"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1182,6 +1183,11 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="514"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="516"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1202,6 +1208,12 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="546"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="548"/>
+   <tile gid="778"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1218,9 +1230,17 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="514"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="517"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="513"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="516"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1232,17 +1252,35 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="778"/>
    <tile/>
    <tile/>
+   <tile gid="554"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="548"/>
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="769"/>
+   <tile gid="770"/>
+   <tile gid="771"/>
    <tile/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="517"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1252,6 +1290,21 @@
    <tile/>
    <tile/>
    <tile/>
+   <tile gid="513"/>
+   <tile gid="681"/>
+   <tile gid="682"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="515"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
    <tile/>
    <tile/>
    <tile/>
@@ -1263,396 +1316,370 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="713"/>
+   <tile gid="714"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
+   <tile gid="547"/>
   </data>
  </layer>
- <layer id="13" name="PathfindingLayout" width="25" height="13">
+ <layer id="13" name="PathfindingLayout" width="25" height="13" opacity="0.6">
   <data>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
   </data>
  </layer>
- <objectgroup id="10" name="Objects"/>
- <objectgroup id="8" name="Colliders"/>
+ <objectgroup id="10" name="Objects">
+  <object id="29" name="CHECKPOINT" x="200" y="112">
+   <properties>
+    <property name="Type" value="CheckPoint"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="Colliders">
+  <object id="25" x="0" y="176" width="400" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="26" x="112" y="144" width="176" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="27" x="160" y="112" width="80" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
