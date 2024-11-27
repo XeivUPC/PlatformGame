@@ -1,0 +1,42 @@
+<player>
+	<!---speed-->
+	<speed value="360"/>
+	<ladder-speed value="160"/>
+	<max-fall-speed value="100.0f"/>
+	<!---jump-->
+	<jump-force value="2.7f"/>
+	<fall-attack-jump-multiplier value="1.0f"/>
+	<!---health-->
+	<player-health value="20"/>
+	<!---gravity-->
+	<default-gravity value="1.0f"/>
+	<fall-gravity value="2.5f"/>
+	<fall-attack-gravity value="2.75f"/>
+	<!---damage-->
+	<attack-damage value="1"/>
+	<!---times-->
+	<coyote-reaction-ms value="100"/>
+	<attack-recover-ms value="400"/>
+	<exit-ladder-time-ms value="100"/>
+	<jump-recover-ms value="150"/>
+	<hurt-anim-effect-ms value="20"/>
+	<hurt-anim-time-ms value="2500"/>
+	<death-time-ms value="4000"/>
+	<!---texture-->
+	<texture name="player_texture" path="Assets/Textures/Player/ShovelKnight_Atlas2.png" x_offset="-35.0f" y_offset="-35.0f"/>
+	<!---audio-->
+	<jump-sound-id value="Player_Jump.wav"/>
+	<hurt-sound-id value="Player_Hurt.wav"/>
+	<die-sound-id value="Player_Die.wav"/>
+	<!---animation-->
+	<animator start_with="Player_Idle" default-speed="100" loop ="true">
+		<anim name="Player_Idle" size-x ="70" size-y="70">
+			<sprite offset-x ="0" offset-y="0"/>
+		</anim>
+		<anim name="Player_Idle_2" size-x ="70" size-y="70">
+			<sprite offset-x ="2" offset-y="0"/>
+			<sprite offset-x ="3" offset-y="0"/>
+			<sprite offset-x ="4" offset-y="0"/>
+		</anim>
+	</animator>
+</player>
