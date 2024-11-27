@@ -41,6 +41,9 @@ bool Player::Awake() {
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
 	hurtSoundId = Engine::GetInstance().audio->LoadFx("Player_Hurt.wav");
 	dieSoundId = Engine::GetInstance().audio->LoadFx("Player_Die.wav");
+	
+
+
 	return true;
 }
 
@@ -49,6 +52,9 @@ bool Player::Start() {
 	texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
 	InitAnimations();
+
+
+
 	return true;
 }
 
