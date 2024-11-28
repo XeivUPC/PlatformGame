@@ -40,3 +40,23 @@
 		</anim>
 	</animator>
 </player>
+<betto>
+	<speed value="300"/>
+	<attack-damage value="1"/>
+	<attack-cooldown-ms value="500"/>
+	<hurt-cooldown-ms value="500"/>
+	<health value="1"/>
+	<path-finding-update-time-ms value="1000"/>
+	<animator start_with="Beeto_Alive" default-speed="100" loop ="true">
+		<anim name="Beeto_Alive" size-x ="32" size-y="16">
+			<sprite offset-x ="0" offset-y="0"/>
+			<sprite offset-x ="1" offset-y="0"/>
+			<sprite offset-x ="2" offset-y="0"/>
+			<sprite offset-x ="3" offset-y="0"/>
+		</anim>
+		<anim name="Beeto_Dead" size-x ="32" size-y="16">
+			<sprite offset-x ="0" offset-y="1"/>
+			<sprite offset-x ="1" offset-y="1"/>
+		</anim>
+	</animator>
+</betto>
