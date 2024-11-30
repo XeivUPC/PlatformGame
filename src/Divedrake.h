@@ -7,7 +7,7 @@ public:
 	~Divedrake();
 
 private:
-	void InitAnimations();
+	void LoadParameters();
 	void InitColliders();
 	void Brain();
 	void Render(float dt);

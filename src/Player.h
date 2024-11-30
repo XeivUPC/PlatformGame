@@ -71,6 +71,8 @@ private:
 
 	void SetGravityValue(float verticalVelocity);
 
+	void LoadParameters();
+
 	/// Status
 	bool isGrounded = true;
 	bool isCrouching = true;
@@ -80,7 +82,7 @@ private:
 	bool isDead=false;
 
 	/// MAX VALUES
-	const float MAX_FALL_SPEED = 100.0f;
+	float MAX_FALL_SPEED = 100.0f;
 
 	/// Gravity Values
 	float defaultGravity = 1.0f;
@@ -119,8 +121,6 @@ private:
 
 	/// Animator
 	Animator* animator;
-	void InitAnimations();
-
 
 	//// Audio
 	int jumpSoundId;

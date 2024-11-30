@@ -24,10 +24,8 @@ void Enemy::FindCurrentTileInPath()
 	}
 }
 
-void Enemy::InitAnimations()
+void Enemy::LoadParameters()
 {
-	texture = Engine::GetInstance().textures->Load(textureName.c_str());
-	animator = new Animator();
 }
 
 void Enemy::InitColliders()
@@ -145,7 +143,7 @@ bool Enemy::Awake()
 bool Enemy::Start()
 {
 	player = Engine::GetInstance().scene->player;
-	InitAnimations();
+	LoadParameters();
 	InitColliders();
 	return true;
 }

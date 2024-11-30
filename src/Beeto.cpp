@@ -4,13 +4,12 @@
 #include "Textures.h"
 #include "Box2DFactory.h"
 #include "Box2DRender.h"
+#include "Log.h"
 
 Beeto::Beeto(Vector2D pos, MapLayer* layer) : Enemy(pos, layer)
 {
-	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
-	speed = 80.0f * 3;
 
 	blockedTiles = { 801, 803 };
 }
@@ -20,26 +19,47 @@ Beeto::~Beeto()
 {
 }
 
-void Beeto::InitAnimations()
+void Beeto::LoadParameters()
 {
-	textureName = "Assets/Textures/Enemies/Beeto.png";
-	Enemy::InitAnimations();
+	bool ret = true;
+	pugi::xml_document mapFileXML;
+	pugi::xml_parse_result result = mapFileXML.load_file("entityData.xml");
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file entityData.xml. pugi error: %s", result.description());
+		ret = false;
+	}
+	else {
+		pugi::xml_node beetoProperties = mapFileXML.child("entities").child("beeto");
+		speed = beetoProperties.child("speed").attribute("value").as_float();
+		hitDamage = beetoProperties.child("attack-damage").attribute("value").as_float();
+		attackCooldownMS = beetoProperties.child("attack-cooldown-ms").attribute("value").as_float();
+		hurtCooldownMS = beetoProperties.child("hurt-cooldown-ms").attribute("value").as_float();
+		enemyHealth = Health(beetoProperties.child("health").attribute("value").as_int());
+		pathUpdateTime = beetoProperties.child("path-finding-update-time-ms").attribute("value").as_float();
 
-	AnimationData alive = AnimationData("Beeto_Alive");
-	alive.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {32, 16}});
-	alive.AddSprite(Sprite{ texture,{1.0f, 0.0f}, {32, 16}});
-	alive.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {32, 16}});
-	alive.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {32, 16}});
+		textureName = beetoProperties.child("texture").attribute("path").as_string();
+		textureOffset = { beetoProperties.child("texture").attribute("x_offset").as_float(),beetoProperties.child("texture").attribute("y_offset").as_float() };
+		texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
-	AnimationData dead = AnimationData("Beeto_Dead");
-	dead.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {32, 16} });
-	dead.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {32, 16} });
+		pugi::xml_node animProperties = beetoProperties.child("animator");
+		animator = new Animator();
+		for (pugi::xml_node animNode = animProperties.child("anim"); animNode != NULL; animNode = animNode.next_sibling("anim")) {
 
-	animator->AddAnimation(alive);
-	animator->AddAnimation(dead);
+			std::string animName = animNode.attribute("name").as_string();
+			AnimationData animData = AnimationData(animName);
+			Vector2D animSize = { animNode.attribute("size-x").as_float() ,animNode.attribute("size-y").as_float() };
+			for (pugi::xml_node spriteNode = animNode.child("sprite"); spriteNode != NULL; spriteNode = spriteNode.next_sibling("sprite")) {
+				Vector2D spriteOffset = { spriteNode.attribute("offset-x").as_float() ,spriteNode.attribute("offset-y").as_float() };
+				animData.AddSprite(Sprite{ texture, spriteOffset, animSize });
+			}
+			animator->AddAnimation(animData);
+		}
+		std::string startAnim = animProperties.attribute("start-with").as_string();
+		animator->SelectAnimation(startAnim.c_str(), animProperties.attribute("loop").as_bool());
+		animator->SetSpeed(animProperties.attribute("default-speed").as_float());
 
-	animator->SelectAnimation("Beeto_Alive", true);
-	animator->SetSpeed(100);
+	}
 }
 
 void Beeto::InitColliders()

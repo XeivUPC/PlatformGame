@@ -41,8 +41,7 @@ protected:
 	PathData pathData;
 	MapLayer* mapData = nullptr;
 
-
-	virtual void InitAnimations();
+	virtual void LoadParameters();
 
 	//Colliders
 	virtual void InitColliders();
