@@ -29,19 +29,19 @@ void Divedrake::LoadParameters()
 		ret = false;
 	}
 	else {
-		pugi::xml_node bettoProperties = mapFileXML.child("entities").child("beeto"); //// Cambiar al diverdrake
-		speed = bettoProperties.child("speed").attribute("value").as_float();
-		hitDamage = bettoProperties.child("attack-damage").attribute("value").as_float();
-		attackCooldownMS = bettoProperties.child("attack-cooldown-ms").attribute("value").as_float();
-		hurtCooldownMS = bettoProperties.child("hurt-cooldown-ms").attribute("value").as_float();
-		enemyHealth = Health(bettoProperties.child("health").attribute("value").as_int());
-		pathUpdateTime = bettoProperties.child("path-finding-update-time-ms").attribute("value").as_float();
+		pugi::xml_node divedrakeProperties = mapFileXML.child("entities").child("beeto"); //// Cambiar al diverdrake
+		speed = divedrakeProperties.child("speed").attribute("value").as_float();
+		hitDamage = divedrakeProperties.child("attack-damage").attribute("value").as_float();
+		attackCooldownMS = divedrakeProperties.child("attack-cooldown-ms").attribute("value").as_float();
+		hurtCooldownMS = divedrakeProperties.child("hurt-cooldown-ms").attribute("value").as_float();
+		enemyHealth = Health(divedrakeProperties.child("health").attribute("value").as_int());
+		pathUpdateTime = divedrakeProperties.child("path-finding-update-time-ms").attribute("value").as_float();
 
-		textureName = bettoProperties.child("texture").attribute("path").as_string();
-		textureOffset = { bettoProperties.child("texture").attribute("x_offset").as_float(),bettoProperties.child("texture").attribute("y_offset").as_float() };
+		textureName = divedrakeProperties.child("texture").attribute("path").as_string();
+		textureOffset = { divedrakeProperties.child("texture").attribute("x_offset").as_float(),divedrakeProperties.child("texture").attribute("y_offset").as_float() };
 		texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
-		pugi::xml_node animProperties = bettoProperties.child("animator");
+		pugi::xml_node animProperties = divedrakeProperties.child("animator");
 		animator = new Animator();
 		for (pugi::xml_node animNode = animProperties.child("anim"); animNode != NULL; animNode = animNode.next_sibling("anim")) {
 
