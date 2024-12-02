@@ -11,7 +11,7 @@ Divedrake::Divedrake(Vector2D pos, MapLayer* layer) : Enemy(pos, layer)
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
 
-	blockedTiles = { 802, 803, 804 };
+	blockedTiles = { 803, 804 };
 }
 
 Divedrake::~Divedrake()
@@ -29,7 +29,7 @@ void Divedrake::LoadParameters()
 		ret = false;
 	}
 	else {
-		pugi::xml_node divedrakeProperties = mapFileXML.child("entities").child("beeto"); //// Cambiar al diverdrake
+		pugi::xml_node divedrakeProperties = mapFileXML.child("entities").child("divedrake"); //// Cambiar al diverdrake
 		speed = divedrakeProperties.child("speed").attribute("value").as_float();
 		hitDamage = divedrakeProperties.child("attack-damage").attribute("value").as_float();
 		attackCooldownMS = divedrakeProperties.child("attack-cooldown-ms").attribute("value").as_float();
@@ -57,7 +57,6 @@ void Divedrake::LoadParameters()
 		std::string startAnim = animProperties.attribute("start-with").as_string();
 		animator->SelectAnimation(startAnim.c_str(), animProperties.attribute("loop").as_bool());
 		animator->SetSpeed(animProperties.attribute("default-speed").as_float());
-
 	}
 }
 
@@ -68,8 +67,9 @@ void Divedrake::InitColliders()
 	b2World* world = Engine::GetInstance().physics->world;
 
 	b2Vec2 enemyColliderPosition{ (position.getX()), (position.getY()) };
-	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(26), PIXEL_TO_METERS(16));
+	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(2), PIXEL_TO_METERS(2));
 	enemyCollider->SetFixedRotation(true);
+	enemyCollider->SetGravityScale(0);
 
 	b2Filter enemyFilter;
 	enemyFilter.maskBits &= ~Engine::GetInstance().PLAYER_LAYER;
@@ -121,6 +121,7 @@ void Divedrake::Brain()
 		pathData = Engine::GetInstance().pathfinding->GetData();
 	}
 	FindCurrentTileInPath();
+	printf("%f / %f\n", enemyDirection.getX(), enemyDirection.getY());
 	SetPathDirection();
 	Enemy::Brain();
 	Enemy::Move();
@@ -130,5 +131,5 @@ void Divedrake::Render(float dt)
 {
 	Engine::GetInstance().pathfinding->DrawPath(&pathData);
 	Enemy::Render(dt);
-	animator->SelectAnimation("Beeto_Alive", true);
+	animator->SelectAnimation("Divedrake_Idle", true);
 }

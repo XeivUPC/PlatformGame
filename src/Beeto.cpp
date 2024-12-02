@@ -124,6 +124,10 @@ void Beeto::Brain()
 	FindCurrentTileInPath();
 	SetPathDirection();
 	Enemy::Brain();
+
+	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
+	else enemyCollider->SetGravityScale(1);
+
 	Enemy::Move();
 }
 

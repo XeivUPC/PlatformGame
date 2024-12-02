@@ -22,7 +22,7 @@
 		<jump-recover-ms value="150"/>
 		<death-time-ms value="4000"/>
 		<!---texture-->
-		<texture name="player_texture" path="Assets/Textures/Player/ShovelKnight_Atlas2.png" x_offset="-35.0f" y_offset="-35.0f"/>
+		<texture path="Assets/Textures/Player/ShovelKnight_Atlas2.png" x_offset="-35.0f" y_offset="-35.0f"/>
 		<!---audio-->
 		<jump-sound-id value="Player_Jump.wav"/>
 		<hurt-sound-id value="Player_Hurt.wav"/>
@@ -80,7 +80,6 @@
 				<sprite offset-x ="2" offset-y="7"/>
 				<sprite offset-x ="3" offset-y="7"/>
 			</anim>
-
 		</animator>
 	</player>
 	<beeto>
@@ -91,7 +90,7 @@
 		<health value="1"/>
 		<path-finding-update-time-ms value="1000"/>
 
-		<texture name="betto_texture" path="Assets/Textures/Enemies/Beeto.png" x_offset="-16.0f" y_offset="-7.0f"/>
+		<texture path="Assets/Textures/Enemies/Beeto.png" x_offset="-16.0f" y_offset="-7.0f"/>
 		<animator start-with="Beeto_Alive" default-speed="100" loop ="true">
 			<anim name="Beeto_Alive" size-x ="32" size-y="16">
 				<sprite offset-x ="0" offset-y="0"/>
@@ -105,5 +104,37 @@
 			</anim>
 		</animator>
 	</beeto>
+	<divedrake>
+		<speed value="240"/>
+		<attack-damage value="1"/>
+		<attack-cooldown-ms value="500"/>
+		<hurt-cooldown-ms value="500"/>
+		<health value="1"/>
+		<path-finding-update-time-ms value="1000"/>
+
+		<texture path="Assets/Textures/Enemies/Divedrake.png" x_offset="-18.5f" y_offset="-16.0f"/>
+		<animator start-with="Divedrake_Idle" default-speed="100" loop ="true">
+			<anim name="Divedrake_Idle" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="0"/>
+				<sprite offset-x ="1" offset-y="0"/>
+				<sprite offset-x ="2" offset-y="0"/>
+			</anim>
+			<anim name="Divedrake_Up" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="1"/>
+				<sprite offset-x ="1" offset-y="1"/>
+				<sprite offset-x ="2" offset-y="1"/>
+			</anim>
+			<anim name="Divedrake_Side" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="2"/>
+				<sprite offset-x ="1" offset-y="2"/>
+				<sprite offset-x ="2" offset-y="2"/>
+			</anim>
+			<anim name="Divedrake_Down" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="3"/>
+				<sprite offset-x ="1" offset-y="3"/>
+				<sprite offset-x ="2" offset-y="3"/>
+			</anim>
+		</animator>
+	</divedrake>
 </entities>
 
