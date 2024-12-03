@@ -132,10 +132,10 @@ void Enemy::SetPathDirection()
 	}
 }
 
-Enemy::Enemy(Vector2D pos, MapLayer* pathLayer) : Entity(EntityType::UNKNOWN)
+Enemy::Enemy(Vector2D pos, LevelSection* levelSection) : Entity(EntityType::UNKNOWN)
 {
 	position = pos;
-	mapData = pathLayer;
+	this->levelSection = levelSection;
 }
 
 Enemy::~Enemy()

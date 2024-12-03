@@ -3,7 +3,7 @@
 class Divedrake : public Enemy
 {
 public:
-	Divedrake(Vector2D pos, MapLayer* layer);
+	Divedrake(Vector2D pos, LevelSection* layer);
 	~Divedrake();
 
 private:

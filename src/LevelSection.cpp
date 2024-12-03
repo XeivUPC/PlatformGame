@@ -386,7 +386,7 @@ void LevelSection::LoadEnemies()
             float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
 
             Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Divedrake* divedrake = new Divedrake(postion, mapData.layers.at(4));
+            Divedrake* divedrake = new Divedrake(postion, this);
             Engine::GetInstance().entityManager->AddEntity((Entity*)divedrake, true);
 
             objects.emplace_back((Entity*)divedrake);
