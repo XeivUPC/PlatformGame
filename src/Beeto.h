@@ -8,8 +8,12 @@ public:
 	virtual ~Beeto();
 
 private:
-	void LoadParameters();
+	
+	void InitAnimations();
 	void InitColliders();
 	void Brain();
 	void Render(float dt);
+
+	b2Fixture* climbCheck;
+	CollisionSensor climbCheckController;
 };

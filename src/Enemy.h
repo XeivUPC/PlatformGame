@@ -41,7 +41,8 @@ protected:
 	PathData pathData;
 	LevelSection* levelSection = nullptr;
 
-	virtual void LoadParameters();
+
+	virtual void InitAnimations();
 
 	//Colliders
 	virtual void InitColliders();

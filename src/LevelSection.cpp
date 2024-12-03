@@ -13,7 +13,6 @@
 #include "MovingPlatform.h"
 #include "InstaKillObject.h"
 #include "Beeto.h"
-#include "Divedrake.h"
 #include "Debug.h"
 
 LevelSection::LevelSection()
@@ -380,16 +379,6 @@ void LevelSection::LoadEnemies()
             Engine::GetInstance().entityManager->AddEntity((Entity*)beeto,true);
 
             objects.emplace_back((Entity*)beeto);
-        }
-        else if (type == "Divedrake") {
-            float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
-            float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
-
-            Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Divedrake* divedrake = new Divedrake(postion, mapData.layers.at(4));
-            Engine::GetInstance().entityManager->AddEntity((Entity*)divedrake, true);
-
-            objects.emplace_back((Entity*)divedrake);
         }
     }
 }

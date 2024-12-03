@@ -156,7 +156,6 @@
     <ClCompile Include="src\Counter.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\DirtBlock.cpp" />
-    <ClCompile Include="src\Divedrake.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
@@ -194,7 +193,6 @@
     <ClInclude Include="src\Counter.h" />
     <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\DirtBlock.h" />
-    <ClInclude Include="src\Divedrake.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
@@ -224,7 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml" />
-    <Xml Include="entityData.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

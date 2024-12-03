@@ -153,9 +153,6 @@
     <ClCompile Include="src\PathfindingSystem.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="src\Divedrake.cpp">
-      <Filter>Source Files\Game\Enemies</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -269,15 +266,9 @@
     <ClInclude Include="src\PathfindingSystem.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\Divedrake.h">
-      <Filter>Source Files\Game\Enemies</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
-      <Filter>Configuration FIles</Filter>
-    </Xml>
-    <Xml Include="entityData.xml">
       <Filter>Configuration FIles</Filter>
     </Xml>
   </ItemGroup>

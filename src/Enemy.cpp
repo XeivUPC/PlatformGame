@@ -12,7 +12,10 @@
 
 void Enemy::FindCurrentTileInPath()
 {
-	Vector2D tile = { (float)((int)position.getX()), (float)((int)(position.getY()-1)) };
+	Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+	Vector2D positionEnemy = { position.getX() - offset.getX(), position.getY() - offset.getY() };
+
+	Vector2D tile = { (float)((int)positionEnemy.getX()), (float)((int)(positionEnemy.getY()+0.5f)) };
 	currentPathTileIndex = 0;
 	for (size_t i = 0; i < pathData.pathTiles.size(); i++)
 	{
@@ -24,8 +27,10 @@ void Enemy::FindCurrentTileInPath()
 	}
 }
 
-void Enemy::LoadParameters()
+void Enemy::InitAnimations()
 {
+	texture = Engine::GetInstance().textures->Load(textureName.c_str());
+	animator = new Animator();
 }
 
 void Enemy::InitColliders()
@@ -77,6 +82,9 @@ void Enemy::Brain()
 		attackCooldown.Start();
 		Attack();
 	}
+
+	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
+	else enemyCollider->SetGravityScale(1);
 }
 
 void Enemy::Render(float dt)
@@ -110,18 +118,7 @@ void Enemy::SetPathDirection()
 
 	}
 	if (currentPathTileIndex - 1 > 0 && currentPathTileIndex< pathData.pathTiles.size()) {
-		Vector2D enemyTile = { position.getX(), position.getY()-1 };
-		Vector2D currentTile = pathData.pathTiles.at(currentPathTileIndex - 1) + Vector2D{0.5f,0.5f};
-
-		enemyDirection = Vector2D{ currentTile.getX() - enemyTile.getX(), currentTile.getY() - enemyTile.getY() };
-		enemyDirection = enemyDirection.normalized();
-
-		float distance = abs((enemyTile - currentTile).magnitude());
-		if ( distance< 0.05f) {
-			Vector2D nextTile = pathData.pathTiles.at(currentPathTileIndex - 1);
-			currentTile = pathData.pathTiles.at(currentPathTileIndex);
-			enemyDirection = Vector2D{ nextTile.getX() - currentTile.getX(), nextTile.getY() - currentTile.getY() };
-		}
+		enemyDirection = Vector2D{pathData.pathTiles.at(currentPathTileIndex-1).getX() - pathData.pathTiles.at(currentPathTileIndex).getX(), pathData.pathTiles.at(currentPathTileIndex-1).getY() - pathData.pathTiles.at(currentPathTileIndex).getY() };
 	}
 	if (enemyDirection.getX() == 0 && enemyDirection.getY() ==0) {
 		Vector2D playerPosition = Engine::GetInstance().scene->player->position;
@@ -132,10 +129,10 @@ void Enemy::SetPathDirection()
 	}
 }
 
-Enemy::Enemy(Vector2D pos, MapLayer* pathLayer) : Entity(EntityType::UNKNOWN)
+Enemy::Enemy(Vector2D pos, LevelSection* levelSection) : Entity(EntityType::UNKNOWN)
 {
 	position = pos;
-	mapData = pathLayer;
+	this->levelSection = levelSection;
 }
 
 Enemy::~Enemy()
@@ -151,7 +148,7 @@ bool Enemy::Awake()
 bool Enemy::Start()
 {
 	player = Engine::GetInstance().scene->player;
-	LoadParameters();
+	InitAnimations();
 	InitColliders();
 	return true;
 }

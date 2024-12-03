@@ -4,12 +4,13 @@
 #include "Textures.h"
 #include "Box2DFactory.h"
 #include "Box2DRender.h"
-#include "Log.h"
 
 Beeto::Beeto(Vector2D pos, LevelSection* layer) : Enemy(pos, layer)
 {
+	textureOffset = { -16,-7 };
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
+	speed = 80.0f * 3;
 
 	blockedTiles = { 801, 803 };
 }
@@ -19,47 +20,26 @@ Beeto::~Beeto()
 {
 }
 
-void Beeto::LoadParameters()
+void Beeto::InitAnimations()
 {
-	bool ret = true;
-	pugi::xml_document mapFileXML;
-	pugi::xml_parse_result result = mapFileXML.load_file("entityData.xml");
-	if (result == NULL)
-	{
-		LOG("Could not load map xml file entityData.xml. pugi error: %s", result.description());
-		ret = false;
-	}
-	else {
-		pugi::xml_node beetoProperties = mapFileXML.child("entities").child("beeto");
-		speed = beetoProperties.child("speed").attribute("value").as_float();
-		hitDamage = beetoProperties.child("attack-damage").attribute("value").as_float();
-		attackCooldownMS = beetoProperties.child("attack-cooldown-ms").attribute("value").as_float();
-		hurtCooldownMS = beetoProperties.child("hurt-cooldown-ms").attribute("value").as_float();
-		enemyHealth = Health(beetoProperties.child("health").attribute("value").as_int());
-		pathUpdateTime = beetoProperties.child("path-finding-update-time-ms").attribute("value").as_float();
+	textureName = "Assets/Textures/Enemies/Beeto.png";
+	Enemy::InitAnimations();
 
-		textureName = beetoProperties.child("texture").attribute("path").as_string();
-		textureOffset = { beetoProperties.child("texture").attribute("x_offset").as_float(),beetoProperties.child("texture").attribute("y_offset").as_float() };
-		texture = Engine::GetInstance().textures->Load(textureName.c_str());
+	AnimationData alive = AnimationData("Beeto_Alive");
+	alive.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {32, 16}});
+	alive.AddSprite(Sprite{ texture,{1.0f, 0.0f}, {32, 16}});
+	alive.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {32, 16}});
+	alive.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {32, 16}});
 
-		pugi::xml_node animProperties = beetoProperties.child("animator");
-		animator = new Animator();
-		for (pugi::xml_node animNode = animProperties.child("anim"); animNode != NULL; animNode = animNode.next_sibling("anim")) {
+	AnimationData dead = AnimationData("Beeto_Dead");
+	dead.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {32, 16} });
+	dead.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {32, 16} });
 
-			std::string animName = animNode.attribute("name").as_string();
-			AnimationData animData = AnimationData(animName);
-			Vector2D animSize = { animNode.attribute("size-x").as_float() ,animNode.attribute("size-y").as_float() };
-			for (pugi::xml_node spriteNode = animNode.child("sprite"); spriteNode != NULL; spriteNode = spriteNode.next_sibling("sprite")) {
-				Vector2D spriteOffset = { spriteNode.attribute("offset-x").as_float() ,spriteNode.attribute("offset-y").as_float() };
-				animData.AddSprite(Sprite{ texture, spriteOffset, animSize });
-			}
-			animator->AddAnimation(animData);
-		}
-		std::string startAnim = animProperties.attribute("start-with").as_string();
-		animator->SelectAnimation(startAnim.c_str(), animProperties.attribute("loop").as_bool());
-		animator->SetSpeed(animProperties.attribute("default-speed").as_float());
+	animator->AddAnimation(alive);
+	animator->AddAnimation(dead);
 
-	}
+	animator->SelectAnimation("Beeto_Alive", true);
+	animator->SetSpeed(100);
 }
 
 void Beeto::InitColliders()
@@ -92,11 +72,40 @@ void Beeto::InitColliders()
 	playerDamageCheck->SetDensity(0);
 	playerDamageCheck->SetFilterData(playerDamageFilter);
 
+	b2FixtureUserData directionRightCheckData;
+	directionRightCheckData.pointer = (uintptr_t)(&directionRightCheckController);
+	directionRightCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionRightCheckData);
+	directionRightCheck->SetSensor(true);
+	directionRightCheck->SetDensity(0);
+	directionRightCheck->SetFilterData(groundFilter);
+
+	b2FixtureUserData directionLeftCheckData;
+	directionLeftCheckData.pointer = (uintptr_t)(&directionLeftCheckController);
+	directionLeftCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionLeftCheckData);
+	directionLeftCheck->SetSensor(true);
+	directionLeftCheck->SetDensity(0);
+	directionLeftCheck->SetFilterData(groundFilter);
+	
+	b2FixtureUserData directionBottomRightCheckData;
+	directionBottomRightCheckData.pointer = (uintptr_t)(&directionBottomRightCheckController);
+	directionBottomRightCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(24.0f), PIXEL_TO_METERS(0.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionBottomRightCheckData);
+	directionBottomRightCheck->SetSensor(true);
+	directionBottomRightCheck->SetDensity(0);
+	directionBottomRightCheck->SetFilterData(groundFilter);
+
+	b2FixtureUserData directionBottomLeftCheckData;
+	directionBottomLeftCheckData.pointer = (uintptr_t)(&directionBottomLeftCheckController);
+	directionBottomLeftCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(PIXEL_TO_METERS(-24.0f), PIXEL_TO_METERS(16.0f)), PIXEL_TO_METERS(2), PIXEL_TO_METERS(2), directionBottomLeftCheckData);
+	directionBottomLeftCheck->SetSensor(true);
+	directionBottomLeftCheck->SetDensity(0);
+	directionBottomLeftCheck->SetFilterData(groundFilter);
+
 	playerCheckController.SetBodyToTrack(playerCheck);
 
 	playerDamageCheckController.SetBodyToTrack(playerDamageCheck);
 	directionBottomRightCheckController.SetBodyToTrack(directionBottomRightCheck);
 	directionBottomLeftCheckController.SetBodyToTrack(directionBottomLeftCheck);
+	climbCheckController.SetBodyToTrack(climbCheck);
 
 	enemyCollider->ResetMassData();
 	b2MassData massData;
@@ -128,10 +137,6 @@ void Beeto::Brain()
 	FindCurrentTileInPath();
 	SetPathDirection();
 	Enemy::Brain();
-
-	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
-	else enemyCollider->SetGravityScale(1);
-
 	Enemy::Move();
 }
 

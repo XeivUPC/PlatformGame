@@ -17,7 +17,7 @@ class AnimationData
 {
 	friend class Animator;
 private:
-	std::string name = "";
+	const char* name = "";
 	std::vector <Sprite> sprites;
 protected:
 	SDL_Rect GetSpriteRect(int spriteIndex);
@@ -26,8 +26,8 @@ protected:
 public:
 	void AddSprite(Sprite sprite);
 	void AddSprite(Sprite sprite, int extraData);
-	AnimationData(std::string n, std::vector<Sprite> s);
-	AnimationData(std::string n);
+	AnimationData(const char* n, std::vector<Sprite> s);
+	AnimationData(const char* n);
 	AnimationData();
 	~AnimationData();
 
@@ -36,9 +36,9 @@ public:
 class Animator
 {
 private:
-	std::unordered_map<std::string, AnimationData> animations;
+	std::unordered_map<const char*, AnimationData> animations;
 	int customSpriteRangeStart = 0, customSpriteRangeEnd = 0;
-	std::string currentAnimation = "";
+	const char* currentAnimation = "";
 	int currentSprite = 0;
 	bool loop = false;
 	float speed = 1;
@@ -52,8 +52,8 @@ public:
 	~Animator();
 	Animator(std::vector<AnimationData> anims, float s);
 	void AddAnimation(AnimationData anim);
-	void SelectAnimation(std::string animName, bool l);
-	void SelectAnimation(std::string animName, bool l, int indexInit, int indexEnd);
+	void SelectAnimation(const char* animName, bool l);
+	void SelectAnimation(const char* animName, bool l, int indexInit, int indexEnd);
 	void SetSpeed(float s);
 	void Update(float dt);
 	void Animate(int x, int y, SDL_RendererFlip flip);
@@ -64,7 +64,7 @@ public:
 	void SetIfCanDraw(bool canDraw);
 	bool CanDraw();
 
-	std::string GetCurrentAnimationName();
+	const char* GetCurrentAnimationName();
 	AnimationData GetCurrentAnimation();
 	Sprite GetCurrentAnimationSprite();
 };

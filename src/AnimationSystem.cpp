@@ -39,13 +39,13 @@ void AnimationData::AddSprite(Sprite sprite, int extraData)
 	sprites.push_back(sprite);
 }
 
-AnimationData::AnimationData(std::string n, std::vector<Sprite> s)
+AnimationData::AnimationData(const char* n, std::vector<Sprite> s)
 {
 	name = n;
 	sprites = s;
 }
 
-AnimationData::AnimationData(std::string n)
+AnimationData::AnimationData(const char* n)
 {
 	name = n;
 }
@@ -120,7 +120,7 @@ void Animator::AddAnimation(AnimationData anim)
 	animations[anim.name] = anim;
 }
 
-void Animator::SelectAnimation(std::string animName, bool l)
+void Animator::SelectAnimation(const char* animName, bool l)
 {
 	if (currentAnimation == animName)
 		return;
@@ -132,7 +132,7 @@ void Animator::SelectAnimation(std::string animName, bool l)
 	currentSprite = 0;
 }
 
-void Animator::SelectAnimation(std::string animName, bool l, int indexInit, int indexEnd)
+void Animator::SelectAnimation(const char* animName, bool l, int indexInit, int indexEnd)
 {
 	if (currentAnimation == animName)
 		return;
@@ -188,7 +188,7 @@ bool Animator::CanDraw()
 	return canDraw;
 }
 
-std::string Animator::GetCurrentAnimationName()
+const char* Animator::GetCurrentAnimationName()
 {
 	return currentAnimation;
 }

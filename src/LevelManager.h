@@ -40,9 +40,6 @@ public:
     Vector2D GetClosestCheckPointPosition();
     void RegisterCheckPoint(CheckPoint* checkPoint);
 
-    void LoadSaveFile(std::string path);
-    void SaveSaveFile(std::string path);
-
     LevelSection* GetCurrentSection();
 
     std::string path;

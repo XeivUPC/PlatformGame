@@ -28,6 +28,7 @@ bool Scene::Awake()
 	//Get the player texture name from the config file and assigns the value	
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
+	player->textureName = configParameters.child("player").attribute("texturePath").as_string();
 
 	return ret;
 }
