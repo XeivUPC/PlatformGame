@@ -285,11 +285,12 @@ void LevelManager::LoadSaveFile(std::string path)
 
 		pugi::xml_node otherNode = saveFile.child("entities").child("other");
 		for (const auto& pair : loadedSections) {
+			int sectionNumber = pair.second->sectionNumber;
 			for (const auto& object : pair.second->objects)
 			{
 				if (object->id != -1) {
-					pugi::xml_node found_node = otherNode.find_child([object](pugi::xml_node node) {
-						return std::string(node.name()) == "Id" + std::to_string(object->id);
+					pugi::xml_node found_node = otherNode.find_child([sectionNumber,object](pugi::xml_node node) {
+						return std::string(node.name()) == "Id" + std::to_string(sectionNumber)+ "-" + std::to_string(object->id);
 					});
 					if (found_node) {
 						float x = found_node.child("position").attribute("x").as_float();
@@ -322,11 +323,12 @@ void LevelManager::SaveSaveFile(std::string path)
 
 		pugi::xml_node otherNode = saveFile.child("entities").child("other");
 		for (const auto& pair : loadedSections) {
+			int sectionNumber = pair.second->sectionNumber;
 			for (const auto& object : pair.second->objects)
 			{
 				if (object->id != -1) {
-					pugi::xml_node found_node = otherNode.find_child([object](pugi::xml_node node) {
-						return std::string(node.name()) == "Id" + std::to_string(object->id);
+					pugi::xml_node found_node = otherNode.find_child([sectionNumber,object](pugi::xml_node node) {
+						return std::string(node.name()) == "Id" + std::to_string(sectionNumber) + "-" + std::to_string(object->id);
 					});
 
 					if (found_node) {
@@ -335,7 +337,7 @@ void LevelManager::SaveSaveFile(std::string path)
 						found_node.child("enabled").attribute("value").set_value(object->active);
 					}
 					else {
-						pugi::xml_node newNode =  otherNode.append_child(("Id" + std::to_string(object->id)).c_str());
+						pugi::xml_node newNode =  otherNode.append_child(("Id" + std::to_string(sectionNumber) + "-" + std::to_string(object->id)).c_str());
 						pugi::xml_node positionNode = newNode.append_child("position");
 						positionNode.append_attribute("x").set_value(object->GetPosition().getX());
 						positionNode.append_attribute("y").set_value(object->GetPosition().getY());
