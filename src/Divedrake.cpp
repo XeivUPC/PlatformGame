@@ -131,7 +131,7 @@ void Divedrake::Render(float dt)
 {
 	Engine::GetInstance().pathfinding->DrawPath(&pathData, { levelSection->sectionOffset.x, levelSection->sectionOffset.y });
 	Enemy::Render(dt);
-	if(enemyDirection.getX() + enemyDirection.getY() == 0)
+	if(abs(enemyDirection.getX()) <= 0.2f)
 		animator->SelectAnimation("Divedrake_Idle", true);
 	else
 	{
