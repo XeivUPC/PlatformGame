@@ -1,0 +1,140 @@
+<entities>
+	<player>
+		<!---speed-->
+		<speed value="360"/>
+		<ladder-speed value="160"/>
+		<max-fall-speed value="100.0f"/>
+		<!---jump-->
+		<jump-force value="2.7f"/>
+		<fall-attack-jump-multiplier value="1.0f"/>
+		<!---health-->
+		<player-health value="20"/>
+		<!---gravity-->
+		<default-gravity value="1.0f"/>
+		<fall-gravity value="2.5f"/>
+		<fall-attack-gravity value="2.75f"/>
+		<!---damage-->
+		<attack-damage value="1"/>
+		<!---times-->
+		<coyote-reaction-ms value="100"/>
+		<attack-recover-ms value="400"/>
+		<exit-ladder-time-ms value="100"/>
+		<jump-recover-ms value="150"/>
+		<death-time-ms value="4000"/>
+		<!---texture-->
+		<texture path="Assets/Textures/Player/ShovelKnight_Atlas2.png" x_offset="-35.0f" y_offset="-35.0f"/>
+		<!---audio-->
+		<jump-sound-id value="Player_Jump.wav"/>
+		<hurt-sound-id value="Player_Hurt.wav"/>
+		<die-sound-id value="Player_Die.wav"/>
+		<!---animation-->
+		<animator start-with="Player_Idle" default-speed="100" loop ="true">
+			<anim name="Player_Idle" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="0"/>
+			</anim>
+			<anim name="Player_Idle_2" size-x ="70" size-y="70">
+				<sprite offset-x ="2" offset-y="0"/>
+				<sprite offset-x ="3" offset-y="0"/>
+				<sprite offset-x ="4" offset-y="0"/>
+			</anim>
+			<anim name="Player_Crouch" size-x ="70" size-y="70">
+				<sprite offset-x ="6" offset-y="0"/>
+			</anim>
+			<anim name="Player_Move" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="1"/>
+				<sprite offset-x ="1" offset-y="1"/>
+				<sprite offset-x ="2" offset-y="1"/>
+				<sprite offset-x ="3" offset-y="1"/>
+				<sprite offset-x ="4" offset-y="1"/>
+				<sprite offset-x ="5" offset-y="1"/>
+			</anim>
+			<anim name="Player_Jump_Rise" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="2"/>
+			</anim>
+			<anim name="Player_Jump_Fall" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="3"/>
+			</anim>
+			<anim name="Player_Fall_Attack" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="4"/>
+			</anim>
+			<anim name="Player_Attack" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="5"/>
+				<sprite offset-x ="1" offset-y="5"/>
+				<sprite offset-x ="2" offset-y="5"/>
+				<sprite offset-x ="3" offset-y="5"/>
+			</anim>
+			<anim name="Player_Climb" size-x ="70" size-y="70">
+				<sprite offset-x ="1" offset-y="6"/>
+				<sprite offset-x ="1" offset-y="6"/>
+				<sprite offset-x ="2" offset-y="6"/>
+				<sprite offset-x ="2" offset-y="6"/>
+			</anim>
+			<anim name="Player_Exit_Climb" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="6"/>
+			</anim>
+			<anim name="Player_Dead_Air" size-x ="70" size-y="70">
+				<sprite offset-x ="0" offset-y="7"/>
+			</anim>
+			<anim name="Player_Dead_Ground" size-x ="70" size-y="70">
+				<sprite offset-x ="1" offset-y="7"/>
+				<sprite offset-x ="2" offset-y="7"/>
+				<sprite offset-x ="3" offset-y="7"/>
+			</anim>
+		</animator>
+	</player>
+	<beeto>
+		<speed value="240"/>
+		<attack-damage value="1"/>
+		<attack-cooldown-ms value="500"/>
+		<hurt-cooldown-ms value="500"/>
+		<health value="1"/>
+		<path-finding-update-time-ms value="1000"/>
+
+		<texture path="Assets/Textures/Enemies/Beeto.png" x_offset="-16.0f" y_offset="-7.0f"/>
+		<animator start-with="Beeto_Alive" default-speed="100" loop ="true">
+			<anim name="Beeto_Alive" size-x ="32" size-y="16">
+				<sprite offset-x ="0" offset-y="0"/>
+				<sprite offset-x ="1" offset-y="0"/>
+				<sprite offset-x ="2" offset-y="0"/>
+				<sprite offset-x ="3" offset-y="0"/>
+			</anim>
+			<anim name="Beeto_Dead" size-x ="32" size-y="16">
+				<sprite offset-x ="0" offset-y="1"/>
+				<sprite offset-x ="1" offset-y="1"/>
+			</anim>
+		</animator>
+	</beeto>
+	<divedrake>
+		<speed value="240"/>
+		<attack-damage value="1"/>
+		<attack-cooldown-ms value="500"/>
+		<hurt-cooldown-ms value="500"/>
+		<health value="1"/>
+		<path-finding-update-time-ms value="1000"/>
+
+		<texture path="Assets/Textures/Enemies/Divedrake.png" x_offset="-18.5f" y_offset="-16.0f"/>
+		<animator start-with="Divedrake_Idle" default-speed="100" loop ="true">
+			<anim name="Divedrake_Idle" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="0"/>
+				<sprite offset-x ="1" offset-y="0"/>
+				<sprite offset-x ="2" offset-y="0"/>
+			</anim>
+			<anim name="Divedrake_Up" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="1"/>
+				<sprite offset-x ="1" offset-y="1"/>
+				<sprite offset-x ="2" offset-y="1"/>
+			</anim>
+			<anim name="Divedrake_Side" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="2"/>
+				<sprite offset-x ="1" offset-y="2"/>
+				<sprite offset-x ="2" offset-y="2"/>
+			</anim>
+			<anim name="Divedrake_Down" size-x ="37" size-y="32">
+				<sprite offset-x ="0" offset-y="3"/>
+				<sprite offset-x ="1" offset-y="3"/>
+				<sprite offset-x ="2" offset-y="3"/>
+			</anim>
+		</animator>
+	</divedrake>
+</entities>
+

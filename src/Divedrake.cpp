@@ -1,4 +1,4 @@
-#include "Beeto.h"
+#include "Divedrake.h"
 #include "Engine.h"
 #include "Physics.h"
 #include "Textures.h"
@@ -6,20 +6,19 @@
 #include "Box2DRender.h"
 #include "Log.h"
 
-Beeto::Beeto(Vector2D pos, LevelSection* layer) : Enemy(pos, layer)
+Divedrake::Divedrake(Vector2D pos, MapLayer* layer) : Enemy(pos, layer)
 {
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
 
-	blockedTiles = { 801, 803 };
+	blockedTiles = { 803, 804 };
 }
 
-
-Beeto::~Beeto()
+Divedrake::~Divedrake()
 {
 }
 
-void Beeto::LoadParameters()
+void Divedrake::LoadParameters()
 {
 	bool ret = true;
 	pugi::xml_document mapFileXML;
@@ -30,19 +29,19 @@ void Beeto::LoadParameters()
 		ret = false;
 	}
 	else {
-		pugi::xml_node beetoProperties = mapFileXML.child("entities").child("beeto");
-		speed = beetoProperties.child("speed").attribute("value").as_float();
-		hitDamage = beetoProperties.child("attack-damage").attribute("value").as_float();
-		attackCooldownMS = beetoProperties.child("attack-cooldown-ms").attribute("value").as_float();
-		hurtCooldownMS = beetoProperties.child("hurt-cooldown-ms").attribute("value").as_float();
-		enemyHealth = Health(beetoProperties.child("health").attribute("value").as_int());
-		pathUpdateTime = beetoProperties.child("path-finding-update-time-ms").attribute("value").as_float();
+		pugi::xml_node divedrakeProperties = mapFileXML.child("entities").child("divedrake"); //// Cambiar al diverdrake
+		speed = divedrakeProperties.child("speed").attribute("value").as_float();
+		hitDamage = divedrakeProperties.child("attack-damage").attribute("value").as_float();
+		attackCooldownMS = divedrakeProperties.child("attack-cooldown-ms").attribute("value").as_float();
+		hurtCooldownMS = divedrakeProperties.child("hurt-cooldown-ms").attribute("value").as_float();
+		enemyHealth = Health(divedrakeProperties.child("health").attribute("value").as_int());
+		pathUpdateTime = divedrakeProperties.child("path-finding-update-time-ms").attribute("value").as_float();
 
-		textureName = beetoProperties.child("texture").attribute("path").as_string();
-		textureOffset = { beetoProperties.child("texture").attribute("x_offset").as_float(),beetoProperties.child("texture").attribute("y_offset").as_float() };
+		textureName = divedrakeProperties.child("texture").attribute("path").as_string();
+		textureOffset = { divedrakeProperties.child("texture").attribute("x_offset").as_float(),divedrakeProperties.child("texture").attribute("y_offset").as_float() };
 		texture = Engine::GetInstance().textures->Load(textureName.c_str());
 
-		pugi::xml_node animProperties = beetoProperties.child("animator");
+		pugi::xml_node animProperties = divedrakeProperties.child("animator");
 		animator = new Animator();
 		for (pugi::xml_node animNode = animProperties.child("anim"); animNode != NULL; animNode = animNode.next_sibling("anim")) {
 
@@ -58,25 +57,25 @@ void Beeto::LoadParameters()
 		std::string startAnim = animProperties.attribute("start-with").as_string();
 		animator->SelectAnimation(startAnim.c_str(), animProperties.attribute("loop").as_bool());
 		animator->SetSpeed(animProperties.attribute("default-speed").as_float());
-
 	}
 }
 
-void Beeto::InitColliders()
+void Divedrake::InitColliders()
 {
 	Enemy::InitColliders();
 	Box2DFactory& colliderCreator = Box2DFactory::GetInstance();
 	b2World* world = Engine::GetInstance().physics->world;
-	
+
 	b2Vec2 enemyColliderPosition{ (position.getX()), (position.getY()) };
-	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(26), PIXEL_TO_METERS(16));
+	enemyCollider = colliderCreator.CreateBox(world, enemyColliderPosition, PIXEL_TO_METERS(2), PIXEL_TO_METERS(2));
 	enemyCollider->SetFixedRotation(true);
+	enemyCollider->SetGravityScale(0);
 
 	b2Filter enemyFilter;
-	enemyFilter.maskBits  &= ~Engine::GetInstance().PLAYER_LAYER;
-	enemyFilter.maskBits  &= ~Engine::GetInstance().ENEMY_ATTACK_LAYER;
+	enemyFilter.maskBits &= ~Engine::GetInstance().PLAYER_LAYER;
+	enemyFilter.maskBits &= ~Engine::GetInstance().ENEMY_ATTACK_LAYER;
 	enemyCollider->GetFixtureList()[0].SetFilterData(enemyFilter);
-	
+
 
 	b2FixtureUserData playerCheckData;
 	playerCheckData.pointer = (uintptr_t)(&playerCheckController);
@@ -105,39 +104,32 @@ void Beeto::InitColliders()
 	enemyCollider->SetMassData(&massData);
 }
 
-void Beeto::Brain()
+void Divedrake::Brain()
 {
 	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
 	{
 		pathUpdateTimer.Start();
-		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
-		Vector2D startPos = { position.getX() - offset.getX(), position.getY() - offset.getY()};
-		Vector2D targetPos = { player->position.getX() - offset.getX(), player->position.getY() - offset.getY() };
-		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, targetPos);
+		Engine::GetInstance().pathfinding->FindPath(mapData->tiles, mapData->width, mapData->height, blockedTiles, { position.getX(), position.getY() - 1 }, { player->position.getX(), player->position.getY() - 1 });
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
 			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
 		}
 		if (Engine::GetInstance().pathfinding->HasFound())
 		{
-			
-		}
 
+		}
 		pathData = Engine::GetInstance().pathfinding->GetData();
 	}
 	FindCurrentTileInPath();
+	printf("%f / %f\n", enemyDirection.getX(), enemyDirection.getY());
 	SetPathDirection();
 	Enemy::Brain();
-
-	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
-	else enemyCollider->SetGravityScale(1);
-
 	Enemy::Move();
 }
 
-void Beeto::Render(float dt)
+void Divedrake::Render(float dt)
 {
-	Engine::GetInstance().pathfinding->DrawPath(&pathData, { levelSection->sectionOffset.x, levelSection->sectionOffset.y});
+	Engine::GetInstance().pathfinding->DrawPath(&pathData);
 	Enemy::Render(dt);
-	animator->SelectAnimation("Beeto_Alive", true);
+	animator->SelectAnimation("Divedrake_Idle", true);
 }

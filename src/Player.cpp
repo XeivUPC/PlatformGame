@@ -28,8 +28,16 @@ bool Player::Awake() {
 
 	//Initialize Player parameters
 	SetPosition({ 8,8 });
+	return true;
+}
+
+bool Player::Start() {
+
+
+	LoadParameters();
 
 	InitColliders();
+
 	groundCheckController.SetBodyToTrack(groundCheck);
 	shovelFallAttackCheckController.SetBodyToTrack(shovelFallAttackCheck);
 	ladderCheckController.SetBodyToTrack(ladderCheck);
@@ -41,96 +49,12 @@ bool Player::Awake() {
 	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
 	hurtSoundId = Engine::GetInstance().audio->LoadFx("Player_Hurt.wav");
 	dieSoundId = Engine::GetInstance().audio->LoadFx("Player_Die.wav");
-	
-
-
-	return true;
-}
-
-bool Player::Start() {
-
-	texture = Engine::GetInstance().textures->Load(textureName.c_str());
-
-	InitAnimations();
 
 
 
 	return true;
 }
 
-void Player::InitAnimations() {
-
-	animator = new Animator();
-	AnimationData idle = AnimationData("Player_Idle");
-	idle.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {70, 70}});
-
-	AnimationData idle2 = AnimationData("Player_Idle_2");
-	idle2.AddSprite(Sprite{ texture,{2.0f, 0.0f}, {70, 70}});
-	idle2.AddSprite(Sprite{ texture,{3.0f, 0.0f}, {70, 70}});
-	idle2.AddSprite(Sprite{ texture,{4.0f, 0.0f}, {70, 70}});
-
-	AnimationData crouch = AnimationData("Player_Crouch");
-	crouch.AddSprite(Sprite{ texture,{6.0f, 0.0f}, {70, 70} });
-
-
-	AnimationData move = AnimationData("Player_Move");
-	move.AddSprite(Sprite{ texture,{0.0f, 1.0f}, {70, 70}});
-	move.AddSprite(Sprite{ texture,{1.0f, 1.0f}, {70, 70}});
-	move.AddSprite(Sprite{ texture,{2.0f, 1.0f}, {70, 70}});
-	move.AddSprite(Sprite{ texture,{3.0f, 1.0f}, {70, 70}});
-	move.AddSprite(Sprite{ texture,{4.0f, 1.0f}, {70, 70}});
-	move.AddSprite(Sprite{ texture,{5.0f, 1.0f}, {70, 70}});
-
-	AnimationData jump_rise = AnimationData("Player_Jump_Rise");
-	jump_rise.AddSprite(Sprite{ texture,{0.0f, 2.0f}, {70, 70}});
-
-	AnimationData jump_fall = AnimationData("Player_Jump_Fall");
-	jump_fall.AddSprite(Sprite{ texture,{0.0f, 3.0f}, {70, 70}});
-
-	AnimationData fall_attack = AnimationData("Player_Fall_Attack");
-	fall_attack.AddSprite(Sprite{ texture,{0.0f, 4.0f}, {70, 70}});
-
-	AnimationData attack = AnimationData("Player_Attack");
-	attack.AddSprite(Sprite{ texture,{0.0f, 5.0f}, {70, 70} });
-	attack.AddSprite(Sprite{ texture,{1.0f, 5.0f}, {70, 70}});
-	attack.AddSprite(Sprite{ texture,{2.0f, 5.0f}, {70, 70}});
-	attack.AddSprite(Sprite{ texture,{3.0f, 5.0f}, {70, 70}});
-
-	AnimationData climb = AnimationData("Player_Climb");
-	climb.AddSprite(Sprite{ texture,{1.0f, 6.0f}, {70, 70} });
-	climb.AddSprite(Sprite{ texture,{1.0f, 6.0f}, {70, 70} });
-	climb.AddSprite(Sprite{ texture,{2.0f, 6.0f}, {70, 70} });
-	climb.AddSprite(Sprite{ texture,{2.0f, 6.0f}, {70, 70} });
-
-	AnimationData climb_exit = AnimationData("Player_Exit_Climb");
-	climb_exit.AddSprite(Sprite{ texture,{0.0f, 6.0f}, {70, 70} });
-
-	AnimationData dead_air = AnimationData("Player_Dead_Air");
-	dead_air.AddSprite(Sprite{ texture,{0.0f, 7.0f}, {70, 70} });
-
-	AnimationData dead_ground = AnimationData("Player_Dead_Ground");
-	dead_ground.AddSprite(Sprite{ texture,{1.0f, 7.0f}, {70, 70} });
-	dead_ground.AddSprite(Sprite{ texture,{2.0f, 7.0f}, {70, 70} });
-	dead_ground.AddSprite(Sprite{ texture,{3.0f, 7.0f}, {70, 70} });
-
-
-	
-	animator->AddAnimation(idle);
-	animator->AddAnimation(idle2);
-	animator->AddAnimation(crouch);
-	animator->AddAnimation(move);
-	animator->AddAnimation(jump_rise);
-	animator->AddAnimation(jump_fall);
-	animator->AddAnimation(fall_attack);
-	animator->AddAnimation(attack);
-	animator->AddAnimation(climb);
-	animator->AddAnimation(climb_exit);
-	animator->AddAnimation(dead_ground);
-	animator->AddAnimation(dead_air);
-	animator->SelectAnimation("Player_Idle", true);
-
-	animator->SetSpeed(100);
-}
 
 void Player::InitColliders() {
 
@@ -530,6 +454,65 @@ void Player::SetGravityValue(float verticalVelocity) {
 
 
 	playerCollider->SetGravityScale(gravityValue);
+}
+
+void Player::LoadParameters()
+{
+	bool ret = true;
+	pugi::xml_document mapFileXML;
+	pugi::xml_parse_result result = mapFileXML.load_file("entityData.xml");
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file entityData.xml. pugi error: %s", result.description());
+		ret = false;
+	}
+	else {
+		pugi::xml_node playerProperties = mapFileXML.child("entities").child("player");
+		speed = playerProperties.child("speed").attribute("value").as_float();
+		ladderSpeed = playerProperties.child("ladder-speed").attribute("value").as_float();
+		MAX_FALL_SPEED = playerProperties.child("max-fall-speed").attribute("value").as_float();
+		jumpForce = playerProperties.child("jump-force").attribute("value").as_float();
+		fallAttackJumpMultiplier = playerProperties.child("fall-attack-jump-multiplier").attribute("value").as_float();
+		playerHealth = Health(playerProperties.child("player-health").attribute("value").as_int());
+		defaultGravity = playerProperties.child("default-gravity").attribute("value").as_float();
+		fallGravity = playerProperties.child("fall-gravity").attribute("value").as_float();
+		fallAttackGravity = playerProperties.child("fall-attack-gravity").attribute("value").as_float();
+		attackDamage = playerProperties.child("attack-damage").attribute("value").as_float();
+		coyoteReactionMS = playerProperties.child("coyote-reaction-ms").attribute("value").as_float();
+		attackRecoverMS = playerProperties.child("attack-recover-ms").attribute("value").as_float();
+		exitLadderTimeMS = playerProperties.child("exit-ladder-time-ms").attribute("value").as_float();
+		jumpRecoverMS = playerProperties.child("jump-recover-ms").attribute("value").as_float();
+		deathTimeMS = playerProperties.child("death-time-ms").attribute("value").as_float();
+
+		textureName = playerProperties.child("texture").attribute("path").as_string();
+		textureOffset = { playerProperties.child("texture").attribute("x_offset").as_float(),playerProperties.child("texture").attribute("y_offset").as_float() };
+		texture = Engine::GetInstance().textures->Load(textureName.c_str());
+
+		std::string fileName = playerProperties.child("jump-sound-id").attribute("value").as_string();
+		jumpSoundId = Engine::GetInstance().audio->LoadFx(fileName.c_str());
+		fileName = playerProperties.child("hurt-sound-id").attribute("value").as_string();
+		hurtSoundId = Engine::GetInstance().audio->LoadFx(fileName.c_str());
+		fileName = playerProperties.child("die-sound-id").attribute("value").as_string();
+		dieSoundId = Engine::GetInstance().audio->LoadFx(fileName.c_str());
+
+
+		pugi::xml_node animProperties = playerProperties.child("animator");
+		animator = new Animator();
+		for (pugi::xml_node animNode = animProperties.child("anim"); animNode != NULL; animNode = animNode.next_sibling("anim")){
+
+			std::string animName = animNode.attribute("name").as_string();
+			AnimationData animData = AnimationData(animName);
+			Vector2D animSize = { animNode.attribute("size-x").as_float() ,animNode.attribute("size-y").as_float() };
+			for (pugi::xml_node spriteNode = animNode.child("sprite"); spriteNode != NULL; spriteNode = spriteNode.next_sibling("sprite")){
+				Vector2D spriteOffset = { spriteNode.attribute("offset-x").as_float() ,spriteNode.attribute("offset-y").as_float() };
+				animData.AddSprite(Sprite{texture, spriteOffset, animSize});
+			}
+			animator->AddAnimation(animData);
+		}
+		std::string startAnim = animProperties.attribute("start-with").as_string();
+		animator->SelectAnimation(startAnim.c_str(), animProperties.attribute("loop").as_bool());
+		animator->SetSpeed(animProperties.attribute("default-speed").as_float());
+	}
 }
 
 bool Player::CleanUp()
