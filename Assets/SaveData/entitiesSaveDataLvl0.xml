@@ -1,6 +1,20 @@
 <?xml version="1.0"?>
 <entities>
-	<player enable="true">
-		<position x="7.63136005" y="11.0475016" />
+	<player>
+		<position x="26.5240974" y="11.0475016" />
 	</player>
+	<other>
+		<Id47>
+			<position x="49.772995" y="1.51161551" />
+			<enabled value="false" />
+		</Id47>
+		<Id59>
+			<position x="30.3909111" y="11.4850006" />
+			<enabled value="true" />
+		</Id59>
+		<Id62>
+			<position x="118" y="12" />
+			<enabled value="true" />
+		</Id62>
+	</other>
 </entities>

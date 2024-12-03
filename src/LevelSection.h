@@ -92,6 +92,7 @@ public:
     MapData mapData;
 
     b2Vec2 sectionOffset;
+    std::vector<Entity*> objects;
 
 private:
     Vector2D MapToWorld(int x, int y) const;
@@ -109,7 +110,6 @@ private:
     pugi::xml_node mapNode;
 
     std::unordered_map<int, Animator*> animatedTiles;
-    std::vector<Entity*> objects;
 };
 
 

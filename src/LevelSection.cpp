@@ -267,6 +267,7 @@ void LevelSection::LoadObjects()
     for (pugi::xml_node objectNode = mapNode.find_child_by_attribute("objectgroup", "name", "Objects").child("object"); objectNode != NULL; objectNode = objectNode.next_sibling("object")) {
 
         pugi::xml_node objectTypePropety = objectNode.child("properties").find_child_by_attribute("property", "name", "Type");
+        int id = objectNode.attribute("id").as_int();
 
         std::string type = objectTypePropety.attribute("value").as_string();
         if (type  == "CheckPoint") {
@@ -368,15 +369,16 @@ void LevelSection::LoadEnemies()
     for (pugi::xml_node enemyNode = mapNode.find_child_by_attribute("objectgroup", "name", "Enemies").child("object"); enemyNode != NULL; enemyNode = enemyNode.next_sibling("object")) {
 
         pugi::xml_node enemyTypePropety = enemyNode.child("properties").find_child_by_attribute("property", "name", "EnemyType");
-
         std::string type = enemyTypePropety.attribute("value").as_string();
+
+        int id = enemyNode.attribute("id").as_int();
 
         if (type == "Beeto") {
             float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
 
             Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Beeto* beeto = new Beeto(postion,  this);
+            Beeto* beeto = new Beeto(postion,  this, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)beeto,true);
 
             objects.emplace_back((Entity*)beeto);
@@ -386,7 +388,7 @@ void LevelSection::LoadEnemies()
             float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
 
             Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Divedrake* divedrake = new Divedrake(postion, this);
+            Divedrake* divedrake = new Divedrake(postion, this, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)divedrake, true);
 
             objects.emplace_back((Entity*)divedrake);

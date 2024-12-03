@@ -283,6 +283,26 @@ void LevelManager::LoadSaveFile(std::string path)
 		Vector2D pos = { saveFile.child("entities").child("player").child("position").attribute("x").as_float() ,saveFile.child("entities").child("player").child("position").attribute("y").as_float() };
 		Engine::GetInstance().scene->player->SetPosition(pos);
 
+		pugi::xml_node otherNode = saveFile.child("entities").child("other");
+		for (const auto& pair : loadedSections) {
+			for (const auto& object : pair.second->objects)
+			{
+				if (object->id != -1) {
+					pugi::xml_node found_node = otherNode.find_child([object](pugi::xml_node node) {
+						return std::string(node.name()) == "Id" + std::to_string(object->id);
+					});
+					if (found_node) {
+						float x = found_node.child("position").attribute("x").as_float();
+						float y = found_node.child("position").attribute("y").as_float();
+						object->SetPosition({x,y});
+
+
+						object->active = found_node.child("enabled").attribute("value").as_bool();
+					}
+				}
+			}
+		}
+
 	}
 }
 
@@ -296,8 +316,36 @@ void LevelManager::SaveSaveFile(std::string path)
 		LOG("Could not load map xml file %s. pugi error: %s", path.c_str(), result.description());
 	}
 	else {
-		saveFile.child("entities").child("player").child("position").attribute("x").set_value(Engine::GetInstance().scene->player->position.getX());
-		saveFile.child("entities").child("player").child("position").attribute("y").set_value(Engine::GetInstance().scene->player->position.getY());
+		saveFile.child("entities").child("player").child("position").attribute("x").set_value(Engine::GetInstance().scene->player->GetPosition().getX());
+		saveFile.child("entities").child("player").child("position").attribute("y").set_value(Engine::GetInstance().scene->player->GetPosition().getY());
+
+
+		pugi::xml_node otherNode = saveFile.child("entities").child("other");
+		for (const auto& pair : loadedSections) {
+			for (const auto& object : pair.second->objects)
+			{
+				if (object->id != -1) {
+					pugi::xml_node found_node = otherNode.find_child([object](pugi::xml_node node) {
+						return std::string(node.name()) == "Id" + std::to_string(object->id);
+					});
+
+					if (found_node) {
+						found_node.child("position").attribute("x").set_value(object->GetPosition().getX());
+						found_node.child("position").attribute("y").set_value(object->GetPosition().getY());
+						found_node.child("enabled").attribute("value").set_value(object->active);
+					}
+					else {
+						pugi::xml_node newNode =  otherNode.append_child(("Id" + std::to_string(object->id)).c_str());
+						pugi::xml_node positionNode = newNode.append_child("position");
+						positionNode.append_attribute("x").set_value(object->GetPosition().getX());
+						positionNode.append_attribute("y").set_value(object->GetPosition().getY());
+						pugi::xml_node enabledNode = newNode.append_child("enabled");
+						enabledNode.append_attribute("value").set_value(object->active);
+					}
+				}
+			}
+		}
+
 		saveFile.save_file(path.c_str());
 	}
 

@@ -14,6 +14,7 @@ class Entity
 public:
 
 	Entity(EntityType type) : type(type), active(true) {  }
+	Entity(EntityType type, int id) : id(id), type(type), active(true) {  }
 
 	virtual bool Awake()
 	{
@@ -54,9 +55,18 @@ public:
 		}
 	}
 
+	virtual void SetPosition(Vector2D pos) {
+		position = pos;
+	}
+
+	virtual Vector2D GetPosition() {
+		return position;
+	}
+
 public:
 
 	std::string name;
+	int id=-1;
 	EntityType type;
 	bool active = true;
 

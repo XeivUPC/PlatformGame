@@ -568,4 +568,9 @@ void Player::SetPosition(Vector2D pos)
 	position = pos;
 }
 
+Vector2D Player::GetPosition()
+{
+	return { playerCollider->GetPosition().x ,playerCollider->GetPosition().y};
+}
+
 

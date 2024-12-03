@@ -4,7 +4,7 @@
 class Beeto : public Enemy
 {
 public:
-	Beeto(Vector2D pos, LevelSection* layer);
+	Beeto(Vector2D pos, LevelSection* layer, int id);
 	virtual ~Beeto();
 
 private:

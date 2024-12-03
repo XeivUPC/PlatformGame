@@ -6,7 +6,7 @@
 #include "Box2DRender.h"
 #include "Log.h"
 
-Divedrake::Divedrake(Vector2D pos, LevelSection* layer) : Enemy(pos, layer)
+Divedrake::Divedrake(Vector2D pos, LevelSection* layer, int id) : Enemy(pos, layer, id)
 {
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
@@ -112,7 +112,7 @@ void Divedrake::Brain()
 		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, {position.getX(), position.getY() - 1}, {player->position.getX(), player->position.getY() - 1});
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
-			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
+			Engine::GetInstance().pathfinding->PropagateAStar(ASTAR_HEURISTICS::EUCLIDEAN);
 		}
 		if (Engine::GetInstance().pathfinding->HasFound())
 		{

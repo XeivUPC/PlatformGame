@@ -3,6 +3,7 @@
 #include "Physics.h"
 #include "Scene.h"
 #include "EntityManager.h"
+#include "LevelManager.h"
 #include "Box2DFactory.h"
 #include "Textures.h"
 #include "Window.h"
@@ -55,7 +56,8 @@ void Enemy::Hurt()
 
 void Enemy::Die()
 {
-	Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(this);
+	active = false;
+	//Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(this);
 }
 
 void Enemy::Move()
@@ -63,6 +65,18 @@ void Enemy::Move()
 	float fixedDt = 16 / 1000.0f;
 	b2Vec2 bodyDirection = b2Vec2{ enemyDirection.getX()*speed * fixedDt, enemyDirection.getY()*speed* fixedDt };
 	enemyCollider->SetLinearVelocity(bodyDirection);
+}
+
+void Enemy::SetPosition(Vector2D pos)
+{
+	if (enemyCollider != nullptr)
+		enemyCollider->SetTransform({ pos.getX(), pos.getY() }, 0);
+	position = pos;
+}
+
+Vector2D Enemy::GetPosition()
+{
+	return { enemyCollider->GetPosition().x ,enemyCollider->GetPosition().y };
 }
 
 void Enemy::Brain()
@@ -123,16 +137,10 @@ void Enemy::SetPathDirection()
 			enemyDirection = Vector2D{ nextTile.getX() - currentTile.getX(), nextTile.getY() - currentTile.getY() };
 		}
 	}
-	if (enemyDirection.getX() == 0 && enemyDirection.getY() ==0) {
-		Vector2D playerPosition = Engine::GetInstance().scene->player->position;
-		if (playerPosition.getX() > position.getX()) {
-			enemyDirection.setX(1);
-		}else
-			enemyDirection.setX(-1);
-	}
+
 }
 
-Enemy::Enemy(Vector2D pos, LevelSection* levelSection) : Entity(EntityType::UNKNOWN)
+Enemy::Enemy(Vector2D pos, LevelSection* levelSection, int id) : Entity(EntityType::UNKNOWN, id)
 {
 	position = pos;
 	this->levelSection = levelSection;
@@ -158,6 +166,12 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
+	if (levelSection != Engine::GetInstance().levelManager->GetCurrentSection()) {
+		enemyCollider->SetLinearVelocity({ 0,0 });
+		enemyDirection = { 0,0 };
+		return true;
+	}
+
 	position.setX(enemyCollider->GetPosition().x);
 	position.setY(enemyCollider->GetPosition().y);
 

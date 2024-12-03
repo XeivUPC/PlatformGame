@@ -6,7 +6,7 @@
 #include "Box2DRender.h"
 #include "Log.h"
 
-Beeto::Beeto(Vector2D pos, LevelSection* layer) : Enemy(pos, layer)
+Beeto::Beeto(Vector2D pos, LevelSection* layer, int id) : Enemy(pos, layer, id)
 {
 	enemyHealth.ModifyBaseHealth(1);
 	enemyHealth.ResetHealth();
@@ -127,6 +127,16 @@ void Beeto::Brain()
 	}
 	FindCurrentTileInPath();
 	SetPathDirection();
+
+	if (enemyDirection.getX() == 0 && enemyDirection.getY() == 0) {
+		Vector2D playerPosition = player->position;
+		if (playerPosition.getX() > position.getX()) {
+			enemyDirection.setX(1);
+		}
+		else
+			enemyDirection.setX(-1);
+	}
+
 	Enemy::Brain();
 
 	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);

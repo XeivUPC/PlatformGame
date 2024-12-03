@@ -80,13 +80,16 @@ protected:
 	void Hurt();
 	void Die();
 	void Move();
+
+	void SetPosition(Vector2D pos);
+	Vector2D GetPosition();
 	virtual void Brain();
 	virtual void Render(float dt);
 	void SetPathDirection();
 	void FindCurrentTileInPath();
 
 public:
-	Enemy(Vector2D pos, LevelSection* levelSection);
+	Enemy(Vector2D pos, LevelSection* levelSection, int id);
 	virtual ~Enemy();
 	bool Awake();
 	bool Start();
