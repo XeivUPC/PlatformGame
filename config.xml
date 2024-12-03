@@ -24,12 +24,6 @@
 		<sfx path ="Assets/Sounds/"/>
 		<volume value="32"/>
 	</audio>
-
-    <scene>
-        <player x="100" y="100" texturePath="Assets/Textures/Player/ShovelKnight_Atlas2.png"/>
-        <map path="Assets/Maps/" name="MapTemplate.tmx"/>
-    </scene>
-
 	<levels path="Assets/Maps/LevelsData/"/>
 
 

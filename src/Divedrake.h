@@ -1,11 +1,10 @@
 #pragma once
 #include "Enemy.h"
-
-class Beeto : public Enemy
+class Divedrake : public Enemy
 {
 public:
-	Beeto(Vector2D pos, LevelSection* layer);
-	virtual ~Beeto();
+	Divedrake(Vector2D pos, MapLayer* layer);
+	~Divedrake();
 
 private:
 	void LoadParameters();

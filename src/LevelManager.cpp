@@ -54,6 +54,15 @@ bool LevelManager::Update(float dt)
 		
 	}
 
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
+		LoadSaveFile("entitiesSaveDataLvl" + std::to_string(currentLevel));
+		Engine::GetInstance().render->ConfineCameraBetweenRange();
+	}
+
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+		SaveSaveFile("entitiesSaveDataLvl"+ std::to_string(currentLevel));
+	}
+
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
 		loadedSections[sectionsInUse[i]]->Update(dt);
@@ -227,7 +236,7 @@ void LevelManager::GoToClosestCheckPoint()
 		}
 	}
 	if (finded) {
-		LoadSection(sectionToGo);
+		LoadSection(sectionToGo);               
 	}
 	else
 		LoadSection(1);
@@ -258,6 +267,40 @@ Vector2D LevelManager::GetClosestCheckPointPosition()
 void LevelManager::RegisterCheckPoint(CheckPoint* checkPoint)
 {
 	checkPoints.emplace_back(checkPoint);
+}
+
+void LevelManager::LoadSaveFile(std::string path)
+{
+	path = "Assets/SaveData/" + path + ".xml";
+	xml_document saveFile;
+	pugi::xml_parse_result result = saveFile.load_file(path.c_str());
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file %s. pugi error: %s", path.c_str(), result.description());
+	}
+	else {
+
+		Vector2D pos = { saveFile.child("entities").child("player").child("position").attribute("x").as_float() ,saveFile.child("entities").child("player").child("position").attribute("y").as_float() };
+		Engine::GetInstance().scene->player->SetPosition(pos);
+
+	}
+}
+
+void LevelManager::SaveSaveFile(std::string path)
+{
+	path = "Assets/SaveData/" + path + ".xml";
+	xml_document saveFile;
+	pugi::xml_parse_result result = saveFile.load_file(path.c_str());
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file %s. pugi error: %s", path.c_str(), result.description());
+	}
+	else {
+		saveFile.child("entities").child("player").child("position").attribute("x").set_value(Engine::GetInstance().scene->player->position.getX());
+		saveFile.child("entities").child("player").child("position").attribute("y").set_value(Engine::GetInstance().scene->player->position.getY());
+		saveFile.save_file(path.c_str());
+	}
+
 }
 
 LevelSection* LevelManager::GetCurrentSection()
