@@ -1,5 +1,6 @@
 #include "PathfindingSystem.h"
 #include "Engine.h"
+#include "Debug.h"
 #include "LevelManager.h"
 #include "Textures.h"
 
@@ -188,6 +189,8 @@ PathData PathfindingSystem::GetData()
 
 void PathfindingSystem::DrawPath(PathData* data, Vector2D offset)
 {
+    if (!Engine::GetInstance().debug->HasDebug(1))
+        return;
     Vector2D point;
 
     // Draw visited

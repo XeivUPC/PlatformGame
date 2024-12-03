@@ -87,12 +87,12 @@ void Enemy::Render(float dt)
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 	else
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_HORIZONTAL);
-	if (pathData.pathTiles.size() > 0)
+	/*if (pathData.pathTiles.size() > 0)
 	{
 		Engine::GetInstance().render->LockLayer(Render::Layer7);
 		Engine::GetInstance().render->DrawCircle(METERS_TO_PIXELS(pathData.pathTiles.at(currentPathTileIndex).getX() + 0.5f), METERS_TO_PIXELS(pathData.pathTiles.at(currentPathTileIndex).getY()+1.5f), 8, 255, 255, 255);
 		Engine::GetInstance().render->UnlockLayer();
-	}
+	}*/
 
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
