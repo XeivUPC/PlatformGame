@@ -22,6 +22,7 @@ protected:
 	float speed = 100.0f * 3;
 	int attackCooldownMS = 500;
 	int hurtCooldownMS = 500;
+	Vector2D basePosition;
 	Timer attackCooldown;
 	Timer hurtCooldown;
 	Health enemyHealth = Health(1);
@@ -37,7 +38,8 @@ protected:
 	//Path
 	std::vector<int> blockedTiles;
 	Timer pathUpdateTimer;
-	float pathUpdateTime = 1000;
+	float pathUpdateTime;
+	int pathDetectDistance;
 	PathData pathData;
 	LevelSection* levelSection = nullptr;
 

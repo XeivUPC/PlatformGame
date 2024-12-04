@@ -37,6 +37,7 @@ void Beeto::LoadParameters()
 		hurtCooldownMS = beetoProperties.child("hurt-cooldown-ms").attribute("value").as_float();
 		enemyHealth = Health(beetoProperties.child("health").attribute("value").as_int());
 		pathUpdateTime = beetoProperties.child("path-finding-update-time-ms").attribute("value").as_float();
+		pathDetectDistance = beetoProperties.child("path-detect-distance").attribute("value").as_int();
 
 		textureName = beetoProperties.child("texture").attribute("path").as_string();
 		textureOffset = { beetoProperties.child("texture").attribute("x_offset").as_float(),beetoProperties.child("texture").attribute("y_offset").as_float() };
@@ -58,7 +59,6 @@ void Beeto::LoadParameters()
 		std::string startAnim = animProperties.attribute("start-with").as_string();
 		animator->SelectAnimation(startAnim.c_str(), animProperties.attribute("loop").as_bool());
 		animator->SetSpeed(animProperties.attribute("default-speed").as_float());
-
 	}
 }
 
@@ -103,6 +103,8 @@ void Beeto::InitColliders()
 	massData.mass = enemyMass;
 	massData.center = enemyCollider->GetLocalCenter();
 	enemyCollider->SetMassData(&massData);
+	basePosition = GetPosition();
+	basePosition.setY(basePosition.getY()-1);
 }
 
 void Beeto::Brain()
@@ -113,14 +115,13 @@ void Beeto::Brain()
 		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
 		Vector2D startPos = { position.getX() - offset.getX(), position.getY() - offset.getY()};
 		Vector2D targetPos = { player->position.getX() - offset.getX(), player->position.getY() - offset.getY() };
-		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, targetPos);
+		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, targetPos, pathDetectDistance);
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
 			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
 		}
 		if (Engine::GetInstance().pathfinding->HasFound())
 		{
-			
 		}
 
 		pathData = Engine::GetInstance().pathfinding->GetData();
@@ -128,19 +129,25 @@ void Beeto::Brain()
 	FindCurrentTileInPath();
 	SetPathDirection();
 
-	if (enemyDirection.getX() == 0 && enemyDirection.getY() == 0) {
-		Vector2D playerPosition = player->position;
-		if (playerPosition.getX() > position.getX()) {
-			enemyDirection.setX(1);
+	if (enemyDirection.getX() == 0 && enemyDirection.getY() == 0)
+	{	
+		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+		Vector2D startPos = { position.getX() - offset.getX(), position.getY() - offset.getY() };
+		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, basePosition, pathDetectDistance, true);
+		while (!Engine::GetInstance().pathfinding->HasFinished())
+		{
+			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
 		}
-		else
-			enemyDirection.setX(-1);
+
+		pathData = Engine::GetInstance().pathfinding->GetData();
+		FindCurrentTileInPath();
+		SetPathDirection();
 	}
 
 	Enemy::Brain();
 
-	if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
-	else enemyCollider->SetGravityScale(1);
+	/*if (enemyDirection.getY() != 0)enemyCollider->SetGravityScale(0);
+	else enemyCollider->SetGravityScale(1);*/
 
 	Enemy::Move();
 }

@@ -20,7 +20,6 @@ struct PathData
 	std::vector<Vector2D> pathTiles;
 	std::vector<Vector2D> visitedTiles;
 	std::priority_queue<std::pair<int, Vector2D>, std::vector<std::pair<int, Vector2D>>, std::greater<std::pair<int, Vector2D>> > frontierAStar;
-
 };
 
 class PathfindingSystem : public Module
@@ -58,7 +57,7 @@ public:
 
 	PathData GetData();
 	void DrawPath(PathData* data, Vector2D offset);
-	void FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition);
+	void FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition, int distance, bool forced = false);
 	bool Start()override;
 	bool Update(float dt)override;
 	bool CleanUp()override;

@@ -89,6 +89,7 @@
 		<hurt-cooldown-ms value="500"/>
 		<health value="1"/>
 		<path-finding-update-time-ms value="1000"/>
+		<path-detect-distance value="10"/>
 
 		<texture path="Assets/Textures/Enemies/Beeto.png" x_offset="-16.0f" y_offset="-7.0f"/>
 		<animator start-with="Beeto_Alive" default-speed="100" loop ="true">
@@ -111,6 +112,7 @@
 		<hurt-cooldown-ms value="500"/>
 		<health value="1"/>
 		<path-finding-update-time-ms value="1000"/>
+		<path-detect-distance value="10"/>
 
 		<texture path="Assets/Textures/Enemies/Divedrake.png" x_offset="-18.5f" y_offset="-16.0f"/>
 		<animator start-with="Divedrake_Idle" default-speed="100" loop ="true">

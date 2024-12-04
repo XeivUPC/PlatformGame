@@ -230,7 +230,7 @@ void PathfindingSystem::DrawPath(PathData* data, Vector2D offset)
     Engine::GetInstance().render->UnlockLayer();
 }
 
-void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition)
+void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, std::vector<int> blockedTiles, Vector2D currentPosition, Vector2D targetPosition, int distance, bool forced)
 {
     mapTiles = tiles;
     mapWidth = width;
@@ -243,6 +243,8 @@ void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, 
     target = { (float)((int)targetPosition.getX()), (float)((int)targetPosition.getY()) };
     path_status = SEARCHING;
     ResetPath(currentTile);
+    if((abs(currentPosition.getX() - targetPosition.getX()) + abs(currentPosition.getY() - targetPosition.getY()) > distance) && !forced)
+        path_status = NO_PATH;
 }
 
 bool PathfindingSystem::Start()

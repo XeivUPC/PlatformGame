@@ -36,6 +36,8 @@ void Divedrake::LoadParameters()
 		hurtCooldownMS = divedrakeProperties.child("hurt-cooldown-ms").attribute("value").as_float();
 		enemyHealth = Health(divedrakeProperties.child("health").attribute("value").as_int());
 		pathUpdateTime = divedrakeProperties.child("path-finding-update-time-ms").attribute("value").as_float();
+		pathDetectDistance = divedrakeProperties.child("path-detect-distance").attribute("value").as_int();
+
 
 		textureName = divedrakeProperties.child("texture").attribute("path").as_string();
 		textureOffset = { divedrakeProperties.child("texture").attribute("x_offset").as_float(),divedrakeProperties.child("texture").attribute("y_offset").as_float() };
@@ -102,6 +104,8 @@ void Divedrake::InitColliders()
 	massData.mass = enemyMass;
 	massData.center = enemyCollider->GetLocalCenter();
 	enemyCollider->SetMassData(&massData);
+	basePosition = GetPosition();
+	basePosition.setY(basePosition.getY() - 1);
 }
 
 void Divedrake::Brain()
@@ -109,7 +113,7 @@ void Divedrake::Brain()
 	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
 	{
 		pathUpdateTimer.Start();
-		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, {position.getX(), position.getY() - 1}, {player->position.getX(), player->position.getY() - 1});
+		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, {position.getX(), position.getY() - 1}, {player->position.getX(), player->position.getY() - 1}, pathDetectDistance);
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
 			Engine::GetInstance().pathfinding->PropagateAStar(ASTAR_HEURISTICS::EUCLIDEAN);
@@ -121,8 +125,21 @@ void Divedrake::Brain()
 		pathData = Engine::GetInstance().pathfinding->GetData();
 	}
 	FindCurrentTileInPath();
-	printf("%f / %f\n", enemyDirection.getX(), enemyDirection.getY());
 	SetPathDirection();
+	if (enemyDirection.getX() == 0 && enemyDirection.getY() == 0)
+	{
+		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+		Vector2D startPos = { position.getX() - offset.getX(), position.getY() - offset.getY() };
+		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, basePosition, pathDetectDistance, true);
+		while (!Engine::GetInstance().pathfinding->HasFinished())
+		{
+			Engine::GetInstance().pathfinding->PropagateAStar(EUCLIDEAN);
+		}
+
+		pathData = Engine::GetInstance().pathfinding->GetData();
+		FindCurrentTileInPath();
+		SetPathDirection();
+	}
 	Enemy::Brain();
 	Enemy::Move();
 }
