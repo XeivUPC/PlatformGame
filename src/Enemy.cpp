@@ -13,7 +13,7 @@
 
 void Enemy::FindCurrentTileInPath()
 {
-	Vector2D tile = { (float)((int)position.getX()), (float)((int)(position.getY()-1)) };
+	Vector2D tile = { (float)((int)position.getX()-levelSection->sectionOffset.x), (float)((int)(position.getY() - levelSection->sectionOffset.y)) };
 	currentPathTileIndex = 0;
 	for (size_t i = 0; i < pathData.pathTiles.size(); i++)
 	{
@@ -124,7 +124,8 @@ void Enemy::SetPathDirection()
 
 	}
 	if (currentPathTileIndex - 1 > 0 && currentPathTileIndex< pathData.pathTiles.size()) {
-		Vector2D enemyTile = { position.getX(), position.getY()-1 };
+		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+		Vector2D enemyTile = { position.getX() - offset.getX(), position.getY() - offset.getY() };
 		Vector2D currentTile = pathData.pathTiles.at(currentPathTileIndex - 1) + Vector2D{0.5f,0.5f};
 
 		enemyDirection = Vector2D{ currentTile.getX() - enemyTile.getX(), currentTile.getY() - enemyTile.getY() };

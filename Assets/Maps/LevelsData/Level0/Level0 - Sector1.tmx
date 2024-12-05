@@ -6570,7 +6570,7 @@
    </properties>
    <point/>
   </object>
-  <object id="59" x="550" y="175">
+  <object id="59" x="535.818" y="172">
    <properties>
     <property name="EnemyType" value="Beeto"/>
    </properties>

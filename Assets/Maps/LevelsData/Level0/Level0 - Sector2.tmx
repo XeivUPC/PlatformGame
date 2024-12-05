@@ -1678,7 +1678,7 @@
   </object>
  </objectgroup>
  <objectgroup id="12" name="Enemies">
-  <object id="62" x="288" y="176">
+  <object id="62" x="295.818" y="172">
    <properties>
     <property name="EnemyType" value="Beeto"/>
    </properties>

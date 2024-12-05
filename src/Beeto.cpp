@@ -104,7 +104,7 @@ void Beeto::InitColliders()
 	massData.center = enemyCollider->GetLocalCenter();
 	enemyCollider->SetMassData(&massData);
 	basePosition = GetPosition();
-	basePosition.setY(basePosition.getY()-1);
+	basePosition = { basePosition.getX() - levelSection->sectionOffset.x , basePosition.getY() - levelSection->sectionOffset.y};
 }
 
 void Beeto::Brain()
