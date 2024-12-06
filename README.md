@@ -32,7 +32,7 @@ A recreation of the classic retro-inspired action game *Shovel Knight*.
 - **Climb**: Player attaches to ladders to go up or down to a different level.
 
 ### 🤖 Gameplay Elements
-- **Basic Enemy AI**: Enemies react and follow basic patterns to challenge players.
+- **Advance Enemy AI**: Enemies react and follow custom patterns to challenge players.
 - **Checkpoints**: Progress-saving points for a balanced challenge.
 - **Moving Platforms**: Adds dynamic movement and platforming complexity.
 - **Breakable Objects**: Smashable objects that reveal treasures or pathways.
@@ -49,6 +49,7 @@ A recreation of the classic retro-inspired action game *Shovel Knight*.
 ### 🛠️ Technical Details
 - **Layer Based Rendering**: Organize visual elements into separate layers (e.g., background, foreground, UI) for smoother rendering and to ensure proper depth and visibility.
 - **Custom Collision Detection**: Custom logic for handling unique interactions in various ways.
+- **Save/Load**: Save or load the state of your game.
 
 ## Contributors
 
