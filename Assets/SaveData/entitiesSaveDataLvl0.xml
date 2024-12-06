@@ -1,19 +1,19 @@
 <?xml version="1.0"?>
 <entities>
 	<player>
-		<position x="25.4278145" y="11.0475016" />
+		<position x="8" y="11.0475016" />
 	</player>
 	<other>
 		<Id1-47>
-			<position x="19.307682" y="7.0148921" />
+			<position x="20.4375" y="7" />
 			<enabled value="true" />
 		</Id1-47>
 		<Id1-59>
-			<position x="26.9636345" y="11.4850016" />
+			<position x="33.4375" y="11.4850016" />
 			<enabled value="true" />
 		</Id1-59>
 		<Id2-62>
-			<position x="118" y="11.4850016" />
+			<position x="118.4375" y="11.4850016" />
 			<enabled value="true" />
 		</Id2-62>
 	</other>

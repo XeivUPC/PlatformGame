@@ -35,7 +35,8 @@ bool LevelManager::LoadParameters(xml_node parameters)
 
 bool LevelManager::Start()
 {
-	
+	saveSoundId = Engine::GetInstance().audio->LoadFx("Save.wav");
+
 	return true;
 }
 
@@ -309,6 +310,9 @@ void LevelManager::LoadSaveFile(std::string path)
 
 void LevelManager::SaveSaveFile(std::string path)
 {
+
+	Engine::GetInstance().audio->PlayFx(saveSoundId);
+
 	path = "Assets/SaveData/" + path + ".xml";
 	xml_document saveFile;
 	pugi::xml_parse_result result = saveFile.load_file(path.c_str());

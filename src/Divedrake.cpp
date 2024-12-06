@@ -113,15 +113,18 @@ void Divedrake::Brain()
 	if (pathUpdateTime < pathUpdateTimer.ReadMSec())
 	{
 		pathUpdateTimer.Start();
-		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, {position.getX(), position.getY() - 1}, {player->position.getX(), player->position.getY() - 1}, pathDetectDistance);
+		Vector2D offset = { levelSection->sectionOffset.x, levelSection->sectionOffset.y };
+		Vector2D startPos = { position.getX() - offset.getX(), position.getY() - offset.getY() };
+		Vector2D targetPos = { player->position.getX() - offset.getX(), player->position.getY() - offset.getY() };
+		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, targetPos, pathDetectDistance);
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
-			Engine::GetInstance().pathfinding->PropagateAStar(ASTAR_HEURISTICS::EUCLIDEAN);
+			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
 		}
 		if (Engine::GetInstance().pathfinding->HasFound())
 		{
-
 		}
+
 		pathData = Engine::GetInstance().pathfinding->GetData();
 	}
 	FindCurrentTileInPath();
@@ -133,7 +136,7 @@ void Divedrake::Brain()
 		Engine::GetInstance().pathfinding->FindPath(levelSection->mapData.layers.at(4)->tiles, levelSection->mapData.layers.at(4)->width, levelSection->mapData.layers.at(4)->height, blockedTiles, startPos, basePosition, pathDetectDistance, true);
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
-			Engine::GetInstance().pathfinding->PropagateAStar(EUCLIDEAN);
+			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
 		}
 
 		pathData = Engine::GetInstance().pathfinding->GetData();

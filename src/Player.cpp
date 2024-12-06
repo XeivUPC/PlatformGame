@@ -45,12 +45,6 @@ bool Player::Start() {
 	attackRecoverTimer = Timer();
 	jumpRecoverTimer = Timer();
 
-	/// Texture, index, size, pivot
-	jumpSoundId = Engine::GetInstance().audio->LoadFx("Player_Jump.wav");
-	hurtSoundId = Engine::GetInstance().audio->LoadFx("Player_Hurt.wav");
-	dieSoundId = Engine::GetInstance().audio->LoadFx("Player_Die.wav");
-
-
 
 	return true;
 }

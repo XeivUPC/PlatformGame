@@ -66,5 +66,7 @@ private:
     xml_node parameters;
 
 
+    int saveSoundId;
+
 };
 

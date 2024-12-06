@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Physics.h"
 #include "Scene.h"
+#include "Audio.h"
 #include "EntityManager.h"
 #include "LevelManager.h"
 #include "Box2DFactory.h"
@@ -50,13 +51,16 @@ void Enemy::Attack()
 void Enemy::Hurt()
 {
 	enemyHealth.Hurt(1);
-	if (!enemyHealth.IsAlive())
+	if (!enemyHealth.IsAlive()) {
+
 		Die();
+	}
 }
 
 void Enemy::Die()
 {
 	active = false;
+	Engine::GetInstance().audio->PlayFx(dieSoundId);
 	//Engine::GetInstance().entityManager->DestroyEntityAtUpdateEnd(this);
 }
 
@@ -162,6 +166,7 @@ bool Enemy::Start()
 	player = Engine::GetInstance().scene->player;
 	LoadParameters();
 	InitColliders();
+	dieSoundId = Engine::GetInstance().audio->LoadFx("Enemy_Die.wav");
 	return true;
 }
 

@@ -16,6 +16,8 @@ private:
 	float baseGravity = 1.0f;
 	int currentPathTileIndex;
 
+	int dieSoundId;
+
 protected:
 	//Game Parameters
 	int hitDamage = 1;
