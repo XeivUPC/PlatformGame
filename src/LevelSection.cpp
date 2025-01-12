@@ -340,7 +340,7 @@ void LevelSection::LoadObjects()
             bool isVertical = objectMoveTypeProperty.attribute("value").as_bool();
             
             pugi::xml_node platformTypePropety = objectNode.child("properties").find_child_by_attribute("property", "name", "PlatformType");
-            int platformType = platformTypePropety.attribute("value").as_bool();
+            int platformType = platformTypePropety.attribute("value").as_int();
 
 
 

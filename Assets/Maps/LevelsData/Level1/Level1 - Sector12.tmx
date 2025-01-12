@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="46">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="25" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="50">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="11"/>
@@ -8,6 +8,7 @@
   <property name="TopSection" type="int" value="13"/>
  </properties>
  <tileset firstgid="1" source="../Level1_Tileset.tsx"/>
+ <tileset firstgid="801" source="../PathfindingLayout.tsx"/>
  <layer id="11" name="Back2" width="25" height="13">
   <data>
    <tile/>
@@ -1324,6 +1325,335 @@
    <tile/>
   </data>
  </layer>
+ <layer id="13" name="PathfindingLayout" width="25" height="13" opacity="0.55">
+  <data>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="802"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="801"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+   <tile gid="803"/>
+  </data>
+ </layer>
  <objectgroup id="10" name="Objects">
   <object id="33" name="CHECKPOINT" x="56" y="176">
    <properties>
@@ -1393,6 +1723,11 @@
    </properties>
    <point/>
   </object>
+  <object id="46" name="Insta Kill Object" x="144" y="208" width="80" height="32">
+   <properties>
+    <property name="Type" value="InstaKillObject"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup id="8" name="Colliders">
   <object id="25" x="0" y="0" width="48" height="80">
@@ -1435,6 +1770,24 @@
    <properties>
     <property name="AFFECTING_LAYERS" value="USE_LADDER_LAYER"/>
     <property name="OBJECT_LAYERS" value="LADDER_LAYER"/>
+   </properties>
+  </object>
+  <object id="47" x="128" y="208" width="16" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="48" x="144" y="240" width="80" height="16">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
+   </properties>
+  </object>
+  <object id="49" x="224" y="208" width="16" height="32">
+   <properties>
+    <property name="AFFECTING_LAYERS" value="PLAYER_LAYER"/>
+    <property name="OBJECT_LAYERS" value="GROUND_LAYER"/>
    </properties>
   </object>
  </objectgroup>
