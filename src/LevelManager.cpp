@@ -337,7 +337,7 @@ void LevelManager::SaveSaveFile(std::string path)
 			int sectionNumber = pair.second->sectionNumber;
 			for (const auto& object : pair.second->objects)
 			{
-				if (object->id != -1) {
+				if ( object!=nullptr && object->id != -1) {
 					pugi::xml_node found_node = otherNode.find_child([sectionNumber,object](pugi::xml_node node) {
 						return std::string(node.name()) == "Id" + std::to_string(sectionNumber) + "-" + std::to_string(object->id);
 					});
