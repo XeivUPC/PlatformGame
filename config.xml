@@ -22,7 +22,7 @@
 	<audio>
 		<music path ="Assets/Musics/"/>
 		<sfx path ="Assets/Sounds/"/>
-		<volume value="32"/>
+		<volume value="1"/>
 	</audio>
 	<levels path="Assets/Maps/LevelsData/"/>
 

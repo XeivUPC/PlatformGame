@@ -6,7 +6,7 @@
 #include <box2d/box2d.h>
 #include "CollisionSensor.h"
 
-class DirtBlock : Entity
+class DirtBlock : public Entity
 {
 
 

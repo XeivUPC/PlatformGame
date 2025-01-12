@@ -29,11 +29,14 @@
     <Filter Include="Source Files\Game\CheckPoints">
       <UniqueIdentifier>{d45e8e0f-5828-49cc-8e89-d0969d90e83b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\Obstacle">
-      <UniqueIdentifier>{3d588d78-86af-47e8-8f53-b656b98159f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Game\UI">
       <UniqueIdentifier>{b523fab9-dce4-4e5c-b0d8-7756b7b92237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Objects">
+      <UniqueIdentifier>{3d588d78-86af-47e8-8f53-b656b98159f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Objects\Items">
+      <UniqueIdentifier>{24957d1d-572b-4b43-96b8-ec632c94dd52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,10 +130,10 @@
       <Filter>Source Files\Game\CheckPoints</Filter>
     </ClCompile>
     <ClCompile Include="src\DirtBlock.cpp">
-      <Filter>Source Files\Game\Obstacle</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\MovingPlatform.cpp">
-      <Filter>Source Files\Game\Obstacle</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\UI.cpp">
       <Filter>Source Files\Game\UI</Filter>
@@ -148,13 +151,19 @@
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\InstaKillObject.cpp">
-      <Filter>Source Files\Game\Obstacle</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
     <ClCompile Include="src\PathfindingSystem.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\Divedrake.cpp">
       <Filter>Source Files\Game\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HealthItem.cpp">
+      <Filter>Source Files\Game\Objects\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GoldItem.cpp">
+      <Filter>Source Files\Game\Objects\Items</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -243,10 +252,10 @@
       <Filter>Source Files\Game\CheckPoints</Filter>
     </ClInclude>
     <ClInclude Include="src\DirtBlock.h">
-      <Filter>Source Files\Game\Obstacle</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\MovingPlatform.h">
-      <Filter>Source Files\Game\Obstacle</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\UI.h">
       <Filter>Source Files\Game\UI</Filter>
@@ -264,13 +273,22 @@
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\InstaKillObject.h">
-      <Filter>Source Files\Game\Obstacle</Filter>
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
     <ClInclude Include="src\PathfindingSystem.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\Divedrake.h">
       <Filter>Source Files\Game\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Item.h">
+      <Filter>Source Files\Game\Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HealthItem.h">
+      <Filter>Source Files\Game\Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GoldItem.h">
+      <Filter>Source Files\Game\Objects\Items</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -14,6 +14,8 @@
 #include "InstaKillObject.h"
 #include "Beeto.h"
 #include "Divedrake.h"
+#include "HealthItem.h"
+#include "GoldItem.h"
 #include "Debug.h"
 
 LevelSection::LevelSection()
@@ -360,6 +362,20 @@ void LevelSection::LoadObjects()
             Engine::GetInstance().entityManager->AddEntity((Entity*)movingPlatform,true);
 
             objects.emplace_back((Entity*)movingPlatform);
+        }
+        else if (type == "Heart") {
+            float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
+            Healthtem* heartItem = new Healthtem({x,y}, id);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)heartItem, true);
+            objects.emplace_back((Entity*)heartItem);
+        }
+        else if (type == "Gold") {
+            float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
+            GoldItem* goldItem = new GoldItem({x,y}, id);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)goldItem, true);
+            objects.emplace_back((Entity*)goldItem);
         }
     }
 }

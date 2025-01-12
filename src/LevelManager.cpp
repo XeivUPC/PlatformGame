@@ -282,7 +282,11 @@ void LevelManager::LoadSaveFile(std::string path)
 	else {
 
 		Vector2D pos = { saveFile.child("entities").child("player").child("position").attribute("x").as_float() ,saveFile.child("entities").child("player").child("position").attribute("y").as_float() };
+		int health = saveFile.child("entities").child("player").child("health").attribute("value").as_int();
+		int gold = saveFile.child("entities").child("player").child("gold").attribute("value").as_int();
 		Engine::GetInstance().scene->player->SetPosition(pos);
+		Engine::GetInstance().scene->player->playerHealth.SetHealth(health);
+		Engine::GetInstance().scene->player->coins.SetAmount(gold);
 
 		pugi::xml_node otherNode = saveFile.child("entities").child("other");
 		for (const auto& pair : loadedSections) {
@@ -323,6 +327,9 @@ void LevelManager::SaveSaveFile(std::string path)
 	else {
 		saveFile.child("entities").child("player").child("position").attribute("x").set_value(Engine::GetInstance().scene->player->GetPosition().getX());
 		saveFile.child("entities").child("player").child("position").attribute("y").set_value(Engine::GetInstance().scene->player->GetPosition().getY());
+		saveFile.child("entities").child("player").child("health").attribute("value").set_value(Engine::GetInstance().scene->player->playerHealth.GetCurrentHealth());
+		saveFile.child("entities").child("player").child("gold").attribute("value").set_value(Engine::GetInstance().scene->player->coins.GetAmount());
+
 
 
 		pugi::xml_node otherNode = saveFile.child("entities").child("other");

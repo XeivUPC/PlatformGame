@@ -14,6 +14,7 @@ public:
 	void ModifyBaseHealth(int amount);
 	void Hurt(int Damage);
 	void Heal(int HealtAmount);
+	void SetHealth(int HealthAmount);
 	bool IsAlive();
 	void Debug();
 };

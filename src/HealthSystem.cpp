@@ -49,6 +49,12 @@ void Health::Heal(int HealtAmount)
 	CorrectHealth();
 }
 
+void Health::SetHealth(int HealthAmount)
+{
+	currentHealth = HealthAmount;
+	CorrectHealth();
+}
+
 bool Health::IsAlive()
 {
 	CorrectHealth();

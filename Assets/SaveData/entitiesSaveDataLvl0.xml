@@ -1,20 +1,34 @@
 <?xml version="1.0"?>
 <entities>
 	<player>
-		<position x="8" y="11.0475016" />
+		<position x="40.993103" y="9.04750156" />
+		<health value="20" />
+		<gold value="100" />
 	</player>
 	<other>
 		<Id1-47>
-			<position x="20.4375" y="7" />
+			<position x="56.4375" y="5.75" />
 			<enabled value="true" />
 		</Id1-47>
 		<Id1-59>
 			<position x="33.4375" y="11.4850016" />
-			<enabled value="true" />
+			<enabled value="false" />
 		</Id1-59>
 		<Id2-62>
 			<position x="118.4375" y="11.4850016" />
 			<enabled value="true" />
 		</Id2-62>
+		<Id2-64>
+			<position x="106.5" y="4.6875" />
+			<enabled value="true" />
+		</Id2-64>
+		<Id1-60>
+			<position x="43.4375" y="7.3125" />
+			<enabled value="true" />
+		</Id1-60>
+		<Id1-61>
+			<position x="39" y="9.1875" />
+			<enabled value="false" />
+		</Id1-61>
 	</other>
 </entities>
