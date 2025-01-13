@@ -16,6 +16,7 @@
 #include "Divedrake.h"
 #include "HealthItem.h"
 #include "GoldItem.h"
+#include "LevelChangerArea.h"
 #include "Debug.h"
 
 LevelSection::LevelSection()
@@ -277,7 +278,7 @@ void LevelSection::LoadObjects()
             float y = objectNode.attribute("y").as_int();
 
             Vector2D postion{ PIXEL_TO_METERS(x) + (sectionOffset.x), PIXEL_TO_METERS(y) + (sectionOffset.y) };
-            CheckPoint* checkPoint = new CheckPoint(sectionNumber, postion);
+            CheckPoint* checkPoint = new CheckPoint(sectionNumber, postion, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)checkPoint,true);
 
             objects.emplace_back((Entity*)checkPoint);
@@ -308,8 +309,10 @@ void LevelSection::LoadObjects()
         else if (type == "SpawnPoint") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());   
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
 
-
+            spawnpoint = position;
+            hasSpawnPoint = true;
         }
         else if (type == "InstaKillObject") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
@@ -366,16 +369,42 @@ void LevelSection::LoadObjects()
         else if (type == "Heart") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
-            Healthtem* heartItem = new Healthtem({x,y}, id);
+
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+
+            Healthtem* heartItem = new Healthtem(position, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)heartItem, true);
             objects.emplace_back((Entity*)heartItem);
         }
         else if (type == "Gold") {
             float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
-            GoldItem* goldItem = new GoldItem({x,y}, id);
+
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+
+            GoldItem* goldItem = new GoldItem(position, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)goldItem, true);
             objects.emplace_back((Entity*)goldItem);
+        }
+        else if (type == "LevelChangerArea") {
+            float x = PIXEL_TO_METERS(objectNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(objectNode.attribute("y").as_int());
+
+            float width = PIXEL_TO_METERS(objectNode.attribute("width").as_int());
+            float height = PIXEL_TO_METERS(objectNode.attribute("height").as_int());
+
+            x += width / 2;
+            y += height / 2;
+
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+
+            pugi::xml_node levelTargetProperty = objectNode.child("properties").find_child_by_attribute("property", "name", "LevelTarget");
+            int levelTarget = levelTargetProperty.attribute("value").as_int();
+
+            LevelChangerArea* levelChanger = new LevelChangerArea(position, {width,height}, levelTarget);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)levelChanger, true);
+            objects.emplace_back((Entity*)levelChanger);
+
         }
     }
 }
@@ -409,6 +438,15 @@ void LevelSection::LoadEnemies()
 
             objects.emplace_back((Entity*)divedrake);
         }
+    }
+}
+
+Vector2D LevelSection::GetSpawnPoint()
+{
+    if (hasSpawnPoint)
+        return spawnpoint;
+    else {
+        return { -1,-1 };
     }
 }
 

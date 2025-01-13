@@ -92,9 +92,11 @@ void EntityManager::DestroyEntity(Entity* entity)
 	for (auto it = entities.begin(); it != entities.end(); ++it)
 	{
 		if (*it == entity) {
-			(*it)->CleanUp();
-			delete* it; // Free the allocated memory
+			Entity* entity = *it;
 			entities.erase(it); // Remove the entity from the list
+			entity->CleanUp();
+			delete entity; // Free the allocated memory
+			entity = nullptr;
 			break; // Exit the loop after removing the entity
 		}
 	}

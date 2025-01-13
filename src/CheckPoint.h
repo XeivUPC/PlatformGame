@@ -9,7 +9,7 @@
 class CheckPoint : Entity
 {
 public:
-	CheckPoint(int sectionPlaced, Vector2D respawnPoint);
+	CheckPoint(int sectionPlaced, Vector2D respawnPoint, int id);
 
 	virtual ~CheckPoint();
 
@@ -27,6 +27,9 @@ public:
 
 	int GetSection();
 	Vector2D GetRespawnPos();
+
+	void SetExtraData(int value) override;
+	int GetExtraData() override;
 
 private:
 	Vector2D respawnPos;

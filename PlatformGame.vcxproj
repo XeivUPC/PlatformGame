@@ -166,6 +166,7 @@
     <ClCompile Include="src\HealthItem.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\InstaKillObject.cpp" />
+    <ClCompile Include="src\LevelChangerArea.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LevelSection.cpp" />
     <ClCompile Include="src\Log.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\InstaKillObject.h" />
     <ClInclude Include="src\Item.h" />
+    <ClInclude Include="src\LevelChangerArea.h" />
     <ClInclude Include="src\LevelManager.h" />
     <ClInclude Include="src\LevelSection.h" />
     <ClInclude Include="src\Log.h" />

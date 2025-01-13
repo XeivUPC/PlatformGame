@@ -165,6 +165,9 @@
     <ClCompile Include="src\GoldItem.cpp">
       <Filter>Source Files\Game\Objects\Items</Filter>
     </ClCompile>
+    <ClCompile Include="src\LevelChangerArea.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -289,6 +292,9 @@
     </ClInclude>
     <ClInclude Include="src\GoldItem.h">
       <Filter>Source Files\Game\Objects\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelChangerArea.h">
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

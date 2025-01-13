@@ -51,10 +51,10 @@ public:
 
     bool levelLoaded = false;
 
-    static Vector2D spawnPoint;
 
 private:
 
+    Vector2D spawnPoint;
 
     std::unordered_map<int, LevelSection*> loadedSections;
     std::vector<int> sectionsInUse;

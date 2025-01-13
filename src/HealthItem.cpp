@@ -42,7 +42,9 @@ bool Healthtem::Start()
 	b2FixtureUserData fixtureData;
 	fixtureData.pointer = (uintptr_t)(&collisionController);
 
+	position.setX(position.getX() + PIXEL_TO_METERS(6.5f));
 	position.setY(position.getY() + PIXEL_TO_METERS(7));
+
 	body = colliderCreator.CreateBox(world, { position.getX(), position.getY()}, PIXEL_TO_METERS(13), PIXEL_TO_METERS(14), fixtureData);
 	Item::Start();
 	return true;

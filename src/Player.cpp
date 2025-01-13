@@ -549,10 +549,10 @@ void Player::Respawn()
 	playerCollider->SetTransform({ (spawnPos.getX()),(spawnPos.getY() - 1) }, 0);
 	position.setX(playerCollider->GetPosition().x);
 	position.setY(playerCollider->GetPosition().y);
-	Engine::GetInstance().levelManager->GoToClosestCheckPoint();
 	playerCollider->SetAwake(true);
 	playerHealth.ResetHealth();
 	isInvulnerable = false;
+	Engine::GetInstance().levelManager->GoToClosestCheckPoint();
 }
 
 void Player::SetPosition(Vector2D pos)

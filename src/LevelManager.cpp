@@ -109,6 +109,9 @@ bool LevelManager::LoadLevel(int levelToPlay)
 	LoadSection(1);
 
 	levelLoaded = true;
+	spawnPoint = GetCurrentSection()->spawnpoint;
+	Engine::GetInstance().scene->player->SetPosition(GetCurrentSection()->spawnpoint);
+	Engine::GetInstance().render->ConfineCameraBetweenRange();
 
 	return true;
 }
@@ -241,7 +244,7 @@ void LevelManager::GoToClosestCheckPoint()
 	}
 	else
 		LoadSection(1);
-	Engine::GetInstance().GetInstance().render->ConfineCameraBetweenRange();
+	Engine::GetInstance().render->ConfineCameraBetweenRange();
 }
 
 Vector2D LevelManager::GetClosestCheckPointPosition()
@@ -249,7 +252,7 @@ Vector2D LevelManager::GetClosestCheckPointPosition()
 	int sectionToGo = INT16_MAX;
 	bool finded = false;
 
-	Vector2D pos{8,8};
+	Vector2D pos = spawnPoint;
 	for (size_t i = 0; i < checkPoints.size(); i++)
 	{
 		CheckPoint* checkPoint = checkPoints[i];
@@ -282,6 +285,11 @@ void LevelManager::LoadSaveFile(std::string path)
 	else {
 
 		Vector2D pos = { saveFile.child("entities").child("player").child("position").attribute("x").as_float() ,saveFile.child("entities").child("player").child("position").attribute("y").as_float() };
+
+		int section = saveFile.child("entities").child("player").child("section").attribute("value").as_int();
+		LoadSection(section);
+		Engine::GetInstance().render->ConfineCameraBetweenRange();
+
 		int health = saveFile.child("entities").child("player").child("health").attribute("value").as_int();
 		int gold = saveFile.child("entities").child("player").child("gold").attribute("value").as_int();
 		Engine::GetInstance().scene->player->SetPosition(pos);
@@ -304,12 +312,15 @@ void LevelManager::LoadSaveFile(std::string path)
 
 
 						object->active = found_node.child("enabled").attribute("value").as_bool();
+						object->SetExtraData(found_node.child("extraData").attribute("value").as_int());
 					}
 				}
 			}
 		}
 
 	}
+
+	
 }
 
 void LevelManager::SaveSaveFile(std::string path)
@@ -327,6 +338,8 @@ void LevelManager::SaveSaveFile(std::string path)
 	else {
 		saveFile.child("entities").child("player").child("position").attribute("x").set_value(Engine::GetInstance().scene->player->GetPosition().getX());
 		saveFile.child("entities").child("player").child("position").attribute("y").set_value(Engine::GetInstance().scene->player->GetPosition().getY());
+		saveFile.child("entities").child("player").child("section").attribute("value").set_value(currentSection);
+
 		saveFile.child("entities").child("player").child("health").attribute("value").set_value(Engine::GetInstance().scene->player->playerHealth.GetCurrentHealth());
 		saveFile.child("entities").child("player").child("gold").attribute("value").set_value(Engine::GetInstance().scene->player->coins.GetAmount());
 
@@ -337,7 +350,7 @@ void LevelManager::SaveSaveFile(std::string path)
 			int sectionNumber = pair.second->sectionNumber;
 			for (const auto& object : pair.second->objects)
 			{
-				if ( object!=nullptr && object->id != -1) {
+				if ( object!=nullptr && object->id > 0) {
 					pugi::xml_node found_node = otherNode.find_child([sectionNumber,object](pugi::xml_node node) {
 						return std::string(node.name()) == "Id" + std::to_string(sectionNumber) + "-" + std::to_string(object->id);
 					});
@@ -346,6 +359,7 @@ void LevelManager::SaveSaveFile(std::string path)
 						found_node.child("position").attribute("x").set_value(object->GetPosition().getX());
 						found_node.child("position").attribute("y").set_value(object->GetPosition().getY());
 						found_node.child("enabled").attribute("value").set_value(object->active);
+						found_node.child("extraData").attribute("value").set_value(object->GetExtraData());
 					}
 					else {
 						pugi::xml_node newNode =  otherNode.append_child(("Id" + std::to_string(sectionNumber) + "-" + std::to_string(object->id)).c_str());
@@ -354,6 +368,8 @@ void LevelManager::SaveSaveFile(std::string path)
 						positionNode.append_attribute("y").set_value(object->GetPosition().getY());
 						pugi::xml_node enabledNode = newNode.append_child("enabled");
 						enabledNode.append_attribute("value").set_value(object->active);
+						pugi::xml_node extraDataNode = newNode.append_child("extraData");
+						extraDataNode.append_attribute("value").set_value(object->GetExtraData());
 					}
 				}
 			}
