@@ -6574,12 +6574,6 @@
    </properties>
    <point/>
   </object>
-  <object id="62" x="0" y="144" width="16" height="32">
-   <properties>
-    <property name="LevelTarget" type="int" value="1"/>
-    <property name="Type" value="LevelChangerArea"/>
-   </properties>
-  </object>
   <object id="63" x="177.333" y="160">
    <properties>
     <property name="Size" type="int" value="1"/>
