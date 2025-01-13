@@ -17,7 +17,7 @@
 #include "LevelManager.h"
 #include "Parallax.h"
 #include "TextGenerator.h"
-#include "UI.h"
+#include "GuiManager.h"
 #include "PathfindingSystem.h"
 
 
@@ -50,7 +50,7 @@ Engine::Engine() {
     pathfinding = std::make_shared<PathfindingSystem>();
 
     collisionsManager = std::make_shared<CollisionsManager>();
-    ui = std::make_shared<UI>();
+    ui = std::make_shared<GuiManager>();
     debug = std::make_shared<Debug>();
 
     // Ordered for awake / Start / Update
@@ -69,7 +69,7 @@ Engine::Engine() {
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(debug));
-    AddModule(std::static_pointer_cast<UI>(ui));
+    AddModule(std::static_pointer_cast<Module>(ui));
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));

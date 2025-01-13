@@ -6,6 +6,10 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "Player.h"
+#include "GuiManager.h"
+#include "GuiControl.h"
+#include "Window.h"
+#include "Render.h"
 
 
 Scene::Scene() : Module()
@@ -28,7 +32,7 @@ bool Scene::Awake()
 	//Get the player texture name from the config file and assigns the value	
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
-
+	pauseButton = Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, 33, "", {Engine::GetInstance().window->width-20,10,10,10}, this);
 	return ret;
 }
 
@@ -42,6 +46,16 @@ bool Scene::Start()
 bool Scene::LoadParameters(xml_node parameters) {
 
 	configParameters = parameters;
+	return true;
+}
+
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	if (control == pauseButton)
+	{
+
+	}
+		//pause
 	return true;
 }
 
@@ -59,7 +73,29 @@ bool Scene::Update(float dt)
 	//	if (player->active == true) player->Disable();
 	//	else player->Enable();
 	//}
-
+	Engine::GetInstance().render->SelectLayer(Render::Layer6);
+	switch (pauseButton->CurrentState())
+	{
+	case GuiControlState::DISABLED:
+		Engine::GetInstance().render->DrawRectangle({ Engine::GetInstance().window->width-20, 10, 10, 10}, 127, 127, 127, 255, true, false);
+		break;
+	case GuiControlState::NORMAL:
+		Engine::GetInstance().render->DrawRectangle({ Engine::GetInstance().window->width - 20, 10, 10, 10 }, 255, 255, 255, 255, true, false);
+		break;
+	case GuiControlState::FOCUSED:
+		Engine::GetInstance().render->DrawRectangle({ Engine::GetInstance().window->width - 20, 10, 10, 10 }, 255, 0, 0, 255, true, false);
+		break;
+	case GuiControlState::PRESSED:
+		Engine::GetInstance().render->DrawRectangle({ Engine::GetInstance().window->width - 20, 10, 10, 10 }, 0, 255, 0, 255, true, false);
+		break;
+	case GuiControlState::SELECTED:
+		Engine::GetInstance().render->DrawRectangle({ Engine::GetInstance().window->width - 20, 10, 10, 10 }, 0, 0, 255, 255, true, false);
+		break;
+	}
+	if (isPaused)
+	{
+		Engine::GetInstance().render->DrawRectangle({ 10,10,Engine::GetInstance().window->width, Engine::GetInstance().window->height },255,255,255,255,true,false);
+	}
 
 	return true;
 }

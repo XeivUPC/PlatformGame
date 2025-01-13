@@ -161,6 +161,9 @@
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\GoldItem.cpp" />
+    <ClCompile Include="src\GuiControl.cpp" />
+    <ClCompile Include="src\GuiControlButton.cpp" />
+    <ClCompile Include="src\GuiManager.cpp" />
     <ClCompile Include="src\HealthSystem.cpp" />
     <ClCompile Include="src\HealthItem.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -202,6 +205,9 @@
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\GoldItem.h" />
+    <ClInclude Include="src\GuiControl.h" />
+    <ClInclude Include="src\GuiControlButton.h" />
+    <ClInclude Include="src\GuiManager.h" />
     <ClInclude Include="src\HealthSystem.h" />
     <ClInclude Include="src\HealthItem.h" />
     <ClInclude Include="src\Input.h" />

@@ -143,10 +143,10 @@ bool Player::Update(float dt)
 		magic.Add(1);
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
-		if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
-			Engine::GetInstance().ui->pauseMenuUI.Activate();
-		else
-			Engine::GetInstance().ui->pauseMenuUI.Deactivate();
+		//if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
+			//Engine::GetInstance().ui->pauseMenuUI.Activate();
+		//else
+			//Engine::GetInstance().ui->pauseMenuUI.Deactivate();
 	}
 
 

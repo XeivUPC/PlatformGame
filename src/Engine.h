@@ -23,7 +23,7 @@ class LevelManager;
 class CollisionsManager;
 class Parallax;
 class TextGenerator;
-class UI;
+class GuiManager;
 class Debug;
 class PathfindingSystem;
 
@@ -131,7 +131,7 @@ public:
 	std::shared_ptr<CollisionsManager> collisionsManager;
 	std::shared_ptr<Parallax> parallax;
 	std::shared_ptr<TextGenerator> text;
-	std::shared_ptr<UI> ui;
+	std::shared_ptr<GuiManager> ui;
 	std::shared_ptr<Debug> debug;
 	std::shared_ptr<PathfindingSystem> pathfinding;
 

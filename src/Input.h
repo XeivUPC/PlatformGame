@@ -21,6 +21,7 @@ enum KeyState
 	KEY_REPEAT,
 	KEY_UP
 };
+class Vector2D;
 
 class Input : public Module
 {
@@ -59,7 +60,7 @@ public:
 	bool GetWindowEvent(EventWindow ev);
 
 	// Get mouse / axis position
-	void GetMousePosition(int &x, int &y);
+	Vector2D GetMousePosition();
 	void GetMouseMotion(int& x, int& y);
 
 private:
