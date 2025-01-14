@@ -249,7 +249,7 @@ void PathfindingSystem::FindPath(std::vector<int> tiles, int width, int height, 
 
 bool PathfindingSystem::Start()
 {
-    pathTex = Engine::GetInstance().textures.get()->Load("Assets/Textures/PathTexture.png");
+    pathTex = Engine::GetInstance().textures.get()->GetTexture("PathfindingTexture");
     return true;
 }
 

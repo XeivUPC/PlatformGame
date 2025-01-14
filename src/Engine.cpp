@@ -17,6 +17,7 @@
 #include "EntityManager.h"
 #include "Debug.h"
 #include "LevelManager.h"
+#include "AssetLoader.h"
 #include "Parallax.h"
 #include "TextGenerator.h"
 #include "GuiManager.h"
@@ -42,6 +43,7 @@ Engine::Engine() {
     input = std::make_shared<Input>();
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
+    assetLoader = std::make_shared<AssetLoader>();
     audio = std::make_shared<Audio>();
     physics = std::make_shared<Physics>();
 
@@ -64,10 +66,10 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(window));
     AddModule(std::static_pointer_cast<Module>(input));
     AddModule(std::static_pointer_cast<Module>(textures));
+    AddModule(std::static_pointer_cast<Module>(assetLoader));
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(physics));
 
-    //AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(game_scene));
     AddModule(std::static_pointer_cast<Module>(intro_scene));
     AddModule(std::static_pointer_cast<Module>(title_scene));

@@ -58,6 +58,7 @@ bool EntityManager::CleanUp()
 		delete entity;
 	}
 	entities.clear();
+	entitiesToDestroyAtUpdateEnd.clear();
 
 	return ret;
 }

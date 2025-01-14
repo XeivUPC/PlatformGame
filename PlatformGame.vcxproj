@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AnimationSystem.cpp" />
+    <ClCompile Include="src\AssetLoader.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Beeto.cpp" />
     <ClCompile Include="src\Box2DFactory.cpp" />
@@ -193,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AnimationSystem.h" />
+    <ClInclude Include="src\AssetLoader.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Beeto.h" />
     <ClInclude Include="src\Box2DFactory.h" />

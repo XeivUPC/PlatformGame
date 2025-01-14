@@ -10,7 +10,7 @@
 PauseUI::PauseUI(GameScene* GameAt)
 {
 	gameAt = GameAt;
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI1.png");
+	texture = Engine::GetInstance().textures->GetTexture("UI1Texture");
 	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { Engine::GetInstance().window->width - 20,10,16,16 }, texture, (Module*)gameAt);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::NORMAL);
 	pauseButton->SetRectangle({ 16,0,16,16 }, GuiControlState::FOCUSED);

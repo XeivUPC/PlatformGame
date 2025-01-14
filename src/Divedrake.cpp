@@ -16,6 +16,7 @@ Divedrake::Divedrake(Vector2D pos, LevelSection* layer, int id) : Enemy(pos, lay
 
 Divedrake::~Divedrake()
 {
+
 }
 
 void Divedrake::LoadParameters()
@@ -41,7 +42,7 @@ void Divedrake::LoadParameters()
 
 		textureName = divedrakeProperties.child("texture").attribute("path").as_string();
 		textureOffset = { divedrakeProperties.child("texture").attribute("x_offset").as_float(),divedrakeProperties.child("texture").attribute("y_offset").as_float() };
-		texture = Engine::GetInstance().textures->Load(textureName.c_str());
+		texture = Engine::GetInstance().textures->GetTexture(textureName.c_str());
 
 		pugi::xml_node animProperties = divedrakeProperties.child("animator");
 		animator = new Animator();

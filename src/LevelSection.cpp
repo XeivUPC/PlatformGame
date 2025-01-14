@@ -78,7 +78,7 @@ bool LevelSection::CleanUp()
 {
     // Make sure you clean up any memory allocated from tilesets/map
     for (const auto& tileset : mapData.tilesets) {
-        Engine::GetInstance().textures->UnLoad(tileset->texture);
+        //Engine::GetInstance().textures->DeleteTexture(tileset->texture);
         delete tileset;
     }
     mapData.tilesets.clear();
@@ -196,7 +196,9 @@ TileSet* LevelSection::CreateTileset(xml_node* node, std::string texturePath)
 
     std::string mapTex = texturePath;
     mapTex += document.child("tileset").child("image").attribute("source").as_string();
-    tileset->texture = Engine::GetInstance().textures->Load(mapTex.c_str());
+
+    Engine::GetInstance().textures->CreateTexture(mapTex.c_str(), mapTex.c_str());
+    tileset->texture = Engine::GetInstance().textures->GetTexture(mapTex.c_str());
 
 
     for (pugi::xml_node tileAnimatedNode = document.child("tileset").child("tile"); tileAnimatedNode != NULL; tileAnimatedNode = tileAnimatedNode.next_sibling("tile")) {

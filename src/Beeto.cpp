@@ -41,7 +41,7 @@ void Beeto::LoadParameters()
 
 		textureName = beetoProperties.child("texture").attribute("path").as_string();
 		textureOffset = { beetoProperties.child("texture").attribute("x_offset").as_float(),beetoProperties.child("texture").attribute("y_offset").as_float() };
-		texture = Engine::GetInstance().textures->Load(textureName.c_str());
+		texture = Engine::GetInstance().textures->GetTexture(textureName.c_str());
 
 		pugi::xml_node animProperties = beetoProperties.child("animator");
 		animator = new Animator();

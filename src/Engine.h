@@ -14,6 +14,7 @@ class Window;
 class Input;
 class Render;
 class Textures;
+class AssetLoader;
 class Audio;
 class Physics;
 
@@ -125,6 +126,7 @@ public:
 	std::shared_ptr<Input> input;
 	std::shared_ptr<Render> render;
 	std::shared_ptr<Textures> textures;
+	std::shared_ptr<AssetLoader> assetLoader;
 	std::shared_ptr<Audio> audio;
 	std::shared_ptr<Physics> physics;
 	std::shared_ptr<GameScene> game_scene;

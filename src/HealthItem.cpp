@@ -22,7 +22,7 @@ bool Healthtem::Awake()
 bool Healthtem::Start()
 {
 	animator = new Animator();
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/Objects/HealthPotion.png");
+	texture = Engine::GetInstance().textures->GetTexture("HealthPotionTexture");
 	textureOffset = { -6,-9.5 };
 
 	AnimationData defaultAnim = AnimationData("Default");

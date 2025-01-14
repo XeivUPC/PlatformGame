@@ -22,7 +22,7 @@ bool GoldItem::Awake()
 bool GoldItem::Start()
 {
 	animator = new Animator();
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/Objects/Gold.png");
+	texture = Engine::GetInstance().textures->GetTexture("GoldCoinTexture");
 	textureOffset = { -8,-8 };
 
 	AnimationData defaultAnim = AnimationData("Default");
