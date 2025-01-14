@@ -5,6 +5,7 @@
 
 
 class PauseUI;
+class GameUI;
 class GameScene : public Module
 {
 public:
@@ -40,6 +41,7 @@ public:
 	Player* player;
 
 private:
-	PauseUI* pause;
+	PauseUI* pause = nullptr;
+	GameUI* ui = nullptr;
 };
 

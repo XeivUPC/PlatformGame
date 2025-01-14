@@ -48,7 +48,7 @@ public:
 	
 	SDL_Texture* texture = NULL;
 
-	Health playerHealth = Health(20);
+	Health playerHealth = Health(10);
 
 	Counter coins = Counter();
 	Counter magic = Counter();

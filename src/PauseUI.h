@@ -1,15 +1,14 @@
 #pragma once
 #include "SDL2/SDL.h"
+#include "UI.h"
 class GuiControlButton;
-class GameScene;
-class PauseUI
+class Module;
+class PauseUI : public UI
 {
 private:
-	GameScene* gameAt;
-	SDL_Texture* texture;
 	bool isPaused = false;
 public:
-	PauseUI(GameScene* GameAt);
+	PauseUI(Module* ModuleAt);
 	~PauseUI();
 	void Update(float dt);
 	void Render();

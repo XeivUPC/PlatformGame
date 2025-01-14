@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "EntityManager.h"
 #include "LevelManager.h"
+#include "GameUI.h"
 #include "PauseUI.h"
 
 GameScene::GameScene(bool isActive) : Module(isActive)
@@ -26,6 +27,7 @@ bool GameScene::Awake()
 bool GameScene::Start()
 {
 	pause = new PauseUI(this);
+	ui = new GameUI(this, player);
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER, true);
 	Engine::GetInstance().levelManager->LoadLevel(0);
 	return true;
@@ -38,7 +40,7 @@ bool GameScene::PreUpdate()
 
 bool GameScene::Update(float dt)
 {
-
+	ui->Update(dt);
 	pause->Update(dt);
 	return true;
 }
@@ -53,6 +55,10 @@ bool GameScene::PostUpdate()
 
 bool GameScene::CleanUp()
 {
+	/*ui->CleanUp();
+	pause->CleanUp();
+	delete ui;
+	delete pause;*/
 	LOG("Freeing GameScene");
 	return true;
 }
