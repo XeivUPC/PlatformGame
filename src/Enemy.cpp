@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Engine.h"
 #include "Physics.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "Audio.h"
 #include "EntityManager.h"
 #include "LevelManager.h"
@@ -163,7 +163,7 @@ bool Enemy::Awake()
 
 bool Enemy::Start()
 {
-	player = Engine::GetInstance().scene->player;
+	player = Engine::GetInstance().game_scene->player;
 	LoadParameters();
 	InitColliders();
 	dieSoundId = Engine::GetInstance().audio->LoadFx("Enemy_Die.wav");

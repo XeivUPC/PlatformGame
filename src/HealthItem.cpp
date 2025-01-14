@@ -1,5 +1,5 @@
 #include "HealthItem.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "Engine.h"
 #include "Box2DFactory.h"
 #include "Debug.h"
@@ -80,6 +80,6 @@ bool Healthtem::CleanUp()
 
 void Healthtem::Pick()
 {
-	Engine::GetInstance().scene->player->playerHealth.Heal(2);
+	Engine::GetInstance().game_scene->player->playerHealth.Heal(2);
 	Item::Pick();
 }

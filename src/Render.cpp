@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "Window.h"
 #include "Render.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "LevelManager.h"
 #include "Log.h"
 
@@ -162,8 +162,8 @@ void Render::ConfineCameraBetweenRange(float dt)
 			camera.y = maxY;
 	}
 
-	float playerPosX = Engine::GetInstance().scene->player->position.getX();
-	float playerPosY = Engine::GetInstance().scene->player->position.getY();
+	float playerPosX = Engine::GetInstance().game_scene->player->position.getX();
+	float playerPosY = Engine::GetInstance().game_scene->player->position.getY();
 
 	if (playerPosX > maxRangeConfinePosition.getX())
 		Engine::GetInstance().levelManager->GoToNextSection({ 1,0 });
@@ -187,7 +187,7 @@ void Render::ConfineCameraBetweenRange()
 	float maxY = minY;
 
 
-	float targetPos = METERS_TO_PIXELS((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
+	float targetPos = METERS_TO_PIXELS((-Engine::GetInstance().game_scene->player->position.getX())) + viewport.w / 2.f;
 
 	camera.x = targetPos;
 
@@ -215,7 +215,7 @@ void Render::FollowPlayer()
 	float minY = METERS_TO_PIXELS_RAW(-minRangeConfinePosition.getY()+2);
 	float maxY = minY;
 
-	float targetPos = METERS_TO_PIXELS_RAW((-Engine::GetInstance().scene->player->position.getX())) + viewport.w / 2.f;
+	float targetPos = METERS_TO_PIXELS_RAW((-Engine::GetInstance().game_scene->player->position.getX())) + viewport.w / 2.f;
 
 	if (targetPos > minX) {
 		return;

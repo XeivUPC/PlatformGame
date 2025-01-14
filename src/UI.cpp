@@ -4,7 +4,7 @@
 #include "TextGenerator.h"
 #include "Window.h"
 #include "Input.h"
-#include "Scene.h"
+#include "GameScene.h"
 
 UI::UI()
 {
@@ -121,14 +121,14 @@ void TopUI::Render()
 		return;
 	}
 
-	OrbDrawAndLogic(Engine::GetInstance().scene->player->playerHealth, 2, 4, 5, 8, {152,4});
+	OrbDrawAndLogic(Engine::GetInstance().game_scene->player->playerHealth, 2, 4, 5, 8, {152,4});
 	SDL_Rect chest{ 0, 0, 16, 16 };
 	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 0, -Engine::GetInstance().render->camera.y, SDL_FLIP_NONE, &chest);
 	SDL_Rect potion{ 16, 0, 16, 16 };
 	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().ui->GetTexture(), -Engine::GetInstance().render->camera.x + 80, -Engine::GetInstance().render->camera.y, SDL_FLIP_NONE, &potion);
 	Engine::GetInstance().text->Write("-gold-    -item-    -life-                  -boss-", -Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y);
-	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().scene->player->coins.GetAmount()).c_str(), -Engine::GetInstance().render->camera.x + 16, -Engine::GetInstance().render->camera.y  + 8);
-	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().scene->player->magic.GetAmount()).c_str(), -Engine::GetInstance().render->camera.x + 96, -Engine::GetInstance().render->camera.y  + 8);
+	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().game_scene->player->coins.GetAmount()).c_str(), -Engine::GetInstance().render->camera.x + 16, -Engine::GetInstance().render->camera.y  + 8);
+	Engine::GetInstance().text->Write(std::to_string(Engine::GetInstance().game_scene->player->magic.GetAmount()).c_str(), -Engine::GetInstance().render->camera.x + 96, -Engine::GetInstance().render->camera.y  + 8);
 
 	Engine::GetInstance().render->UnlockLayer();
 }

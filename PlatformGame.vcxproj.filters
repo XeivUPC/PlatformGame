@@ -38,6 +38,9 @@
     <Filter Include="Source Files\Game\Objects\Items">
       <UniqueIdentifier>{24957d1d-572b-4b43-96b8-ec632c94dd52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scenes">
+      <UniqueIdentifier>{a2d9ab36-59b3-4a37-b0db-3d73e6e04da8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -168,6 +171,15 @@
     <ClCompile Include="src\LevelChangerArea.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IntroScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TitleScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -295,6 +307,15 @@
     </ClInclude>
     <ClInclude Include="src\LevelChangerArea.h">
       <Filter>Source Files\Game\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TitleScene.h">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameScene.h">
+      <Filter>Source Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IntroScene.h">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

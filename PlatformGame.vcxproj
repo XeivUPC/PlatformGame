@@ -161,11 +161,13 @@
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EntityManager.cpp" />
+    <ClCompile Include="src\GameScene.cpp" />
     <ClCompile Include="src\GoldItem.cpp" />
     <ClCompile Include="src\HealthSystem.cpp" />
     <ClCompile Include="src\HealthItem.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\InstaKillObject.cpp" />
+    <ClCompile Include="src\IntroScene.cpp" />
     <ClCompile Include="src\LevelChangerArea.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LevelSection.cpp" />
@@ -182,6 +184,7 @@
     <ClCompile Include="src\TextGenerator.cpp" />
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\TitleScene.cpp" />
     <ClCompile Include="src\UI.cpp" />
     <ClCompile Include="src\Vector2D.cpp" />
     <ClCompile Include="src\Window.cpp" />
@@ -203,11 +206,13 @@
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\EntityManager.h" />
+    <ClInclude Include="src\GameScene.h" />
     <ClInclude Include="src\GoldItem.h" />
     <ClInclude Include="src\HealthSystem.h" />
     <ClInclude Include="src\HealthItem.h" />
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\InstaKillObject.h" />
+    <ClInclude Include="src\IntroScene.h" />
     <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\LevelChangerArea.h" />
     <ClInclude Include="src\LevelManager.h" />
@@ -226,6 +231,7 @@
     <ClInclude Include="src\TextGenerator.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Timer.h" />
+    <ClInclude Include="src\TitleScene.h" />
     <ClInclude Include="src\UI.h" />
     <ClInclude Include="src\Vector2D.h" />
     <ClInclude Include="src\Window.h" />

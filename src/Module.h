@@ -9,14 +9,21 @@ class Module
 {
 public:
 
-	Module() : active(false)
+	Module(bool isActive = true) : active(isActive)
 	{
 	
 	}
 
-	void Init()
+	void Enable()
 	{
+		Start();
 		active = true;
+	}
+
+	void Disable()
+	{
+		CleanUp();
+		active = false;
 	}
 
 	// Called before render is available
