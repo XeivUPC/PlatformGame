@@ -222,4 +222,5 @@ void Audio::SetMasterVolume(int volume)
 	Mix_VolumeMusic(volume);
 
 	LOG("Volumes set to %d", volume);
+
 }

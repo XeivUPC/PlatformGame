@@ -14,4 +14,3 @@ public:
 	bool Update(float dt);
 };
 
-#pragma once

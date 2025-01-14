@@ -28,7 +28,6 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, SDL_Rect bounds, S
 	case GuiControlType::BUTTON:
 		guiControl = new GuiControlButton(GuiControlType::BUTTON,bounds, texture);
 		break;
-	}
 
 	//Set the observer
 	guiControl->SetObserver(observer);
