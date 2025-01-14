@@ -34,30 +34,10 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, SDL_Rect bounds, S
 	guiControl->SetObserver(observer);
 
 	// Created GuiControls are add it to the list of controls
-	guiControlsList.push_back(guiControl);
 
 	return guiControl;
 }
 
-bool GuiManager::Update(float dt)
-{	
-	for (const auto& control : guiControlsList)
-	{
-		control->Update(dt);
-	}
-
-	return true;
-}
-
-bool GuiManager::CleanUp()
-{
-	for (const auto& control : guiControlsList)
-	{
-		delete control;
-	}
-
-	return true;
-}
 
 
 

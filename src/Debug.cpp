@@ -1,6 +1,5 @@
 #include "Debug.h"
 #include "Input.h"
-#include "Scene.h"
 #include "Window.h"
 #include "TextGenerator.h"
 #include "Box2DRender.h"

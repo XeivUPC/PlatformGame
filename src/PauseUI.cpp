@@ -81,6 +81,7 @@ void PauseUI::Render()
 	{
 		SDL_Rect rect;
 		Engine::GetInstance().render->LockLayer(Render::Layer6);
+		Engine::GetInstance().render->DrawRectangle({ 0,0, Engine::GetInstance().window->width,Engine::GetInstance().window->height}, 0, 0, 0, 175, true, false);
 		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 0, 0, 0, 255, true, false);
 		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 255, 255, 255, 255, false, false);
 		rect = { 0,64,16,16 };

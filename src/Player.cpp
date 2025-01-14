@@ -43,6 +43,7 @@ bool Player::Start()
 	attackRecoverTimer = Timer();
 	jumpRecoverTimer = Timer();
 
+	isInvulnerable = true;
 
 	return true;
 }

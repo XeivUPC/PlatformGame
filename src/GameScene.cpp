@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "TitleScene.h"
 #include "Log.h"
 #include "Engine.h"
 #include "EntityManager.h"
@@ -28,6 +29,9 @@ bool GameScene::Start()
 	pause = new PauseUI(this);
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER, true);
 	Engine::GetInstance().levelManager->LoadLevel(0);
+
+	exitGame = false;
+	goToMainMenu = false;
 	return true;
 }
 
@@ -38,22 +42,32 @@ bool GameScene::PreUpdate()
 
 bool GameScene::Update(float dt)
 {
-
 	pause->Update(dt);
 	return true;
 }
 
 bool GameScene::PostUpdate()
 {
-	bool ret = true;
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
-	return ret;
+		exitGame = true;
+
+	if (goToMainMenu) {
+		pause->SetPause(false);
+		Engine::GetInstance().title_scene->Enable();
+		Disable();
+	}
+	return !exitGame;
 }
 
 bool GameScene::CleanUp()
 {
 	LOG("Freeing GameScene");
+	pause->CleanUp();
+	delete pause;
+	Engine::GetInstance().entityManager->CleanUp();
+	Engine::GetInstance().levelManager->CleanUp();
+
+
 	return true;
 }
 
@@ -69,25 +83,26 @@ bool GameScene::OnGuiMouseClickEvent(GuiControl* control)
 	{
 		pause->SetPause(true);
 	}
-
-	if (control == (GuiControl*)pause->resumeButton)
+	else if (control == (GuiControl*)pause->resumeButton)
 	{
 		pause->SetPause(false);
 	}
 
-	if (control == (GuiControl*)pause->settingsButton)
+	else if (control == (GuiControl*)pause->settingsButton)
 	{
 		// Go Settings
 	}
 
-	if (control == (GuiControl*)pause->exitGameButton)
+	else if (control == (GuiControl*)pause->exitGameButton)
 	{
 		//Go Main Menu
+		goToMainMenu = true;
+		
 	}
-
-	if (control == (GuiControl*)pause->exitAppButton)
+	else if (control == (GuiControl*)pause->exitAppButton)
 	{
 		//Quit Game
+		exitGame = true;
 	}
 	return true;
 }

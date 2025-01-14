@@ -41,5 +41,7 @@ public:
 
 private:
 	PauseUI* pause;
+	bool exitGame = false;
+	bool goToMainMenu = false;
 };
 
