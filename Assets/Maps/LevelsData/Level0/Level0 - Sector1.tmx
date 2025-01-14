@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="62">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="64">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="-1"/>
@@ -6562,15 +6562,22 @@
     <property name="Type" value="InstaKillObject"/>
    </properties>
   </object>
-  <object id="60" x="695.875" y="110">
+  <object id="60" x="688" y="96">
    <properties>
     <property name="Type" value="Heart"/>
    </properties>
    <point/>
   </object>
-  <object id="61" x="624" y="139.5">
+  <object id="61" x="624" y="128">
    <properties>
     <property name="Type" value="Gold"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="63" x="177.333" y="160">
+   <properties>
+    <property name="Size" type="int" value="1"/>
+    <property name="Type" value="DirtBlock"/>
    </properties>
    <point/>
   </object>

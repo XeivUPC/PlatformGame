@@ -1,18 +1,14 @@
 #pragma once
 #include "Module.h"
-#include "Player.h"
 #include <box2d/box2d.h>
-
-
-
-class Scene : public Module
+class TitleScene : public Module
 {
 public:
 
-	Scene();
+	TitleScene(bool isActive = true);
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~TitleScene();
 
 	// Called before render is available
 	bool Awake();
@@ -34,11 +30,5 @@ public:
 
 	// Load Parameters from config file
 	bool LoadParameters(xml_node parameters);
-
-	bool OnGuiMouseClickEvent(GuiControl* control);
-
-	Player* player;
-private:
-
-	xml_node configParameters;
 };
+

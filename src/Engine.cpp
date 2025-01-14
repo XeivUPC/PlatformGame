@@ -11,7 +11,10 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Physics.h"
-#include "Scene.h"
+//#include "Scene.h"
+#include "GameScene.h"
+#include "IntroScene.h"
+#include "TitleScene.h"
 #include "EntityManager.h"
 #include "Debug.h"
 #include "LevelManager.h"
@@ -20,7 +23,7 @@
 #include "GuiManager.h"
 #include "PathfindingSystem.h"
 
-
+#include "tracy/Tracy.hpp"
 
 
 // Constructor
@@ -42,7 +45,12 @@ Engine::Engine() {
     textures = std::make_shared<Textures>();
     audio = std::make_shared<Audio>();
     physics = std::make_shared<Physics>();
-    scene = std::make_shared<Scene>();
+
+    //scene = std::make_shared<Scene>();
+    game_scene = std::make_shared<GameScene>(false);
+    title_scene = std::make_shared<TitleScene>(false);
+    intro_scene = std::make_shared<IntroScene>();
+
     levelManager = std::make_shared<LevelManager>();
     entityManager = std::make_shared<EntityManager>();
     parallax = std::make_shared<Parallax>();
@@ -60,7 +68,12 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(textures));
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(physics));
-    AddModule(std::static_pointer_cast<Module>(scene));
+
+    //AddModule(std::static_pointer_cast<Module>(scene));
+    AddModule(std::static_pointer_cast<Module>(game_scene));
+    AddModule(std::static_pointer_cast<Module>(intro_scene));
+    AddModule(std::static_pointer_cast<Module>(title_scene));
+
     AddModule(std::static_pointer_cast<Module>(parallax));
     AddModule(std::static_pointer_cast<Module>(pathfinding));
     //// Add the map module
@@ -84,7 +97,6 @@ Engine& Engine::GetInstance() {
 }
 
 void Engine::AddModule(std::shared_ptr<Module> module){
-    module->Init();
     moduleList.push_back(module);
 }
 
@@ -151,6 +163,8 @@ bool Engine::Start() {
 // Called each loop iteration
 bool Engine::Update() {
 
+    ZoneScoped;
+
     bool ret = true;
     PrepareUpdate();
 
@@ -167,6 +181,8 @@ bool Engine::Update() {
         ret = PostUpdate();
 
     FinishUpdate();
+
+    FrameMark;
     return ret;
 }
 
@@ -181,7 +197,8 @@ bool Engine::CleanUp() {
     //Iterates the module list and calls CleanUp on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module->CleanUp();
+        if (module->active)
+            result = module->CleanUp();
         if (!result) {
             break;
         }
@@ -210,12 +227,14 @@ void Engine::SetMaxFrameDuration(int value)
 // ---------------------------------------------
 void Engine::PrepareUpdate()
 {
+    ZoneScoped;
     frameTime.Start();
 }
 
 // ---------------------------------------------
 void Engine::FinishUpdate()
 {
+    ZoneScoped;
     //Cap the framerate of the gameloop
     double currentDt = frameTime.ReadMs();
     if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
@@ -264,10 +283,12 @@ void Engine::FinishUpdate()
 // Call modules before each loop iteration
 bool Engine::PreUpdate()
 {
+    ZoneScoped;
     //Iterates the module list and calls PreUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module->PreUpdate();
+        if(module->active)
+            result = module->PreUpdate();
         if (!result) {
             break;
         }
@@ -279,10 +300,12 @@ bool Engine::PreUpdate()
 // Call modules on each loop iteration
 bool Engine::DoUpdate()
 {
+    ZoneScoped;
     //Iterates the module list and calls Update on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module->Update(dt);
+        if (module->active)
+            result = module->Update(dt);
         if (!result) {
             break;
         }
@@ -297,7 +320,8 @@ bool Engine::PostUpdate()
     //Iterates the module list and calls PostUpdate on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module->PostUpdate();
+        if (module->active)
+            result = module->PostUpdate();
         if (!result) {
             break;
         }

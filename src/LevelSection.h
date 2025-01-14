@@ -80,6 +80,8 @@ public:
     void LoadObjects();
     void LoadEnemies();
 
+    Vector2D GetSpawnPoint();
+
     MapLayer* GetLayerByIndex(int index);
 
     int sectionNumber;
@@ -88,6 +90,9 @@ public:
     int rightSection;
     int topSection;
     int bottomSection;
+
+    bool hasSpawnPoint;
+    Vector2D spawnpoint = {-1,-1};
 
     MapData mapData;
 

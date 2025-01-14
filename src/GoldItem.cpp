@@ -1,5 +1,5 @@
 #include "GoldItem.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "Engine.h"
 #include "Box2DFactory.h"
 #include "Debug.h"
@@ -76,6 +76,6 @@ bool GoldItem::CleanUp()
 
 void GoldItem::Pick()
 {
-	Engine::GetInstance().scene->player->coins.Add(100);
+	Engine::GetInstance().game_scene->player->coins.Add(100);
 	Item::Pick();
 }

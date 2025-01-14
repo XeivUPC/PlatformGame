@@ -6,7 +6,7 @@
 #include "CollisionsManager.h"
 #include "EntityManager.h"
 #include "Debug.h"
-#include "Scene.h"
+#include "GameScene.h"
 #include "Player.h"
 
 InstaKillObject::InstaKillObject(Vector2D position, Vector2D size) : Entity(EntityType::UNKNOWN)
@@ -56,7 +56,7 @@ bool InstaKillObject::Start()
 bool InstaKillObject::Update(float dt)
 {
 	if (collisionController.OnTriggerEnter()) {
-		Engine::GetInstance().scene->player->Damage(Engine::GetInstance().scene->player->playerHealth.GetCurrentHealth());
+		Engine::GetInstance().game_scene->player->Damage(Engine::GetInstance().game_scene->player->playerHealth.GetCurrentHealth());
 	}
 
 	if (Engine::GetInstance().debug->HasDebug(1))

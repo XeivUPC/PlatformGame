@@ -62,6 +62,8 @@ public:
 	virtual Vector2D GetPosition() {
 		return position;
 	}
+	virtual int GetExtraData() { return -1; }
+	virtual void SetExtraData(int value){}
 
 public:
 

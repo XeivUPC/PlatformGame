@@ -4,15 +4,15 @@
 #include <box2d/box2d.h>
 
 
-
-class Scene : public Module
+class PauseUI;
+class GameScene : public Module
 {
 public:
 
-	Scene();
+	GameScene(bool isActive = true);
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~GameScene();
 
 	// Called before render is available
 	bool Awake();
@@ -38,7 +38,8 @@ public:
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
 	Player* player;
-private:
 
-	xml_node configParameters;
+private:
+	PauseUI* pause;
 };
+

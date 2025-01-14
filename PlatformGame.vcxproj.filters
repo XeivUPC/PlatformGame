@@ -38,8 +38,8 @@
     <Filter Include="Source Files\Game\Objects\Items">
       <UniqueIdentifier>{24957d1d-572b-4b43-96b8-ec632c94dd52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\UI\Menus">
-      <UniqueIdentifier>{ffbe6059-9651-48bd-901a-f7d893abb849}</UniqueIdentifier>
+    <Filter Include="Source Files\Game\Scenes">
+      <UniqueIdentifier>{a2d9ab36-59b3-4a37-b0db-3d73e6e04da8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +138,9 @@
     <ClCompile Include="src\MovingPlatform.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="src\UI.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
     <ClCompile Include="src\Physics.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -165,17 +168,17 @@
     <ClCompile Include="src\GoldItem.cpp">
       <Filter>Source Files\Game\Objects\Items</Filter>
     </ClCompile>
-    <ClCompile Include="src\GuiControlButton.cpp">
-      <Filter>Source Files\Game\UI</Filter>
+    <ClCompile Include="src\LevelChangerArea.cpp">
+      <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="src\GuiManager.cpp">
-      <Filter>Source Files\Game\UI</Filter>
+    <ClCompile Include="src\GameScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\GuiControl.cpp">
-      <Filter>Source Files\Game\UI</Filter>
+    <ClCompile Include="src\IntroScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\PauseUI.cpp">
-      <Filter>Source Files\Game\UI\Menus</Filter>
+    <ClCompile Include="src\TitleScene.cpp">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -269,6 +272,9 @@
     <ClInclude Include="src\MovingPlatform.h">
       <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="src\UI.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
     <ClInclude Include="src\Physics.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
@@ -299,17 +305,17 @@
     <ClInclude Include="src\GoldItem.h">
       <Filter>Source Files\Game\Objects\Items</Filter>
     </ClInclude>
-    <ClInclude Include="src\GuiControl.h">
-      <Filter>Source Files\Game\UI</Filter>
+    <ClInclude Include="src\LevelChangerArea.h">
+      <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="src\GuiControlButton.h">
-      <Filter>Source Files\Game\UI</Filter>
+    <ClInclude Include="src\TitleScene.h">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\GuiManager.h">
-      <Filter>Source Files\Game\UI</Filter>
+    <ClInclude Include="src\GameScene.h">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="src\PauseUI.h">
-      <Filter>Source Files\Game\UI\Menus</Filter>
+    <ClInclude Include="src\IntroScene.h">
+      <Filter>Source Files\Game\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -9,9 +9,10 @@
 #include "LevelManager.h"
 #include "Debug.h"
 
-CheckPoint::CheckPoint(int sectionPlaced, Vector2D respawnPoint) : Entity(EntityType::UNKNOWN)
+CheckPoint::CheckPoint(int sectionPlaced, Vector2D respawnPoint, int id) : Entity(EntityType::UNKNOWN)
 {
 	this->sectionPlaced = sectionPlaced;
+	this->id = id;
 	respawnPos = respawnPoint;
 	position = respawnPos;
 
@@ -140,4 +141,17 @@ int CheckPoint::GetSection()
 Vector2D CheckPoint::GetRespawnPos()
 {
 	return respawnPos;
+}
+
+void CheckPoint::SetExtraData(int value)
+{
+	if (value == 1)
+		isUnlocked = true;
+	else
+		isUnlocked = false;
+}
+
+int CheckPoint::GetExtraData()
+{
+	return (int)isUnlocked;
 }

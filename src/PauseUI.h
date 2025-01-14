@@ -1,15 +1,15 @@
 #pragma once
 #include "SDL2/SDL.h"
 class GuiControlButton;
-class Scene;
+class GameScene;
 class PauseUI
 {
 private:
-	Scene* gameAt;
+	GameScene* gameAt;
 	SDL_Texture* texture;
 	bool isPaused = false;
 public:
-	PauseUI(Scene* GameAt);
+	PauseUI(GameScene* GameAt);
 	~PauseUI();
 	void Update(float dt);
 	void Render();

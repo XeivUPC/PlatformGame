@@ -6,7 +6,7 @@
 #include "GuiControlButton.h"
 
 
-PauseUI::PauseUI(Scene* GameAt)
+PauseUI::PauseUI(GameScene* GameAt)
 {
 	gameAt = GameAt;
 	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI1.png");
