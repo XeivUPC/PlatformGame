@@ -8,24 +8,24 @@
 
 PauseUI::PauseUI(Module* ModuleAt): UI(ModuleAt)
 {
-	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 250,0,16,16 }, texture, moduleAt);
+	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 250,0,16,16 }, texture, moduleAt);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::NORMAL);
 	pauseButton->SetRectangle({ 16,0,16,16 }, GuiControlState::FOCUSED);
 	pauseButton->SetRectangle({ 32,0,16,16 }, GuiControlState::PRESSED);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::DISABLED);
-	resumeButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 45,Engine::GetInstance().window->height / 2 + 6,53,11 }, texture, moduleAt);
+	resumeButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 45,Engine::GetInstance().window->height / 2 + 6,53,11 }, texture, moduleAt);
 	resumeButton->SetRectangle({ 0,16,53,11 }, GuiControlState::NORMAL);
 	resumeButton->SetRectangle({ 53,16,53,11 }, GuiControlState::FOCUSED);
 	resumeButton->SetRectangle({ 106,16,53,11 }, GuiControlState::PRESSED);
-	settingsButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 109,Engine::GetInstance().window->height / 2 + 6,69,11 }, texture, moduleAt);
+	settingsButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 109,Engine::GetInstance().window->height / 2 + 6,69,11 }, texture, moduleAt);
 	settingsButton->SetRectangle({ 0,27,69,11 }, GuiControlState::NORMAL);
 	settingsButton->SetRectangle({ 69,27,69,11 }, GuiControlState::FOCUSED);
 	settingsButton->SetRectangle({ 138,27,69,11 }, GuiControlState::PRESSED);
-	exitGameButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 189,Engine::GetInstance().window->height / 2 + 6,77,11 }, texture, moduleAt);
+	exitGameButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 189,Engine::GetInstance().window->height / 2 + 6,77,11 }, texture, moduleAt);
 	exitGameButton->SetRectangle({ 0,38,77,11 }, GuiControlState::NORMAL);
 	exitGameButton->SetRectangle({ 77,38,77,11 }, GuiControlState::FOCUSED);
 	exitGameButton->SetRectangle({ 154,38,77,11 }, GuiControlState::PRESSED);
-	exitAppButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 277,Engine::GetInstance().window->height / 2 + 6,77,11 }, texture, moduleAt);
+	exitAppButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 277,Engine::GetInstance().window->height / 2 + 6,77,11 }, texture, moduleAt);
 	exitAppButton->SetRectangle({ 0,49,77,11 }, GuiControlState::NORMAL);
 	exitAppButton->SetRectangle({ 77,49,77,11 }, GuiControlState::FOCUSED);
 	exitAppButton->SetRectangle({ 154,49,77,11 }, GuiControlState::PRESSED);
@@ -38,11 +38,6 @@ PauseUI::PauseUI(Module* ModuleAt): UI(ModuleAt)
 
 PauseUI::~PauseUI()
 {
-	delete pauseButton;
-	delete resumeButton;
-	delete settingsButton;
-	delete exitGameButton;
-	delete exitAppButton;
 }
 
 void PauseUI::Update(float dt)
@@ -104,6 +99,12 @@ void PauseUI::CleanUp()
 	settingsButton->CleanUp();
 	exitGameButton->CleanUp();
 	exitAppButton->CleanUp();
+
+	delete pauseButton;
+	delete resumeButton;
+	delete settingsButton;
+	delete exitGameButton;
+	delete exitAppButton;
 }
 
 void PauseUI::SetPause(bool p)

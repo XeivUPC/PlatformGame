@@ -29,6 +29,8 @@ bool AssetLoader::Start()
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Parallax/Castle_Parallax.png", "CastleParallax1");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Parallax/Trees_1_Parallax.png", "Trees1Parallax1");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Parallax/Trees_2_Parallax.png", "Trees2Parallax1");
+	
+	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Screens/MainMenu.png", "MainMenu");
 
 	return true;
 }

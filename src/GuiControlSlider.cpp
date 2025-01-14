@@ -106,14 +106,13 @@ void GuiControlSlider::MoveThumb()
 
 void GuiControlSlider::RecalculateThumbPosition()
 {
-	Vector2D moveBounds = { bounds.x - thumb->bounds.w / 2 , bounds.x + bounds.w - thumb->bounds.w / 2 };
+	Vector2D moveBounds = {(float)( bounds.x - thumb->bounds.w / 2) , (float)(bounds.x + bounds.w - thumb->bounds.w / 2 )};
 	thumb->bounds.x = moveBounds.getX() + (value - minVal) * (moveBounds.getY() - moveBounds.getX()) / (maxVal - minVal);
 }
 
 void GuiControlSlider::RecalculateValue()
 {
-	Vector2D moveBounds = { bounds.x - thumb->bounds.w / 2 , bounds.x + bounds.w - thumb->bounds.w / 2 };
-
+	Vector2D moveBounds = { (float)(bounds.x - thumb->bounds.w / 2 ),(float)( bounds.x + bounds.w - thumb->bounds.w / 2) };
 	value =  minVal + (thumb->bounds.x - moveBounds.getX()) * (maxVal - minVal) / (moveBounds.getY() - moveBounds.getX());
 }
 

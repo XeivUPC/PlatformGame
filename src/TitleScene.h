@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include <box2d/box2d.h>
+#include "TitleUI.h"
 class TitleScene : public Module
 {
 public:
@@ -29,6 +30,8 @@ public:
 	bool CleanUp();
 
 	// Load Parameters from config file
+	TitleUI* ui = nullptr;
 	bool LoadParameters(xml_node parameters);
+	bool OnGuiMouseClickEvent(GuiControl* control);
 };
 

@@ -4,7 +4,7 @@
 #include "Audio.h"
 #include "TextGenerator.h"
 
-GuiControlButton::GuiControlButton(GuiControlType t, SDL_Rect b, SDL_Texture* tex) : GuiControl(GuiControlType::BUTTON, b, tex)
+GuiControlButton::GuiControlButton(SDL_Rect b, SDL_Texture* tex) : GuiControl(GuiControlType::BUTTON, b, tex)
 {
 }
 

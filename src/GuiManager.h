@@ -2,6 +2,7 @@
 
 #include "Module.h"
 #include "GuiControl.h"
+#include "GuiControlButton.h"
 
 #include <list>
 
@@ -21,7 +22,9 @@ public:
 	
 
 	// Additional methods
-	GuiControl* CreateGuiControl(GuiControlType type, SDL_Rect bounds, SDL_Texture* texture, Module* observer);
+	GuiControl* CreateGuiControlButton(SDL_Rect bounds, SDL_Texture* texture, Module* observer);
+	GuiControl* CreateGuiControlToggle(SDL_Rect bounds, SDL_Texture* texture, bool status, Module* observer);
+	GuiControl* CreateGuiControlSlider(SDL_Rect bounds, SDL_Texture* texture, GuiControlButton* t, float v, float mn, float mx, Module* observer);
 
 public:
 

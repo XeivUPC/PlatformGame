@@ -7,7 +7,7 @@ class GuiControlButton : public GuiControl
 {
 
 public:
-	GuiControlButton(GuiControlType t, SDL_Rect b, SDL_Texture* tex);
+	GuiControlButton(SDL_Rect b, SDL_Texture* tex);
 	virtual ~GuiControlButton();
 
 	// Called each loop iteration

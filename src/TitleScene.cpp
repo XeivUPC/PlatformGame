@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "GuiManager.h"
 #include "Input.h"
 #include "Engine.h"
 #include "Log.h"
@@ -21,6 +22,7 @@ bool TitleScene::Awake()
 
 bool TitleScene::Start()
 {
+	ui = new TitleUI(this);
 	return true;
 }
 
@@ -31,26 +33,33 @@ bool TitleScene::PreUpdate()
 
 bool TitleScene::Update(float dt)
 {
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+	ui->Update(dt);
+	/*if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
 		Engine::GetInstance().game_scene->Enable();
 		Disable();
-	}
+	}*/
 	return true;
 }
 
 bool TitleScene::PostUpdate()
 {
-	
 	return true;
 }
 
 bool TitleScene::CleanUp()
 {
 	LOG("Freeing TitleScreen");
+	ui->CleanUp();
+	delete ui;
 	return true;
 }
 
 bool TitleScene::LoadParameters(xml_node parameters)
+{
+	return true;
+}
+
+bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 {
 	return true;
 }
