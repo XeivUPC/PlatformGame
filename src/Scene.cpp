@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "Entity.h"
 #include "EntityManager.h"
+#include "LevelManager.h"
 #include "Player.h"
 
 
@@ -28,6 +29,7 @@ bool Scene::Awake()
 	//Get the player texture name from the config file and assigns the value	
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
+	
 
 	return ret;
 }
@@ -35,6 +37,7 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
+	
 	return true;
 }
 
@@ -55,6 +58,9 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	if (!Engine::GetInstance().levelManager->levelLoaded) {
+		Engine::GetInstance().levelManager->LoadLevel(0);
+	}
 	//if(Engine::GetInstance().input->GetKey(SDL_SCANCODE_E) == KEY_DOWN){
 	//	if (player->active == true) player->Disable();
 	//	else player->Enable();
