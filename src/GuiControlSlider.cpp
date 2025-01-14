@@ -8,6 +8,7 @@ GuiControlSlider::GuiControlSlider(SDL_Rect b, GuiControlButton* thumb, SDL_Text
 	SetMinValue(min);
 	SetMaxValue(max);
 	SetValue(val);
+	RecalculateThumbPosition();
 }
 
 GuiControlSlider::~GuiControlSlider()
