@@ -25,7 +25,7 @@ public:
 	bool CleanUp();
 
 	// Additional methods
-	GuiControl* CreateGuiControl(GuiControlType type, const char* text, SDL_Rect bounds, SDL_Texture* texture, Module* observer);
+	GuiControl* CreateGuiControl(GuiControlType type, SDL_Rect bounds, SDL_Texture* texture, Module* observer);
 
 public:
 

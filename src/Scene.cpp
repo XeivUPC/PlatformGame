@@ -10,6 +10,7 @@
 #include "Window.h"
 #include "Render.h"
 #include "PauseUI.h"
+#include "GuiControlButton.h"
 
 
 Scene::Scene() : Module()
@@ -51,7 +52,6 @@ bool Scene::LoadParameters(xml_node parameters) {
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
-
 	return true;
 }
 

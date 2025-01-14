@@ -67,8 +67,27 @@ bool GameScene::OnGuiMouseClickEvent(GuiControl* control)
 {
 	if (control == (GuiControl*)pause->pauseButton)
 	{
-		//pause
 		pause->SetPause(true);
+	}
+
+	if (control == (GuiControl*)pause->resumeButton)
+	{
+		pause->SetPause(false);
+	}
+
+	if (control == (GuiControl*)pause->settingsButton)
+	{
+		// Go Settings
+	}
+
+	if (control == (GuiControl*)pause->exitGameButton)
+	{
+		//Go Main Menu
+	}
+
+	if (control == (GuiControl*)pause->exitAppButton)
+	{
+		//Quit Game
 	}
 	return true;
 }

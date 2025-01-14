@@ -56,10 +56,6 @@ public:
 	
 	SDL_Rect bounds;
 
-	std::string text;
-
-	SDL_Color textColor;
-
 	SDL_Texture* texture = nullptr;
 
 	Module* observer = nullptr;
