@@ -5,6 +5,8 @@
 
 using namespace pugi;
 
+class GuiControl;
+
 class Module
 {
 public:
@@ -63,6 +65,11 @@ public:
 	}
 
 	virtual bool LoadParameters(xml_node parameters)
+	{
+		return true;
+	}
+
+	virtual bool OnGuiMouseClickEvent(GuiControl* control)
 	{
 		return true;
 	}

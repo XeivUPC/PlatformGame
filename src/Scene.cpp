@@ -7,6 +7,9 @@
 #include "EntityManager.h"
 #include "LevelManager.h"
 #include "Player.h"
+#include "Window.h"
+#include "Render.h"
+#include "PauseUI.h"
 
 
 Scene::Scene() : Module()
@@ -29,15 +32,13 @@ bool Scene::Awake()
 	//Get the player texture name from the config file and assigns the value	
 	//Instantiate the player using the entity manager
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER);
-	
-
 	return ret;
 }
 
 // Called before the first frame
 bool Scene::Start()
 {
-	
+	pause = new PauseUI(this);
 	return true;
 }
 
@@ -48,10 +49,18 @@ bool Scene::LoadParameters(xml_node parameters) {
 	return true;
 }
 
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	if (control == (GuiControl*)pause->pauseButton)
+	{
+		//pause
+	}
+	return true;
+}
+
 // Called each loop iteration
 bool Scene::PreUpdate()
 {
-
 	return true;
 }
 
@@ -65,8 +74,7 @@ bool Scene::Update(float dt)
 	//	if (player->active == true) player->Disable();
 	//	else player->Enable();
 	//}
-
-
+	pause->Update(dt);
 	return true;
 }
 

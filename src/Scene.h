@@ -1,8 +1,9 @@
 #pragma once
-
 #include "Module.h"
 #include "Player.h"
 #include <box2d/box2d.h>
+
+class PauseUI;
 
 class Scene : public Module
 {
@@ -34,7 +35,10 @@ public:
 	// Load Parameters from config file
 	bool LoadParameters(xml_node parameters);
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	Player* player;
 private:
+	PauseUI* pause;
 	xml_node configParameters;
 };

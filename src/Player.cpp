@@ -11,7 +11,6 @@
 #include "Physics.h"
 #include "Log.h"
 #include "Debug.h"
-#include "UI.h"
 
 
 
@@ -31,9 +30,8 @@ bool Player::Awake() {
 	return true;
 }
 
-bool Player::Start() {
-
-
+bool Player::Start() 
+{
 	LoadParameters();
 
 	InitColliders();
@@ -143,10 +141,10 @@ bool Player::Update(float dt)
 		magic.Add(1);
 
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
-		if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
-			Engine::GetInstance().ui->pauseMenuUI.Activate();
-		else
-			Engine::GetInstance().ui->pauseMenuUI.Deactivate();
+		//if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
+			//Engine::GetInstance().ui->pauseMenuUI.Activate();
+		//else
+			//Engine::GetInstance().ui->pauseMenuUI.Deactivate();
 	}
 
 

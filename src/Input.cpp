@@ -2,6 +2,7 @@
 #include "Input.h"
 #include "Window.h"
 #include "Log.h"
+#include "Vector2D.h"
 
 
 #define MAX_KEYS 300
@@ -140,10 +141,9 @@ bool Input::GetWindowEvent(EventWindow ev)
 	return windowEvents[ev];
 }
 
-void Input::GetMousePosition(int& x, int& y)
+Vector2D Input::GetMousePosition()
 {
-	x = mouseX;
-	y = mouseY;
+	return Vector2D(mouseX,mouseY);
 }
 
 void Input::GetMouseMotion(int& x, int& y)
