@@ -2,16 +2,24 @@
 #include "Engine.h"
 #include "Input.h"
 #include "Render.h"
+#include "GuiManager.h"
 
-GuiControl::GuiControl(GuiControlType type, int id) : type(type), id(id), state(GuiControlState::NORMAL) {}
-GuiControl::GuiControl(GuiControlType type, SDL_Rect bounds, const char* text) :
-	type(type),
-	state(GuiControlState::NORMAL),
-	bounds(bounds),
-	text(text)
+GuiControl::GuiControl(GuiControlType t, SDL_Rect b, SDL_Texture* tex)
 {
-	color.r = 255; color.g = 255; color.b = 255;
-	texture = NULL;
+	type = t;
+	bounds = b;
+	texture = tex;
+	isEnabled = true;
+	state = GuiControlState::NORMAL;
+	textColor = { 255,255,255,255};
+	for (size_t i = 0; i < 4; i++)
+	{
+		rectangles.emplace_back(SDL_Rect{ 0,0,0,0 });
+	}
+}
+
+GuiControl::~GuiControl()
+{
 }
 
 bool GuiControl::Update(float dt)
@@ -22,12 +30,13 @@ bool GuiControl::Update(float dt)
 
 void GuiControl::Render()
 {
+	Engine::GetInstance().render->SelectLayer(Engine::GetInstance().render->Layer6);
+	Engine::GetInstance().render->DrawTexture(texture, bounds.x, bounds.y, SDL_FLIP_NONE, &rectangles[(int)state]);
 }
 
-void GuiControl::SetTexture(SDL_Texture* tex)
+void GuiControl::CleanUp()
 {
-	texture = tex;
-	section = { 0, 0, 0, 0 };
+	rectangles.clear();
 }
 
 void GuiControl::SetObserver(Module* module)
@@ -47,25 +56,23 @@ bool GuiControl::IsInBounds(Vector2D point)
 	return false;
 }
 
+void GuiControl::SetRectangle(SDL_Rect rect, GuiControlState state)
+{
+	rectangles[(int)state] = rect;
+}
+
+void GuiControl::Enable()
+{
+	isEnabled = true;
+}
+
+void GuiControl::Disable()
+{
+	isEnabled = false;
+}
+
 GuiControlState GuiControl::CurrentState()
 {
-	Vector2D mousePos = Engine::GetInstance().input->GetMousePosition();
-	if (state == GuiControlState::DISABLED)
-		return GuiControlState::DISABLED;
-	if (IsInBounds(mousePos))
-	{
-		state = GuiControlState::FOCUSED;
-		if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_REPEAT) {
-			state = GuiControlState::PRESSED;
-		}
-
-		if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP) {
-			NotifyObserver();
-			state = GuiControlState::SELECTED;
-		}
-	}
-	else
-		state = GuiControlState::NORMAL;
 	return state;
 }
 

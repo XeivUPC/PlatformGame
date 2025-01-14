@@ -11,7 +11,6 @@
 #include "Physics.h"
 #include "Log.h"
 #include "Debug.h"
-#include "UI.h"
 
 
 
@@ -31,9 +30,8 @@ bool Player::Awake() {
 	return true;
 }
 
-bool Player::Start() {
-
-
+bool Player::Start() 
+{
 	LoadParameters();
 
 	InitColliders();

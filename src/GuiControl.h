@@ -3,7 +3,6 @@
 #include "Input.h"
 #include "Render.h"
 #include "Module.h"
-
 #include "Vector2D.h"
 
 enum class GuiControlType
@@ -33,42 +32,41 @@ class GuiControl
 {
 public:
 
-	// Constructor
-	GuiControl(GuiControlType type, int id);
-
-	// Constructor
-	GuiControl(GuiControlType type, SDL_Rect bounds, const char* text);
-
-	// Called each loop iteration
+	GuiControl(GuiControlType t, SDL_Rect b, SDL_Texture* tex);
+	~GuiControl();
 	virtual bool Update(float dt);
-	virtual void Render();
+	void Render();
+	virtual void CleanUp();
 
-	// 
-	void SetTexture(SDL_Texture* tex);
-
-	// 
 	void SetObserver(Module* module);
 
-	// 
 	void NotifyObserver();
 
 	bool IsInBounds(Vector2D point);
 
+	void SetRectangle(SDL_Rect rect, GuiControlState state);
+
+	void Enable();
+
+	void Disable();
+
 	GuiControlState CurrentState();
 
-	int id;
 	GuiControlType type;
-
-	std::string text;       // Control text (if required)
-	SDL_Rect bounds;        // Position and size
 	
-	SDL_Color color;		// Color
-	SDL_Color textColor;    // Text color
+	SDL_Rect bounds;
 
-	SDL_Texture* texture;   // Texture atlas reference
-	SDL_Rect section;       // Texture atlas base section
+	std::string text;
 
-	Module* observer;       // Observer 
-private:
+	SDL_Color textColor;
+
+	SDL_Texture* texture = nullptr;
+
+	Module* observer = nullptr;
+
+	bool isEnabled;
+
+protected:
 	GuiControlState state;
+	std::vector<SDL_Rect> rectangles;
 };

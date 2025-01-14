@@ -1,10 +1,9 @@
 #pragma once
-
 #include "Module.h"
 #include "Player.h"
 #include <box2d/box2d.h>
 
-class GuiControl;
+class PauseUI;
 
 class Scene : public Module
 {
@@ -40,7 +39,6 @@ public:
 
 	Player* player;
 private:
-	bool isPaused;
-	GuiControl* pauseButton;
+	PauseUI* pause;
 	xml_node configParameters;
 };

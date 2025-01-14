@@ -18,7 +18,7 @@ bool GuiManager::Start()
 }
 
 // L16: TODO 1: Implement CreateGuiControl function that instantiates a new GUI control and add it to the list of controls
-GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char* text, SDL_Rect bounds, Module* observer)
+GuiControl* GuiManager::CreateGuiControl(GuiControlType type, const char* text, SDL_Rect bounds, SDL_Texture* texture, Module* observer)
 {
 	GuiControl* guiControl = nullptr;
 
@@ -26,12 +26,12 @@ GuiControl* GuiManager::CreateGuiControl(GuiControlType type, int id, const char
 	switch (type)
 	{
 	case GuiControlType::BUTTON:
-		guiControl = new GuiControlButton(id, bounds, text);
+		guiControl = new GuiControlButton(GuiControlType::BUTTON,bounds, texture);
 		break;
 	}
 
 	//Set the observer
-	guiControl->observer = observer;
+	guiControl->SetObserver(observer);
 
 	// Created GuiControls are add it to the list of controls
 	guiControlsList.push_back(guiControl);

@@ -38,6 +38,9 @@
     <Filter Include="Source Files\Game\Objects\Items">
       <UniqueIdentifier>{24957d1d-572b-4b43-96b8-ec632c94dd52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\UI\Menus">
+      <UniqueIdentifier>{ffbe6059-9651-48bd-901a-f7d893abb849}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -135,9 +138,6 @@
     <ClCompile Include="src\MovingPlatform.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI.cpp">
-      <Filter>Source Files\Game\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -173,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="src\GuiControl.cpp">
       <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PauseUI.cpp">
+      <Filter>Source Files\Game\UI\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -266,9 +269,6 @@
     <ClInclude Include="src\MovingPlatform.h">
       <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI.h">
-      <Filter>Source Files\Game\UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
@@ -307,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="src\GuiManager.h">
       <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PauseUI.h">
+      <Filter>Source Files\Game\UI\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
