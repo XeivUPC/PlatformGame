@@ -31,7 +31,7 @@ bool GuiControl::Update(float dt)
 void GuiControl::Render()
 {
 	Engine::GetInstance().render->SelectLayer(Engine::GetInstance().render->Layer6);
-	Engine::GetInstance().render->DrawTexture(texture, bounds.x, bounds.y, SDL_FLIP_NONE, &rectangles[(int)state]);
+	Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x+bounds.x, -Engine::GetInstance().render->camera.y + bounds.y, SDL_FLIP_NONE, &rectangles[(int)state], {255,255,255,255});
 }
 
 void GuiControl::CleanUp()

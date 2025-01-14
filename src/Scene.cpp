@@ -9,6 +9,7 @@
 #include "Window.h"
 #include "Render.h"
 #include "PauseUI.h"
+#include "GuiControlButton.h"
 
 
 Scene::Scene() : Module()
@@ -52,7 +53,7 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
 	if (control == (GuiControl*)pause->pauseButton)
 	{
-		//pause
+		pause->SetPause(true);
 	}
 	return true;
 }

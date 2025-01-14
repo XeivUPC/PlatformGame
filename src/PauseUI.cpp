@@ -14,6 +14,7 @@ PauseUI::PauseUI(Scene* GameAt)
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::NORMAL);
 	pauseButton->SetRectangle({ 16,0,16,16 }, GuiControlState::FOCUSED);
 	pauseButton->SetRectangle({ 32,0,16,16 }, GuiControlState::PRESSED);
+	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::DISABLED);
 	resumeButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,30,10,10 }, texture, (Module*)gameAt);
 	settingsButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,50,10,10 }, texture, (Module*)gameAt);
 	exitGameButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,70,10,10 }, texture, (Module*)gameAt);
@@ -31,6 +32,22 @@ PauseUI::~PauseUI()
 
 void PauseUI::Update(float dt)
 {
+	if (isPaused)
+	{
+		pauseButton->Disable();
+		resumeButton->Enable();
+		settingsButton->Enable();
+		exitGameButton->Enable();
+		exitAppButton->Enable();
+	}
+	else
+	{
+		pauseButton->Enable();
+		resumeButton->Disable();
+		settingsButton->Disable();
+		exitGameButton->Disable();
+		exitAppButton->Disable();
+	}
 	pauseButton->Update(dt);
 	resumeButton->Update(dt);
 	settingsButton->Update(dt);
@@ -42,6 +59,23 @@ void PauseUI::Update(float dt)
 
 void PauseUI::Render()
 {
+	if (isPaused)
+	{
+		SDL_Rect rect;
+		Engine::GetInstance().render->LockLayer(Render::Layer6);
+		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 0, 0, 0, 255, true, false);
+		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 255, 255, 255, 255, false, false);
+		rect = { 0,16,16,16 };
+		Engine::GetInstance().render->DrawTexture(texture,-Engine::GetInstance().render->camera.x + 33, -Engine::GetInstance().render->camera.y +1+ Engine::GetInstance().window->height / 2,SDL_FLIP_NONE,&rect);
+		rect = { 16,16,16,16 };
+		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + Engine::GetInstance().window->width - 49,-Engine::GetInstance().render->camera.y +1+ Engine::GetInstance().window->height / 2,SDL_FLIP_NONE,&rect);
+		rect = { 32,16,16,16 };
+		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + Engine::GetInstance().window->width - 49, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
+		rect = { 48,16,16,16 };
+		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + 33, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
+
+		Engine::GetInstance().render->UnlockLayer();
+	}
 	pauseButton->Render();
 	resumeButton->Render();
 	settingsButton->Render();
@@ -56,4 +90,14 @@ void PauseUI::CleanUp()
 	settingsButton->CleanUp();
 	exitGameButton->CleanUp();
 	exitAppButton->CleanUp();
+}
+
+void PauseUI::SetPause(bool p)
+{
+	isPaused = p;
+}
+
+bool PauseUI::GetPause()
+{
+	return isPaused;
 }
