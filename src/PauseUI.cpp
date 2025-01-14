@@ -4,21 +4,39 @@
 #include "Window.h"
 #include "Textures.h"
 #include "GuiControlButton.h"
+#include "TextGenerator.h"
 
 
 PauseUI::PauseUI(GameScene* GameAt)
 {
 	gameAt = GameAt;
 	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI1.png");
-	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,10,10,10 }, texture, (Module*)gameAt);
+	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { Engine::GetInstance().window->width - 20,10,16,16 }, texture, (Module*)gameAt);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::NORMAL);
 	pauseButton->SetRectangle({ 16,0,16,16 }, GuiControlState::FOCUSED);
 	pauseButton->SetRectangle({ 32,0,16,16 }, GuiControlState::PRESSED);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::DISABLED);
-	resumeButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,30,10,10 }, texture, (Module*)gameAt);
-	settingsButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,50,10,10 }, texture, (Module*)gameAt);
-	exitGameButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,70,10,10 }, texture, (Module*)gameAt);
-	exitAppButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, "", { Engine::GetInstance().window->width - 20,90,10,10 }, texture, (Module*)gameAt);
+	resumeButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 45,Engine::GetInstance().window->height / 2 + 6,53,11 }, texture, (Module*)gameAt);
+	resumeButton->SetRectangle({ 0,16,53,11 }, GuiControlState::NORMAL);
+	resumeButton->SetRectangle({ 53,16,53,11 }, GuiControlState::FOCUSED);
+	resumeButton->SetRectangle({ 106,16,53,11 }, GuiControlState::PRESSED);
+	settingsButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 109,Engine::GetInstance().window->height / 2 + 6,69,11 }, texture, (Module*)gameAt);
+	settingsButton->SetRectangle({ 0,27,69,11 }, GuiControlState::NORMAL);
+	settingsButton->SetRectangle({ 69,27,69,11 }, GuiControlState::FOCUSED);
+	settingsButton->SetRectangle({ 138,27,69,11 }, GuiControlState::PRESSED);
+	exitGameButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 189,Engine::GetInstance().window->height / 2 + 6,77,11 }, texture, (Module*)gameAt);
+	exitGameButton->SetRectangle({ 0,38,77,11 }, GuiControlState::NORMAL);
+	exitGameButton->SetRectangle({ 77,38,77,11 }, GuiControlState::FOCUSED);
+	exitGameButton->SetRectangle({ 154,38,77,11 }, GuiControlState::PRESSED);
+	exitAppButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 277,Engine::GetInstance().window->height / 2 + 6,77,11 }, texture, (Module*)gameAt);
+	exitAppButton->SetRectangle({ 0,49,77,11 }, GuiControlState::NORMAL);
+	exitAppButton->SetRectangle({ 77,49,77,11 }, GuiControlState::FOCUSED);
+	exitAppButton->SetRectangle({ 154,49,77,11 }, GuiControlState::PRESSED);
+
+	resumeButton->Disable();
+	settingsButton->Disable();
+	exitGameButton->Disable();
+	exitAppButton->Disable();
 }
 
 PauseUI::~PauseUI()
@@ -65,15 +83,14 @@ void PauseUI::Render()
 		Engine::GetInstance().render->LockLayer(Render::Layer6);
 		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 0, 0, 0, 255, true, false);
 		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 255, 255, 255, 255, false, false);
-		rect = { 0,16,16,16 };
+		rect = { 0,64,16,16 };
 		Engine::GetInstance().render->DrawTexture(texture,-Engine::GetInstance().render->camera.x + 33, -Engine::GetInstance().render->camera.y +1+ Engine::GetInstance().window->height / 2,SDL_FLIP_NONE,&rect);
-		rect = { 16,16,16,16 };
+		rect = { 16,64,16,16 };
 		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + Engine::GetInstance().window->width - 49,-Engine::GetInstance().render->camera.y +1+ Engine::GetInstance().window->height / 2,SDL_FLIP_NONE,&rect);
-		rect = { 32,16,16,16 };
+		rect = { 32,64,16,16 };
 		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + Engine::GetInstance().window->width - 49, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
-		rect = { 48,16,16,16 };
+		rect = { 48,64,16,16 };
 		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + 33, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
-
 		Engine::GetInstance().render->UnlockLayer();
 	}
 	pauseButton->Render();

@@ -52,10 +52,6 @@ bool Scene::LoadParameters(xml_node parameters) {
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
-	if (control == (GuiControl*)pause->pauseButton)
-	{
-		pause->SetPause(true);
-	}
 	return true;
 }
 

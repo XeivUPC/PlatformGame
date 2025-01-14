@@ -11,7 +11,6 @@ GuiControl::GuiControl(GuiControlType t, SDL_Rect b, SDL_Texture* tex)
 	texture = tex;
 	isEnabled = true;
 	state = GuiControlState::NORMAL;
-	textColor = { 255,255,255,255};
 	for (size_t i = 0; i < 4; i++)
 	{
 		rectangles.emplace_back(SDL_Rect{ 0,0,0,0 });

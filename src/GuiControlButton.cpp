@@ -6,7 +6,6 @@
 
 GuiControlButton::GuiControlButton(GuiControlType t, SDL_Rect b, SDL_Texture* tex) : GuiControl(GuiControlType::BUTTON, b, tex)
 {
-	this->text = text;
 }
 
 GuiControlButton::~GuiControlButton()
