@@ -27,13 +27,13 @@ bool GameScene::Awake()
 
 bool GameScene::Start()
 {
-	pause = new PauseUI(this);
-	ui = new GameUI(this, player);
 	player = (Player*)Engine::GetInstance().entityManager->CreateEntity(EntityType::PLAYER, true);
 	Engine::GetInstance().levelManager->LoadLevel(0);
 
 	exitGame = false;
 	goToMainMenu = false;
+	pause = new PauseUI(this);
+	ui = new GameUI(this, player);
 	return true;
 }
 
@@ -64,17 +64,13 @@ bool GameScene::PostUpdate()
 
 bool GameScene::CleanUp()
 {
-	/*ui->CleanUp();
+	LOG("Freeing GameScene");
+	ui->CleanUp();
 	pause->CleanUp();
 	delete ui;
-	delete pause;*/
-	LOG("Freeing GameScene");
-	pause->CleanUp();
 	delete pause;
 	Engine::GetInstance().entityManager->CleanUp();
 	Engine::GetInstance().levelManager->CleanUp();
-
-
 	return true;
 }
 

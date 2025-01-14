@@ -59,8 +59,6 @@ private:
 
 	void DoJump(float force);
 
-	
-
 	bool TryShovelAttack();
 	void DoShovelAttack();
 

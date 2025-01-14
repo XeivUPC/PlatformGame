@@ -8,7 +8,7 @@
 		<jump-force value="2.7f"/>
 		<fall-attack-jump-multiplier value="1.0f"/>
 		<!---health-->
-		<player-health value="20"/>
+		<player-health value="10"/>
 		<!---gravity-->
 		<default-gravity value="1.0f"/>
 		<fall-gravity value="2.5f"/>

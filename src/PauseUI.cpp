@@ -8,8 +8,7 @@
 
 PauseUI::PauseUI(Module* ModuleAt): UI(ModuleAt)
 {
-	texture = Engine::GetInstance().textures->GetTexture("UI1Texture");
-	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { Engine::GetInstance().window->width - 20,10,16,16 }, texture, moduleAt);
+	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { 250,0,16,16 }, texture, moduleAt);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::NORMAL);
 	pauseButton->SetRectangle({ 16,0,16,16 }, GuiControlState::FOCUSED);
 	pauseButton->SetRectangle({ 32,0,16,16 }, GuiControlState::PRESSED);
@@ -69,7 +68,6 @@ void PauseUI::Update(float dt)
 	settingsButton->Update(dt);
 	exitGameButton->Update(dt);
 	exitAppButton->Update(dt);
-	UI::Update(dt);
 	Render();
 }
 

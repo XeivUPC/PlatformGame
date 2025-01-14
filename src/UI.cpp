@@ -8,7 +8,7 @@
 UI::UI(Module* ModuleAt)
 {
 	moduleAt = ModuleAt;
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/UI.png");
+	texture = Engine::GetInstance().textures->GetTexture("UITexture");
 }
 
 UI::~UI()

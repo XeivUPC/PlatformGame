@@ -22,7 +22,7 @@ bool AssetLoader::Start()
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Objects/HealthPotion.png", "HealthPotionTexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Objects/Moving_Platforms.png", "MovingPlatformTexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/PathTexture.png", "PathfindingTexture");
-	Engine::GetInstance().textures->CreateTexture("Assets/Textures/UI1.png", "UI1Texture");
+	Engine::GetInstance().textures->CreateTexture("Assets/Textures/UI.png", "UITexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Font.png", "FontTexture");
 
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Parallax/Cloud_Parallax.png", "CloudsParallax1");
