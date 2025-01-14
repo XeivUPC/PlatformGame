@@ -38,7 +38,7 @@ bool Scene::Awake()
 // Called before the first frame
 bool Scene::Start()
 {
-	pause = new PauseUI(this);
+
 	return true;
 }
 
@@ -51,10 +51,7 @@ bool Scene::LoadParameters(xml_node parameters) {
 
 bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
-	if (control == (GuiControl*)pause->pauseButton)
-	{
-		//pause
-	}
+
 	return true;
 }
 
@@ -74,7 +71,7 @@ bool Scene::Update(float dt)
 	//	if (player->active == true) player->Disable();
 	//	else player->Enable();
 	//}
-	pause->Update(dt);
+
 	return true;
 }
 

@@ -163,6 +163,9 @@
     <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\GameScene.cpp" />
     <ClCompile Include="src\GoldItem.cpp" />
+    <ClCompile Include="src\GuiControl.cpp" />
+    <ClCompile Include="src\GuiControlButton.cpp" />
+    <ClCompile Include="src\GuiManager.cpp" />
     <ClCompile Include="src\HealthSystem.cpp" />
     <ClCompile Include="src\HealthItem.cpp" />
     <ClCompile Include="src\Input.cpp" />
@@ -175,6 +178,7 @@
     <ClCompile Include="src\MovingPlatform.cpp" />
     <ClCompile Include="src\Parallax.cpp" />
     <ClCompile Include="src\PathfindingSystem.cpp" />
+    <ClCompile Include="src\PauseUI.cpp" />
     <ClCompile Include="src\PerfTimer.cpp" />
     <ClCompile Include="src\Physics.cpp" />
     <ClCompile Include="src\PlatformGame.cpp" />
@@ -185,7 +189,6 @@
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\Timer.cpp" />
     <ClCompile Include="src\TitleScene.cpp" />
-    <ClCompile Include="src\UI.cpp" />
     <ClCompile Include="src\Vector2D.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -208,6 +211,9 @@
     <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\GameScene.h" />
     <ClInclude Include="src\GoldItem.h" />
+    <ClInclude Include="src\GuiControl.h" />
+    <ClInclude Include="src\GuiControlButton.h" />
+    <ClInclude Include="src\GuiManager.h" />
     <ClInclude Include="src\HealthSystem.h" />
     <ClInclude Include="src\HealthItem.h" />
     <ClInclude Include="src\Input.h" />
@@ -223,6 +229,7 @@
     <ClInclude Include="src\MovingPlatform.h" />
     <ClInclude Include="src\Parallax.h" />
     <ClInclude Include="src\PathfindingSystem.h" />
+    <ClInclude Include="src\PauseUI.h" />
     <ClInclude Include="src\PerfTimer.h" />
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />
@@ -232,7 +239,6 @@
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\TitleScene.h" />
-    <ClInclude Include="src\UI.h" />
     <ClInclude Include="src\Vector2D.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>

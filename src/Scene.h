@@ -3,7 +3,7 @@
 #include "Player.h"
 #include <box2d/box2d.h>
 
-class PauseUI;
+
 
 class Scene : public Module
 {
@@ -39,6 +39,6 @@ public:
 
 	Player* player;
 private:
-	PauseUI* pause;
+
 	xml_node configParameters;
 };
