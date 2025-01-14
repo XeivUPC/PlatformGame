@@ -68,6 +68,7 @@ bool GameScene::OnGuiMouseClickEvent(GuiControl* control)
 	if (control == (GuiControl*)pause->pauseButton)
 	{
 		//pause
+		pause->SetPause(true);
 	}
 	return true;
 }

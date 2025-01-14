@@ -94,7 +94,8 @@ bool Render::PreUpdate()
 
 bool Render::Update(float dt)
 {
-	ConfineCameraBetweenRange(dt);
+	if(Engine::GetInstance().game_scene->active)
+		ConfineCameraBetweenRange(dt);
 	return true;
 }
 

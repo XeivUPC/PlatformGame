@@ -149,7 +149,8 @@ bool Engine::Start() {
     //Iterates the module list and calls Start on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module->Start();
+        if (module->active)
+            result = module->Start();
         if (!result) {
             break;
         }
