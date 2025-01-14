@@ -22,7 +22,7 @@
 		<jump-recover-ms value="150"/>
 		<death-time-ms value="4000"/>
 		<!---texture-->
-		<texture path="Assets/Textures/Player/ShovelKnight_Atlas2.png" x_offset="-35.0f" y_offset="-35.0f"/>
+		<texture path="ShovelKnightTexture" x_offset="-35.0f" y_offset="-35.0f"/>
 		<!---audio-->
 		<jump-sound-id value="Player_Jump.wav"/>
 		<hurt-sound-id value="Player_Hurt.wav"/>
@@ -91,7 +91,7 @@
 		<path-finding-update-time-ms value="1000"/>
 		<path-detect-distance value="10"/>
 
-		<texture path="Assets/Textures/Enemies/Beeto.png" x_offset="-16.0f" y_offset="-7.0f"/>
+		<texture path="BettoTexture" x_offset="-16.0f" y_offset="-7.0f"/>
 		<animator start-with="Beeto_Alive" default-speed="100" loop ="true">
 			<anim name="Beeto_Alive" size-x ="32" size-y="16">
 				<sprite offset-x ="0" offset-y="0"/>
@@ -114,7 +114,7 @@
 		<path-finding-update-time-ms value="1000"/>
 		<path-detect-distance value="10"/>
 
-		<texture path="Assets/Textures/Enemies/Divedrake.png" x_offset="-18.5f" y_offset="-16.0f"/>
+		<texture path="DivedrakeTexture" x_offset="-18.5f" y_offset="-16.0f"/>
 		<animator start-with="Divedrake_Idle" default-speed="100" loop ="true">
 			<anim name="Divedrake_Idle" size-x ="37" size-y="32">
 				<sprite offset-x ="0" offset-y="0"/>

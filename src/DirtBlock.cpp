@@ -37,7 +37,7 @@ bool DirtBlock::Start()
 	if (type == Small) {
 		position.setX(position.getX() + 0.5f);
 		position.setY(position.getY() + 0.5f);
-		texture = Engine::GetInstance().textures->Load("Assets/Textures/Objects/DirtBlock_Small.png");
+		texture = Engine::GetInstance().textures->GetTexture("SmallDirtBlockTexture");
 
 		blockSizeTile = { 16,16 };
 		particleSizeTile = { 24,18 };
@@ -48,7 +48,7 @@ bool DirtBlock::Start()
 	else if (type == Big) {
 		position.setX(position.getX() + 1.0f);
 		position.setY(position.getY() + 1.0f);
-		texture = Engine::GetInstance().textures->Load("Assets/Textures/Objects/DirtBlock_Big.png");
+		texture = Engine::GetInstance().textures->GetTexture("BigDirtBlockTexture");
 
 		blockSizeTile = { 32,32 };
 		particleSizeTile = { 48,36 };

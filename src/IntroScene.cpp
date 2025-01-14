@@ -1,5 +1,6 @@
 #include "IntroScene.h"
 #include "Engine.h"
+#include "Input.h"
 #include "TitleScene.h"
 #include "Log.h"
 
@@ -30,13 +31,17 @@ bool IntroScene::PreUpdate()
 
 bool IntroScene::Update(float dt)
 {
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		Engine::GetInstance().title_scene->Enable();
+		Disable();
+
+	}
 	return true;
 }
 
 bool IntroScene::PostUpdate()
 {
-	Engine::GetInstance().title_scene->Enable();
-	Disable();
+	
 	return true;
 }
 

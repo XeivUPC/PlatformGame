@@ -43,5 +43,7 @@ public:
 private:
 	PauseUI* pause = nullptr;
 	GameUI* ui = nullptr;
+	bool exitGame = false;
+	bool goToMainMenu = false;
 };
 

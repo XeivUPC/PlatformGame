@@ -8,6 +8,7 @@
 
 PauseUI::PauseUI(Module* ModuleAt): UI(ModuleAt)
 {
+	texture = Engine::GetInstance().textures->GetTexture("UI1Texture");
 	pauseButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControl(GuiControlType::BUTTON, { Engine::GetInstance().window->width - 20,10,16,16 }, texture, moduleAt);
 	pauseButton->SetRectangle({ 0,0,16,16 }, GuiControlState::NORMAL);
 	pauseButton->SetRectangle({ 16,0,16,16 }, GuiControlState::FOCUSED);
@@ -78,6 +79,7 @@ void PauseUI::Render()
 	{
 		SDL_Rect rect;
 		Engine::GetInstance().render->LockLayer(Render::Layer6);
+		Engine::GetInstance().render->DrawRectangle({ 0,0, Engine::GetInstance().window->width,Engine::GetInstance().window->height}, 0, 0, 0, 175, true, false);
 		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 0, 0, 0, 255, true, false);
 		Engine::GetInstance().render->DrawRectangle({ 32,Engine::GetInstance().window->height/2, Engine::GetInstance().window->width - 64,24}, 255, 255, 255, 255, false, false);
 		rect = { 0,64,16,16 };

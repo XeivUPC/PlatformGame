@@ -16,6 +16,8 @@ public:
 	Entity(EntityType type) : type(type), active(true) {  }
 	Entity(EntityType type, int id) : id(id), type(type), active(true) {  }
 
+	virtual ~Entity() {}
+
 	virtual bool Awake()
 	{
 		return true;

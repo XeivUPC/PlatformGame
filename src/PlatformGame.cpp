@@ -1,6 +1,6 @@
 // PlatformGame.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 #include <iostream>
 #include "Engine.h"
@@ -10,7 +10,7 @@
 int main(int argc, char* argv[]) {
 
 	LOG("Engine starting ...");
-	//ReportMemoryLeaks();
+	ReportMemoryLeaks();
 
 	//Initializes the engine state
 	Engine::EngineState state = Engine::EngineState::CREATE;

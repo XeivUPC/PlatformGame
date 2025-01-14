@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "Engine.h"
 #include "Textures.h"
-#include "Scene.h"
 #include "Log.h"
 
 
@@ -59,6 +58,7 @@ bool EntityManager::CleanUp()
 		delete entity;
 	}
 	entities.clear();
+	entitiesToDestroyAtUpdateEnd.clear();
 
 	return ret;
 }

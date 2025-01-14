@@ -41,6 +41,9 @@
     <Filter Include="Source Files\Game\Scenes">
       <UniqueIdentifier>{a2d9ab36-59b3-4a37-b0db-3d73e6e04da8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\UI\Menus">
+      <UniqueIdentifier>{02e638a6-b40f-477e-8e9b-5cd93624949f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="vcpkg.json">
@@ -80,9 +83,6 @@
     </ClCompile>
     <ClCompile Include="src\Vector2D.cpp">
       <Filter>Source Files\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scene.cpp">
-      <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\EntityManager.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -138,9 +138,6 @@
     <ClCompile Include="src\MovingPlatform.cpp">
       <Filter>Source Files\Game\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="src\UI.cpp">
-      <Filter>Source Files\Game\UI</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -180,6 +177,21 @@
     <ClCompile Include="src\TitleScene.cpp">
       <Filter>Source Files\Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\GuiControl.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlButton.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiManager.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PauseUI.cpp">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AssetLoader.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -208,9 +220,6 @@
     </ClInclude>
     <ClInclude Include="src\Vector2D.h">
       <Filter>Source Files\Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene.h">
-      <Filter>Source Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity.h">
       <Filter>Source Files\Engine</Filter>
@@ -272,9 +281,6 @@
     <ClInclude Include="src\MovingPlatform.h">
       <Filter>Source Files\Game\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="src\UI.h">
-      <Filter>Source Files\Game\UI</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
@@ -316,6 +322,21 @@
     </ClInclude>
     <ClInclude Include="src\IntroScene.h">
       <Filter>Source Files\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControl.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiControlButton.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiManager.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PauseUI.h">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AssetLoader.h">
+      <Filter>Source Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

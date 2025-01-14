@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AnimationSystem.cpp" />
+    <ClCompile Include="src\AssetLoader.cpp" />
     <ClCompile Include="src\Audio.cpp" />
     <ClCompile Include="src\Beeto.cpp" />
     <ClCompile Include="src\Box2DFactory.cpp" />
@@ -185,7 +186,6 @@
     <ClCompile Include="src\PlatformGame.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Render.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\TextGenerator.cpp" />
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\Timer.cpp" />
@@ -196,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AnimationSystem.h" />
+    <ClInclude Include="src\AssetLoader.h" />
     <ClInclude Include="src\Audio.h" />
     <ClInclude Include="src\Beeto.h" />
     <ClInclude Include="src\Box2DFactory.h" />
@@ -237,7 +238,6 @@
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Render.h" />
-    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\TextGenerator.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Timer.h" />

@@ -11,13 +11,13 @@
 #include "Textures.h"
 #include "Audio.h"
 #include "Physics.h"
-//#include "Scene.h"
 #include "GameScene.h"
 #include "IntroScene.h"
 #include "TitleScene.h"
 #include "EntityManager.h"
 #include "Debug.h"
 #include "LevelManager.h"
+#include "AssetLoader.h"
 #include "Parallax.h"
 #include "TextGenerator.h"
 #include "GuiManager.h"
@@ -43,10 +43,10 @@ Engine::Engine() {
     input = std::make_shared<Input>();
     render = std::make_shared<Render>();
     textures = std::make_shared<Textures>();
+    assetLoader = std::make_shared<AssetLoader>();
     audio = std::make_shared<Audio>();
     physics = std::make_shared<Physics>();
 
-    //scene = std::make_shared<Scene>();
     game_scene = std::make_shared<GameScene>(false);
     title_scene = std::make_shared<TitleScene>(false);
     intro_scene = std::make_shared<IntroScene>();
@@ -66,13 +66,14 @@ Engine::Engine() {
     AddModule(std::static_pointer_cast<Module>(window));
     AddModule(std::static_pointer_cast<Module>(input));
     AddModule(std::static_pointer_cast<Module>(textures));
+    AddModule(std::static_pointer_cast<Module>(assetLoader));
     AddModule(std::static_pointer_cast<Module>(audio));
     AddModule(std::static_pointer_cast<Module>(physics));
 
-    //AddModule(std::static_pointer_cast<Module>(scene));
     AddModule(std::static_pointer_cast<Module>(game_scene));
     AddModule(std::static_pointer_cast<Module>(intro_scene));
     AddModule(std::static_pointer_cast<Module>(title_scene));
+    AddModule(std::static_pointer_cast<Module>(ui));
 
     AddModule(std::static_pointer_cast<Module>(parallax));
     AddModule(std::static_pointer_cast<Module>(pathfinding));
@@ -82,7 +83,6 @@ Engine::Engine() {
     //// Add the entity manager
     AddModule(std::static_pointer_cast<Module>(entityManager));
     AddModule(std::static_pointer_cast<Module>(debug));
-    AddModule(std::static_pointer_cast<Module>(ui));
 
     // Render last 
     AddModule(std::static_pointer_cast<Module>(render));
@@ -149,7 +149,8 @@ bool Engine::Start() {
     //Iterates the module list and calls Start on each module
     bool result = true;
     for (const auto& module : moduleList) {
-        result = module->Start();
+        if (module->active)
+            result = module->Start();
         if (!result) {
             break;
         }

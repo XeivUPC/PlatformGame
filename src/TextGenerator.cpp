@@ -32,7 +32,7 @@ bool TextGenerator::Awake()
 
 bool TextGenerator::Start()
 {
-	fontTexture = Engine::GetInstance().textures->Load("Assets/Textures/Font.png");
+	fontTexture = Engine::GetInstance().textures->GetTexture("FontTexture");
 	size = Vector2D{ 8,8 };
 	int widht, height;
 	Engine::GetInstance().textures->GetSize(fontTexture, widht, height);

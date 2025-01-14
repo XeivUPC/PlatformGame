@@ -34,7 +34,7 @@ bool CheckPoint::Start()
 	animator = new Animator();
 	turnOnTimer = Timer();
 	unlockSoundId = Engine::GetInstance().audio->LoadFx("CheckPoint_Unlock.wav");
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/Objects/CheckPoint.png");
+	texture = Engine::GetInstance().textures->GetTexture("CheckpointTexture");
 
 	AnimationData turnedOff = AnimationData("Off");
 	turnedOff.AddSprite(Sprite{ texture,{0.0f, 0.0f}, {64, 64} });

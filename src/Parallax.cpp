@@ -22,10 +22,10 @@ bool Parallax::Awake()
 
 bool Parallax::Start()
 {
-    LoadTexture("Assets/Textures/Parallax/Cloud_Parallax.png",0);
-    LoadTexture("Assets/Textures/Parallax/Castle_Parallax.png",0.2);
-    LoadTexture("Assets/Textures/Parallax/Trees_1_Parallax.png",0.4);
-    LoadTexture("Assets/Textures/Parallax/Trees_2_Parallax.png",0.6);
+    LoadTexture("CloudsParallax1",0);
+    LoadTexture("CastleParallax1",0.2);
+    LoadTexture("Trees1Parallax1",0.4);
+    LoadTexture("Trees2Parallax1",0.6);
     return true;
 }
 
@@ -80,16 +80,12 @@ bool Parallax::PostUpdate()
 
 bool Parallax::CleanUp()
 {
-    for (int i = 0; i < ParallaxLayers.size(); i++)
-    {
-        Engine::GetInstance().textures->UnLoad(ParallaxLayers[i].texture);
-    }
     ParallaxLayers.clear();
     return true;
 }
 
 void Parallax::LoadTexture(std::string path, float speed)
 {
-    SDL_Texture* texture = (Engine::GetInstance().textures->Load(path.c_str()));
+    SDL_Texture* texture = (Engine::GetInstance().textures->GetTexture(path.c_str()));
     ParallaxLayers.push_back({ texture, speed , {0,0} });
 }

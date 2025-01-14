@@ -24,13 +24,13 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
-	// Load Texture
-	SDL_Texture* const Load(std::string path);
-	SDL_Texture* const LoadSurface(SDL_Surface* surface);
-	bool UnLoad(SDL_Texture* texture);
 	void GetSize(const SDL_Texture* texture, int& width, int& height) const;
+	SDL_Texture* GetTexture(std::string textureID);
+	void CreateTexture(std::string path, std::string textureID);
+	void DeleteTexture(std::string textureID);
 
-public:
-	std::unordered_map<std::string,SDL_Texture*> textures;
-
+private:
+	SDL_Texture* const LoadSurface(SDL_Surface* surface);
+	bool IsTextureLoaded(std::string textureID);
+	std::unordered_map<std::string, SDL_Texture*> textureData;
 };

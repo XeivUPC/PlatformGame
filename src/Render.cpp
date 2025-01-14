@@ -94,13 +94,15 @@ bool Render::PreUpdate()
 
 bool Render::Update(float dt)
 {
-	ConfineCameraBetweenRange(dt);
+	if(Engine::GetInstance().game_scene->active)
+		ConfineCameraBetweenRange(dt);
 	return true;
 }
 
 bool Render::PostUpdate()
 {
-	FollowPlayer();
+	if (Engine::GetInstance().game_scene->active) 
+		FollowPlayer();
 	UnlockLayer();
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 

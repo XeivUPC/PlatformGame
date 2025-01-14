@@ -33,7 +33,7 @@ bool MovingPlatform::Awake()
 bool MovingPlatform::Start()
 {
 	animator = new Animator();
-	texture = Engine::GetInstance().textures->Load("Assets/Textures/Objects/Moving_Platforms.png");
+	texture = Engine::GetInstance().textures->GetTexture("MovingPlatformTexture");
 
 	AnimationData moving = AnimationData("Moving");
 	moving.AddSprite(Sprite{ texture,{0.0f, (float)platformType}, {48, 16} });

@@ -43,6 +43,7 @@ bool Player::Start()
 	attackRecoverTimer = Timer();
 	jumpRecoverTimer = Timer();
 
+	isInvulnerable = true;
 
 	return true;
 }
@@ -478,7 +479,7 @@ void Player::LoadParameters()
 
 		textureName = playerProperties.child("texture").attribute("path").as_string();
 		textureOffset = { playerProperties.child("texture").attribute("x_offset").as_float(),playerProperties.child("texture").attribute("y_offset").as_float() };
-		texture = Engine::GetInstance().textures->Load(textureName.c_str());
+		texture = Engine::GetInstance().textures->GetTexture(textureName.c_str());
 
 		std::string fileName = playerProperties.child("jump-sound-id").attribute("value").as_string();
 		jumpSoundId = Engine::GetInstance().audio->LoadFx(fileName.c_str());
@@ -512,7 +513,6 @@ bool Player::CleanUp()
 	LOG("Cleanup player");
 	delete animator;
 	Engine::GetInstance().physics->world->DestroyBody(playerCollider);
-	Engine::GetInstance().textures->UnLoad(texture);
 	return true;
 }
 
