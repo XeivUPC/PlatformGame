@@ -146,6 +146,7 @@
     <None Include="vcpkg.json" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="GuiControlToggle.cpp" />
     <ClCompile Include="src\AnimationSystem.cpp" />
     <ClCompile Include="src\AssetLoader.cpp" />
     <ClCompile Include="src\Audio.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="src\GoldItem.cpp" />
     <ClCompile Include="src\GuiControl.cpp" />
     <ClCompile Include="src\GuiControlButton.cpp" />
+    <ClCompile Include="src\GuiControlSlider.cpp" />
     <ClCompile Include="src\GuiManager.cpp" />
     <ClCompile Include="src\HealthSystem.cpp" />
     <ClCompile Include="src\HealthItem.cpp" />
@@ -193,6 +195,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GuiControlToggle.h" />
     <ClInclude Include="src\AnimationSystem.h" />
     <ClInclude Include="src\AssetLoader.h" />
     <ClInclude Include="src\Audio.h" />
@@ -214,6 +217,7 @@
     <ClInclude Include="src\GoldItem.h" />
     <ClInclude Include="src\GuiControl.h" />
     <ClInclude Include="src\GuiControlButton.h" />
+    <ClInclude Include="src\GuiControlSlider.h" />
     <ClInclude Include="src\GuiManager.h" />
     <ClInclude Include="src\HealthSystem.h" />
     <ClInclude Include="src\HealthItem.h" />

@@ -192,6 +192,12 @@
     <ClCompile Include="src\AssetLoader.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\GuiControlSlider.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiControlToggle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -338,6 +344,10 @@
     <ClInclude Include="src\AssetLoader.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\GuiControlSlider.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiControlToggle.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">
