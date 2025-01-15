@@ -33,6 +33,11 @@ public:
 		return true;
 	}
 
+	virtual bool Render()
+	{
+		return true;
+	}
+
 
 	virtual bool CleanUp()
 	{

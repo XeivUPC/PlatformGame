@@ -216,6 +216,9 @@
     <ClCompile Include="src\IntroUI.cpp">
       <Filter>Source Files\Game\UI\Menus</Filter>
     </ClCompile>
+    <ClCompile Include="src\FadeUI.cpp">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Audio.h">
@@ -384,6 +387,9 @@
       <Filter>Source Files\Game\UI\Menus</Filter>
     </ClInclude>
     <ClInclude Include="src\IntroUI.h">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FadeUI.h">
       <Filter>Source Files\Game\UI\Menus</Filter>
     </ClInclude>
   </ItemGroup>

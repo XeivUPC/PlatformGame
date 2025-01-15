@@ -88,7 +88,7 @@ protected:
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition();
 	virtual void Brain();
-	virtual void Render(float dt);
+	bool Render();
 	void SetPathDirection();
 	void FindCurrentTileInPath();
 

@@ -30,6 +30,14 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	void PauseSimulation();
+	void StartSimulation();
+	bool IsSimulationPaused();
+
 public:
 	b2World* world;
+
+private:
+	bool simulationOn = true;
+
 };

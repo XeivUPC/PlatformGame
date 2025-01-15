@@ -31,7 +31,8 @@ bool Physics::PreUpdate()
 {
 	float dt = Engine::GetInstance().GetMaxFrameDuration() / 1000.0f;
 
-	world->Step(dt, 8, 3);
+	if (simulationOn)
+		world->Step(dt, 8, 3);
 	return true;
 }
 
@@ -48,4 +49,19 @@ bool Physics::PostUpdate()
 bool Physics::CleanUp()
 {
 	return true;
+}
+
+void Physics::PauseSimulation()
+{
+	simulationOn = false;
+}
+
+void Physics::StartSimulation()
+{
+	simulationOn = true;
+}
+
+bool Physics::IsSimulationPaused()
+{
+	return simulationOn;
 }

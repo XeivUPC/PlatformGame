@@ -99,8 +99,14 @@ bool CheckPoint::Update(float dt)
 		animator->SelectAnimation("Off", true);
 	}
 	
-	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
+	return true;
+}
+
+bool CheckPoint::Render()
+{
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
+	
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
 	if (Engine::GetInstance().debug->HasDebug(1))
@@ -109,7 +115,7 @@ bool CheckPoint::Update(float dt)
 		Box2DRender::GetInstance().RenderBody(body, { 255,0,0,255 });
 		Engine::GetInstance().render->UnlockLayer();
 	}
-	return true;
+	return false;
 }
 
 bool CheckPoint::CleanUp()

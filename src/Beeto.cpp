@@ -152,9 +152,10 @@ void Beeto::Brain()
 	Enemy::Move();
 }
 
-void Beeto::Render(float dt)
+bool Beeto::Render()
 {
 	Engine::GetInstance().pathfinding->DrawPath(&pathData, { levelSection->sectionOffset.x, levelSection->sectionOffset.y});
-	Enemy::Render(dt);
+	Enemy::Render();
 	animator->SelectAnimation("Beeto_Alive", true);
+	return true;
 }

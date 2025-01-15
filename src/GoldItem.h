@@ -12,6 +12,7 @@ public:
 	bool Awake();
 	bool Start();
 	bool Update(float dt);
+	bool Render();
 	bool CleanUp();
 protected:
 	void Pick();

@@ -97,9 +97,9 @@ void Enemy::Brain()
 	}
 }
 
-void Enemy::Render(float dt)
+bool Enemy::Render()
 {
-	animator->Update(dt);
+
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Enemy);
 	if(enemyDirection.getX()>0)
 		animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
@@ -118,6 +118,7 @@ void Enemy::Render(float dt)
 		Box2DRender::GetInstance().RenderBody(enemyCollider, { 255,0,0,255 });
 		Engine::GetInstance().render->UnlockLayer();
 	}
+	return true;
 }
 
 void Enemy::SetPathDirection()
@@ -182,7 +183,7 @@ bool Enemy::Update(float dt)
 	position.setY(enemyCollider->GetPosition().y);
 
 	Brain();
-	Render(dt);
+	animator->Update(dt);
 	return true;
 }
 

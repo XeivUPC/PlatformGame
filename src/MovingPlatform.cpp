@@ -110,12 +110,6 @@ bool MovingPlatform::Update(float dt)
 	position.setY(body->GetPosition().y);
 
 
-
-	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
-	animator->Update(dt);
-	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
-
-
 	if (!isVertical)
 	{
 		b2Vec2 platVel = body->GetLinearVelocity();
@@ -125,6 +119,18 @@ bool MovingPlatform::Update(float dt)
 			entity->SetLinearVelocity({ vel.x + platVel.x, vel.y + platVel.y });
 		}
 	}
+
+
+	animator->Update(dt);
+	
+	return true;
+}
+
+bool MovingPlatform::Render()
+{
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
+	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
+
 
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{

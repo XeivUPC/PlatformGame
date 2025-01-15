@@ -116,6 +116,14 @@ bool DirtBlock::Update(float dt)
 		return true;
 	}
 
+	animator->Update(dt);
+	
+
+	return true;
+}
+
+bool DirtBlock::Render()
+{
 	Vector2D textureOffset = blockTextureOffset;
 	if (isBroken) {
 		animator->SelectAnimation("Particle", false);
@@ -127,10 +135,9 @@ bool DirtBlock::Update(float dt)
 	}
 
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
-	animator->Update(dt);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 
-	if(!isBroken){
+	if (!isBroken) {
 		if (Engine::GetInstance().debug->HasDebug(1))
 		{
 			Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
@@ -138,7 +145,6 @@ bool DirtBlock::Update(float dt)
 			Engine::GetInstance().render->UnlockLayer();
 		}
 	}
-
 	return true;
 }
 

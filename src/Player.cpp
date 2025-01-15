@@ -141,13 +141,6 @@ bool Player::Update(float dt)
 	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_M) == KEY_REPEAT)
 		magic.Add(1);
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_P) == KEY_DOWN) {
-		//if(!Engine::GetInstance().ui->pauseMenuUI.isActive)
-			//Engine::GetInstance().ui->pauseMenuUI.Activate();
-		//else
-			//Engine::GetInstance().ui->pauseMenuUI.Deactivate();
-	}
-
 
 	bool previousGroundedValue = isGrounded;
 	isGrounded = groundCheckController.IsBeingTriggered();
@@ -182,7 +175,8 @@ bool Player::Update(float dt)
 
 
 	if (isDead && deathTimeTimer.ReadMSec() >= deathTimeMS) {
-		Respawn();
+		//Respawn();
+		readyToRespawn = true;
 	}
 
 	b2Vec2 inputValue = GetMoveInput();
@@ -342,8 +336,16 @@ bool Player::Update(float dt)
 		}
 	}
 
-	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer3);
+	
 	animator->Update(dt);
+	
+	
+	return true;
+}
+
+bool Player::Render()
+{
+	Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer3);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.x, METERS_TO_PIXELS(position.getY()) + textureOffset.y, (SDL_RendererFlip)isFlipped);
 
 	if (Engine::GetInstance().debug->HasDebug(1))
@@ -365,7 +367,6 @@ bool Player::Update(float dt)
 		}
 	}
 	Engine::GetInstance().render->UnlockLayer();
-	
 	return true;
 }
 
@@ -516,6 +517,11 @@ bool Player::CleanUp()
 	return true;
 }
 
+bool Player::IsAlive()
+{
+	return !isDead;
+}
+
 void Player::Damage(int amount, Vector2D direction)
 {
 	if (isInvulnerable || isDead)
@@ -536,6 +542,7 @@ void Player::Damage(int amount, Vector2D direction)
 		isInvulnerable = false;
 		isDead = true;
 		deathTimeTimer.Start();
+		readyToRespawn = false;
 	}
 
 }

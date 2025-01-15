@@ -51,18 +51,25 @@ bool GoldItem::Update(float dt)
 	//Render
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer2);
 	animator->Update(dt);
-	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
+	
 
+	
+
+	Item::Update(dt);
+
+
+	return true;
+}
+
+bool GoldItem::Render()
+{
+	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_NONE);
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
 		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 		Box2DRender::GetInstance().RenderBody(body, { 255,0,0,255 });
 		Engine::GetInstance().render->UnlockLayer();
 	}
-
-	Item::Update(dt);
-
-
 	return true;
 }
 

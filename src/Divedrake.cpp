@@ -148,10 +148,10 @@ void Divedrake::Brain()
 	Enemy::Move();
 }
 
-void Divedrake::Render(float dt)
+bool Divedrake::Render()
 {
 	Engine::GetInstance().pathfinding->DrawPath(&pathData, { levelSection->sectionOffset.x, levelSection->sectionOffset.y });
-	Enemy::Render(dt);
+	Enemy::Render();
 	if(abs(enemyDirection.getX()) <= 0.2f)
 		animator->SelectAnimation("Divedrake_Idle", true);
 	else
@@ -165,4 +165,5 @@ void Divedrake::Render(float dt)
 			else
 				animator->SelectAnimation("Divedrake_Side", true);
 	}
+	return true;
 }

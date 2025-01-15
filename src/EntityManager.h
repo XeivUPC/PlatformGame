@@ -34,7 +34,7 @@ public:
 	void AddEntity(Entity* entity, bool doEarlyCalls=false);
 
 public:
-
+	bool paused = false;
 	std::list<Entity*> entities;
 private:
 	std::list<Entity*> entitiesToDestroyAtUpdateEnd;

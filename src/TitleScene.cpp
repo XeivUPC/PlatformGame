@@ -10,6 +10,7 @@
 #include "SettingsUI.h"
 #include "CreditsUI.h"
 #include "GuiControlToggle.h"
+#include "FadeUI.h"
 #include "GuiControlSlider.h"
 
 TitleScene::TitleScene(bool isActive) : Module(isActive)
@@ -32,10 +33,12 @@ bool TitleScene::Start()
 	settings = new SettingsUI(this);
 	credits = new CreditsUI(this);
 	ui = new TitleUI(this);
+	fade = new FadeUI(this);
 	goToGame = false;
 	exitGame = false;
 	loadSaveFile = false;
 	settings->Init();
+	fade->StartFadeOut({ 0,0,0,255 }, 500.0f);
 
 
 	CheckIfSaveFileExists("entitiesSaveData.xml");
@@ -53,12 +56,15 @@ bool TitleScene::Update(float dt)
 	ui->Update(dt);
 	settings->Update(dt);
 	credits->Update(dt);
+	fade->Update(dt);
 	return true;
 }
 
 bool TitleScene::PostUpdate()
 {
 	if (goToGame) {
+		if (fade->IsFading())
+			return true;
 		Engine::GetInstance().game_scene->Enable();
 		if(loadSaveFile)
 			Engine::GetInstance().levelManager->LoadSaveFile("entitiesSaveData.xml");
@@ -74,9 +80,11 @@ bool TitleScene::CleanUp()
 	ui->CleanUp();
 	settings->CleanUp();
 	credits->CleanUp();
+	fade->CleanUp();
 	delete ui;
 	delete settings;
 	delete credits;
+	delete fade;
 	return true;
 }
 
@@ -90,12 +98,14 @@ bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 	if (control == (GuiControl*)ui->playButton)
 	{
 		goToGame = true;
+		fade->StartFadeIn({ 0,0,0,255 }, 1000.0f);
 	}
 	else if (control == (GuiControl*)ui->continueButton)
 	{
 		//Load Game with SaveFile
 		goToGame = true;
 		loadSaveFile = true;
+		fade->StartFadeIn({ 0,0,0,255 }, 1000.0f);
 	}
 	else if (control == (GuiControl*)ui->settingsButton)
 	{

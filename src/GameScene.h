@@ -7,6 +7,7 @@
 class PauseUI;
 class GameUI;
 class SettingsUI;
+class FadeUI;
 class GameScene : public Module
 {
 public:
@@ -45,6 +46,7 @@ private:
 	PauseUI* pause = nullptr;
 	SettingsUI* settings = nullptr;
 	GameUI* ui = nullptr;
+	FadeUI* fade = nullptr;
 	bool exitGame = false;
 	bool goToMainMenu = false;
 };

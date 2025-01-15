@@ -6,6 +6,7 @@
 
 class SettingsUI;
 class CreditsUI;
+class FadeUI;
 
 class TitleScene : public Module
 {
@@ -44,6 +45,7 @@ private:
 	void CheckIfSaveFileExists(std::string path);
 	SettingsUI* settings = nullptr;
 	CreditsUI* credits = nullptr;
+	FadeUI* fade = nullptr;
 
 	bool goToGame = false;
 	bool loadSaveFile = false;

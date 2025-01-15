@@ -23,10 +23,12 @@ public:
 	bool Start();
 
 	bool Update(float dt);
+	bool Render();
 
 	bool CleanUp();
-
+	bool IsAlive();
 	void Damage(int amount, Vector2D direction = {0,0});
+	void Respawn();
 
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition();
@@ -34,7 +36,7 @@ public:
 	bool isDoingFallAttack = false;
 	bool isDoingShovelAttack = false;
 
-
+	bool readyToRespawn = false;
 public:
 
 	//Player Exposed Stats
@@ -66,7 +68,6 @@ private:
 	void DoFallAttack();
 	b2Vec2 GetMoveInput();
 
-	void Respawn();
 
 	void SetGravityValue(float verticalVelocity);
 

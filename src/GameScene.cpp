@@ -10,8 +10,10 @@
 #include "LevelManager.h"
 #include "Window.h"
 #include "GameUI.h"
+#include "Physics.h"
 #include "PauseUI.h"
 #include "SettingsUI.h"
+#include "FadeUI.h"
 
 GameScene::GameScene(bool isActive) : Module(isActive)
 {
@@ -39,8 +41,10 @@ bool GameScene::Start()
 	goToMainMenu = false;
 	pause = new PauseUI(this);
 	settings = new SettingsUI(this);
+	fade = new FadeUI(this);
 	ui = new GameUI(this, player);
 	settings->Init();
+	fade->StartFadeOut({ 0,0,0,255 }, 1000.0f);
 	return true;
 }
 
@@ -52,8 +56,11 @@ bool GameScene::PreUpdate()
 bool GameScene::Update(float dt)
 {
 	ui->Update(dt);
-	pause->Update(dt);
+	if (!fade->IsFading()){
+		pause->Update(dt);
+	}
 	settings->Update(dt);
+	fade->Update(dt);
 	return true;
 }
 
@@ -76,9 +83,15 @@ bool GameScene::CleanUp()
 	ui->CleanUp();
 	pause->CleanUp();
 	settings->CleanUp();
+	fade->CleanUp();
 	delete ui;
 	delete pause;
 	delete settings;
+	delete fade;
+
+	Engine::GetInstance().entityManager->paused = false;
+	Engine::GetInstance().physics->StartSimulation();
+
 	Engine::GetInstance().audio->StopMusic();
 	Engine::GetInstance().render->camera.x = 0;
 	Engine::GetInstance().render->camera.y = 0;
@@ -98,11 +111,15 @@ bool GameScene::OnGuiMouseClickEvent(GuiControl* control)
 {
 	if (control == (GuiControl*)pause->pauseButton)
 	{
+		Engine::GetInstance().entityManager->paused = true;
+		Engine::GetInstance().physics->PauseSimulation();
 		pause->SetPause(true);
 	}
 	else if (control == (GuiControl*)pause->resumeButton)
 	{
 		pause->SetPause(false);
+		Engine::GetInstance().entityManager->paused = false;
+		Engine::GetInstance().physics->StartSimulation();
 	}
 
 	else if (control == (GuiControl*)pause->settingsButton)

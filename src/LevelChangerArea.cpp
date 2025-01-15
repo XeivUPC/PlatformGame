@@ -50,13 +50,19 @@ bool LevelChangerArea::Update(float dt)
 		ChangeArea();
 	}
 
+	
+
+	return true;
+}
+
+bool LevelChangerArea::Render()
+{
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
 		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
 		Box2DRender::GetInstance().RenderBody(body, { 255,0,0,255 });
 		Engine::GetInstance().render->UnlockLayer();
 	}
-
 	return true;
 }
 

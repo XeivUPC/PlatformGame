@@ -125,7 +125,9 @@ bool EntityManager::Update(float dt)
 	{
 		if (entity == nullptr) continue;
 		if (entity->active == false) continue;
-		ret = entity->Update(dt);
+		if(!paused)
+			ret = entity->Update(dt);
+		ret = entity->Render();
 	}
 
 	for (const auto entityToDelete : entitiesToDestroyAtUpdateEnd)

@@ -40,6 +40,9 @@ public:
 		}
 		return true;
 	}
+	bool Render() {
+		return true;
+	}
 	bool CleanUp() { 
 		if (body != nullptr)
 			Engine::GetInstance().physics->world->DestroyBody(body);

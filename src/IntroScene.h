@@ -4,7 +4,7 @@
 #include <box2d/box2d.h>
 #include "IntroUI.h"
 #include "Timer.h"
-
+class FadeUI;
 class IntroScene : public Module
 {
 public:
@@ -38,8 +38,10 @@ public:
 	IntroUI* ui = nullptr;
 
 private:
+	FadeUI* fade = nullptr;
 	int timeInIntro = 3000;
 	Timer timer;
+	bool timerFinished = false;
 
 };
 

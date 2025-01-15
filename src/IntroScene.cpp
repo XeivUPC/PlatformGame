@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "TitleScene.h"
 #include "Log.h"
+#include "FadeUI.h"
 
 IntroScene::IntroScene(bool isActive) : Module(isActive)
 {
@@ -22,6 +23,8 @@ bool IntroScene::Awake()
 bool IntroScene::Start()
 {
 	ui = new IntroUI(this);
+	fade = new FadeUI(this);
+	fade->StartFadeOut({ 0,0,0,255 }, 500.0f);
 	return true;
 }
 
@@ -34,7 +37,14 @@ bool IntroScene::PreUpdate()
 bool IntroScene::Update(float dt)
 {
 	ui->Update(dt);
+	fade->Update(dt);
 	if (timer.ReadMSec() > timeInIntro) {
+		if (!timerFinished)
+			fade->StartFadeIn({ 0,0,0,255 }, 500.0f);
+		timerFinished = true;
+		if (fade->IsFading())
+			return true;
+
 		Engine::GetInstance().title_scene->Enable();
 		Disable();
 
@@ -52,7 +62,9 @@ bool IntroScene::CleanUp()
 {
 	LOG("Freeing IntroScene");
 	ui->CleanUp();
+	fade->CleanUp();
 	delete ui;
+	delete fade;
 	return true;
 }
 

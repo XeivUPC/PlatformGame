@@ -59,6 +59,12 @@ bool InstaKillObject::Update(float dt)
 		Engine::GetInstance().game_scene->player->Damage(Engine::GetInstance().game_scene->player->playerHealth.GetCurrentHealth());
 	}
 
+	
+	return true;
+}
+
+bool InstaKillObject::Render()
+{
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
 		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer7);
