@@ -2,10 +2,15 @@
 #include "TitleScene.h"
 #include "Log.h"
 #include "Engine.h"
+#include "Audio.h"
 #include "EntityManager.h"
+#include "GuiControlToggle.h"
+#include "GuiControlSlider.h"
 #include "LevelManager.h"
+#include "Window.h"
 #include "GameUI.h"
 #include "PauseUI.h"
+#include "SettingsUI.h"
 
 GameScene::GameScene(bool isActive) : Module(isActive)
 {
@@ -33,7 +38,9 @@ bool GameScene::Start()
 	exitGame = false;
 	goToMainMenu = false;
 	pause = new PauseUI(this);
+	settings = new SettingsUI(this);
 	ui = new GameUI(this, player);
+	settings->Init();
 	return true;
 }
 
@@ -46,6 +53,7 @@ bool GameScene::Update(float dt)
 {
 	ui->Update(dt);
 	pause->Update(dt);
+	settings->Update(dt);
 	return true;
 }
 
@@ -67,8 +75,10 @@ bool GameScene::CleanUp()
 	LOG("Freeing GameScene");
 	ui->CleanUp();
 	pause->CleanUp();
+	settings->CleanUp();
 	delete ui;
 	delete pause;
+	delete settings;
 	Engine::GetInstance().entityManager->CleanUp();
 	Engine::GetInstance().levelManager->CleanUp();
 	return true;
@@ -94,6 +104,8 @@ bool GameScene::OnGuiMouseClickEvent(GuiControl* control)
 	else if (control == (GuiControl*)pause->settingsButton)
 	{
 		// Go Settings
+		settings->SetIfOpen(true);
+		pause->SetInteractable(false);
 	}
 
 	else if (control == (GuiControl*)pause->exitGameButton)
@@ -106,6 +118,34 @@ bool GameScene::OnGuiMouseClickEvent(GuiControl* control)
 	{
 		//Quit Game
 		exitGame = true;
+	}
+	else if (control == (GuiControl*)settings->backButton) {
+		settings->SetIfOpen(false);
+		pause->SetInteractable(true);
+	}
+	else if (control == (GuiControl*)settings->videoButton)
+	{
+		settings->OpenVideoOptions();
+	}
+	else if (control == (GuiControl*)settings->audioButton)
+	{
+		settings->OpenAudioOptions();
+	}
+	else if (control == (GuiControl*)settings->fullscreenToggle)
+	{
+		Engine::GetInstance().window->SetFullScreen(settings->fullscreenToggle->IsOn());
+	}
+	else if (control == (GuiControl*)settings->generalVolumeSlider)
+	{
+		Engine::GetInstance().audio->SetMasterVolume(settings->generalVolumeSlider->GetValue());
+	}
+	else if (control == (GuiControl*)settings->musicVolumeSlider)
+	{
+		Engine::GetInstance().audio->SetMusicVolume(settings->musicVolumeSlider->GetValue());
+	}
+	else if (control == (GuiControl*)settings->sfxVolumeSlider)
+	{
+		Engine::GetInstance().audio->SetFxVolume(settings->sfxVolumeSlider->GetValue());
 	}
 	return true;
 }

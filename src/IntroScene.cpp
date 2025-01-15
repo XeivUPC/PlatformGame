@@ -21,17 +21,20 @@ bool IntroScene::Awake()
 
 bool IntroScene::Start()
 {
+	ui = new IntroUI(this);
 	return true;
 }
 
 bool IntroScene::PreUpdate()
 {
+
 	return true;
 }
 
 bool IntroScene::Update(float dt)
 {
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+	ui->Update(dt);
+	if (timer.ReadMSec() > timeInIntro) {
 		Engine::GetInstance().title_scene->Enable();
 		Disable();
 
@@ -48,6 +51,8 @@ bool IntroScene::PostUpdate()
 bool IntroScene::CleanUp()
 {
 	LOG("Freeing IntroScene");
+	ui->CleanUp();
+	delete ui;
 	return true;
 }
 

@@ -58,11 +58,14 @@ void PauseUI::Update(float dt)
 		exitGameButton->Disable();
 		exitAppButton->Disable();
 	}
-	pauseButton->Update(dt);
-	resumeButton->Update(dt);
-	settingsButton->Update(dt);
-	exitGameButton->Update(dt);
-	exitAppButton->Update(dt);
+	if (isInteractable) {
+		pauseButton->Update(dt);
+		resumeButton->Update(dt);
+		settingsButton->Update(dt);
+		exitGameButton->Update(dt);
+		exitAppButton->Update(dt);
+	}
+	
 	Render();
 }
 
@@ -82,7 +85,7 @@ void PauseUI::Render()
 		rect = { 32,64,16,16 };
 		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + Engine::GetInstance().window->width - 49, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
 		rect = { 48,64,16,16 };
-		Engine::GetInstance().render->DrawTexture(texture,  + 33, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
+		Engine::GetInstance().render->DrawTexture(texture,  + 33 - Engine::GetInstance().render->camera.x, -Engine::GetInstance().render->camera.y + 7 + Engine::GetInstance().window->height / 2, SDL_FLIP_NONE, &rect);
 		Engine::GetInstance().render->UnlockLayer();
 	}
 	pauseButton->Render();

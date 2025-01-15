@@ -3,6 +3,7 @@
 #include "GuiControlButton.h"
 #include "Textures.h"
 #include "GuiManager.h"
+
 TitleUI::TitleUI(Module* ModuleAt) : UI(ModuleAt)
 {
 	playButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 428/2-85/2,142,85,11 }, texture, moduleAt);
@@ -13,6 +14,7 @@ TitleUI::TitleUI(Module* ModuleAt) : UI(ModuleAt)
 	continueButton->SetRectangle({ 0,107,69,11 }, GuiControlState::NORMAL);
 	continueButton->SetRectangle({ 0,107,69,11 }, GuiControlState::FOCUSED);
 	continueButton->SetRectangle({ 0,107,69,11 }, GuiControlState::PRESSED);
+	continueButton->SetRectangle({ 69,107,69,11 }, GuiControlState::DISABLED);
 	settingsButton = (GuiControlButton*)Engine::GetInstance().ui->CreateGuiControlButton({ 428 / 2 - 69 / 2,164,69,11 }, texture, moduleAt);
 	settingsButton->SetRectangle({ 0,118,69,11 }, GuiControlState::NORMAL);
 	settingsButton->SetRectangle({ 0,118,69,11 }, GuiControlState::FOCUSED);
@@ -25,6 +27,10 @@ TitleUI::TitleUI(Module* ModuleAt) : UI(ModuleAt)
 	exitButton->SetRectangle({ 0,140,37,11 }, GuiControlState::NORMAL);
 	exitButton->SetRectangle({ 0,140,37,11 }, GuiControlState::FOCUSED);
 	exitButton->SetRectangle({ 0,140,37,11 }, GuiControlState::PRESSED);
+
+
+	bg_texture = Engine::GetInstance().textures->GetTexture("MainMenu");
+	continueButton->Disable();
 }
 
 TitleUI::~TitleUI()
@@ -33,18 +39,21 @@ TitleUI::~TitleUI()
 
 void TitleUI::Update(float dt)
 {
-	playButton->Update(dt);
-	continueButton->Update(dt);
-	settingsButton->Update(dt);
-	creditsButton->Update(dt);
-	exitButton->Update(dt);
+	if (isInteractable) {
+		playButton->Update(dt);
+		continueButton->Update(dt);
+		settingsButton->Update(dt);
+		creditsButton->Update(dt);
+		exitButton->Update(dt);
 
-	if (playButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = playButton->bounds.y;
-	else if (continueButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = continueButton->bounds.y;
-	else if (settingsButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = settingsButton->bounds.y;
-	else if (creditsButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = creditsButton->bounds.y;
-	else if (exitButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = exitButton->bounds.y;
-	else shovel_y = -10;
+		if (playButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = playButton->bounds.y;
+		else if (continueButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = continueButton->bounds.y;
+		else if (settingsButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = settingsButton->bounds.y;
+		else if (creditsButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = creditsButton->bounds.y;
+		else if (exitButton->CurrentState() == GuiControlState::FOCUSED)shovel_y = exitButton->bounds.y;
+	}
+	
+	else shovel_y = -300;
 
 	Render();
 }
@@ -53,7 +62,7 @@ void TitleUI::Render()
 {
 	Engine::GetInstance().render->LockLayer(Render::Layer6);
 	SDL_Rect rect = { 0,0,427,239 };
-	Engine::GetInstance().render->DrawTexture(Engine::GetInstance().textures->GetTexture("MainMenu"), 0,0, SDL_FLIP_NONE, &rect);
+	Engine::GetInstance().render->DrawTexture(bg_texture, 0,0, SDL_FLIP_NONE, &rect);
 	playButton->Render();
 	continueButton->Render();
 	settingsButton->Render();

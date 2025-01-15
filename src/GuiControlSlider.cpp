@@ -9,6 +9,7 @@ GuiControlSlider::GuiControlSlider(SDL_Rect b, GuiControlButton* thumb, SDL_Text
 	SetMaxValue(max);
 	SetValue(val);
 	RecalculateThumbPosition();
+	thumb->bounds.y = b.y + b.h / 2.f - thumb->bounds.h/2.f;
 }
 
 GuiControlSlider::~GuiControlSlider()
@@ -31,11 +32,25 @@ bool GuiControlSlider::Update(float dt)
 
 	thumb->Update(dt);
 
-	if (thumb->CurrentState() == GuiControlState::PRESSED) {
+	if (thumb->CurrentState() == GuiControlState::FOCUSED && Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_DOWN) {
+		thumbSelected = true;
+	}
+	if (thumbSelected) {
 		MoveThumb();
+		if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP) {
+			thumbSelected = false;
+			thumb->SetState(GuiControlState::PRESSED);
+		}
 	}
 
+
 	return false;
+}
+
+void GuiControlSlider::Render()
+{
+	GuiControl::Render();
+	thumb->Render();
 }
 
 void GuiControlSlider::CleanUp()
@@ -108,6 +123,8 @@ void GuiControlSlider::RecalculateThumbPosition()
 {
 	Vector2D moveBounds = {(float)( bounds.x - thumb->bounds.w / 2) , (float)(bounds.x + bounds.w - thumb->bounds.w / 2 )};
 	thumb->bounds.x = moveBounds.getX() + (value - minVal) * (moveBounds.getY() - moveBounds.getX()) / (maxVal - minVal);
+
+	
 }
 
 void GuiControlSlider::RecalculateValue()

@@ -13,6 +13,7 @@ public:
 
 	// Called each loop iteration
 	bool Update(float dt);
+	void Render();
 	void CleanUp();
 
 	float GetValue();
@@ -32,4 +33,6 @@ private:
 	float minVal;
 	float maxVal;
 	float value;
+
+	bool thumbSelected = false;
 };

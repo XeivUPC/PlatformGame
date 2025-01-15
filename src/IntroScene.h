@@ -2,6 +2,8 @@
 
 #include "Module.h"
 #include <box2d/box2d.h>
+#include "IntroUI.h"
+#include "Timer.h"
 
 class IntroScene : public Module
 {
@@ -32,5 +34,12 @@ public:
 
 	// Load Parameters from config file
 	bool LoadParameters(xml_node parameters);
+
+	IntroUI* ui = nullptr;
+
+private:
+	int timeInIntro = 3000;
+	Timer timer;
+
 };
 

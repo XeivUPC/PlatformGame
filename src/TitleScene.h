@@ -2,6 +2,10 @@
 #include "Module.h"
 #include <box2d/box2d.h>
 #include "TitleUI.h"
+
+class SettingsUI;
+class CreditsUI;
+
 class TitleScene : public Module
 {
 public:
@@ -35,6 +39,9 @@ public:
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
 private:
+	SettingsUI* settings = nullptr;
+	CreditsUI* credits = nullptr;
+
 	bool goToGame = false;
 	bool exitGame = false;
 };

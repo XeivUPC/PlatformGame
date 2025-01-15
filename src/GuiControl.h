@@ -35,7 +35,7 @@ public:
 	GuiControl(GuiControlType t, SDL_Rect b, SDL_Texture* tex);
 	~GuiControl();
 	virtual bool Update(float dt);
-	void Render();
+	virtual void Render();
 	virtual void CleanUp();
 
 	void SetObserver(Module* module);
@@ -50,6 +50,7 @@ public:
 
 	void Disable();
 
+	void SetState(GuiControlState state);
 	GuiControlState CurrentState();
 
 	GuiControlType type;

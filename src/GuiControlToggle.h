@@ -11,6 +11,7 @@ public:
 	bool Update(float dt);
 	void TurnOn();
 	void TurnOff();
+	bool IsOn();
 	void SetStatus(bool status);
 private:
 

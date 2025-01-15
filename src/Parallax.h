@@ -26,6 +26,7 @@ public:
 	bool PostUpdate();
 	bool CleanUp();
 	void LoadTexture(std::string path, float speed);
+	float ReloadWithLevel(int level);
 private:
 
 	float Wrap(float value, float max);

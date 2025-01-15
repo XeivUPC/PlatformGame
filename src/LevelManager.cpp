@@ -7,6 +7,7 @@
 #include "GameScene.h"
 #include "Textures.h"
 #include "Audio.h"
+#include "Parallax.h"
 
 LevelManager::LevelManager()
 {
@@ -54,20 +55,26 @@ bool LevelManager::Update(float dt)
 		
 	}
 
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
-		LoadSaveFile("entitiesSaveDataLvl" + std::to_string(currentLevel));
-		Engine::GetInstance().render->ConfineCameraBetweenRange();
-	}
-
-	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
-		SaveSaveFile("entitiesSaveDataLvl"+ std::to_string(currentLevel));
-	}
+	
 
 	for (size_t i = 0; i < sectionsInUse.size(); i++)
 	{
 		loadedSections[sectionsInUse[i]]->Update(dt);
 	}
 
+	return true;
+}
+
+bool LevelManager::PostUpdate()
+{
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN) {
+		LoadSaveFile("entitiesSaveDataLvl" + std::to_string(currentLevel));
+		Engine::GetInstance().render->ConfineCameraBetweenRange();
+	}
+
+	if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN) {
+		SaveSaveFile("entitiesSaveDataLvl" + std::to_string(currentLevel));
+	}
 	return true;
 }
 
@@ -111,7 +118,7 @@ bool LevelManager::LoadLevel(int levelToPlay)
 	spawnPoint = GetCurrentSection()->spawnpoint;
 	Engine::GetInstance().game_scene->player->SetPosition(GetCurrentSection()->spawnpoint);
 	Engine::GetInstance().render->ConfineCameraBetweenRange();
-
+	Engine::GetInstance().parallax->ReloadWithLevel(currentLevel);
 	return true;
 }
 

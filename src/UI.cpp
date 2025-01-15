@@ -15,6 +15,10 @@ UI::~UI()
 {
 }
 
+void UI::Init(float dt)
+{
+}
+
 void UI::Update(float dt)
 {
 }
@@ -25,4 +29,9 @@ void UI::Render()
 
 void UI::CleanUp()
 {
+}
+
+void UI::SetInteractable(bool p)
+{
+	isInteractable = p;
 }

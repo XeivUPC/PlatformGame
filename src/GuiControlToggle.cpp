@@ -3,7 +3,7 @@
 
 GuiControlToggle::GuiControlToggle(SDL_Rect b, SDL_Texture* tex, bool isOn) : GuiControl(GuiControlType::TOGGLE, b, tex)
 {
-	SetStatus(isOn);
+	this->isOn = isOn;
 }
 
 GuiControlToggle::~GuiControlToggle()
@@ -19,6 +19,7 @@ bool GuiControlToggle::Update(float dt)
 	}
 	else state = GuiControlState::NORMAL;
 
+	
 	if (IsInBounds(Engine::GetInstance().input->GetMousePosition()))
 	{
 		state = GuiControlState::FOCUSED;
@@ -26,8 +27,10 @@ bool GuiControlToggle::Update(float dt)
 			state = GuiControlState::PRESSED;
 		if (Engine::GetInstance().input->GetMouseButtonDown(SDL_BUTTON_LEFT) == KEY_UP) {
 			SetStatus(!isOn);
-			NotifyObserver();
 		}
+	}
+	if (isOn) {
+		state = GuiControlState::PRESSED;
 	}
 
 	return true;
@@ -43,6 +46,11 @@ void GuiControlToggle::TurnOff()
 	isOn = false;
 }
 
+bool GuiControlToggle::IsOn()
+{
+	return isOn;
+}
+
 void GuiControlToggle::SetStatus(bool status)
 {
 	if (status)
@@ -50,4 +58,5 @@ void GuiControlToggle::SetStatus(bool status)
 	else {
 		TurnOff();
 	}
+	NotifyObserver();
 }

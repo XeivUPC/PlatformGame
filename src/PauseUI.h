@@ -7,6 +7,7 @@ class PauseUI : public UI
 {
 private:
 	bool isPaused = false;
+	bool isInteractable = true;
 public:
 	PauseUI(Module* ModuleAt);
 	~PauseUI();

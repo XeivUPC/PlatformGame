@@ -108,6 +108,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;TRACY_ENABLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:preprocessor %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,6 +157,7 @@
     <ClCompile Include="src\CollisionSensor.cpp" />
     <ClCompile Include="src\CollisionsManager.cpp" />
     <ClCompile Include="src\Counter.cpp" />
+    <ClCompile Include="src\CreditsUI.cpp" />
     <ClCompile Include="src\Debug.cpp" />
     <ClCompile Include="src\DirtBlock.cpp" />
     <ClCompile Include="src\Divedrake.cpp" />
@@ -175,6 +177,7 @@
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\InstaKillObject.cpp" />
     <ClCompile Include="src\IntroScene.cpp" />
+    <ClCompile Include="src\IntroUI.cpp" />
     <ClCompile Include="src\LevelChangerArea.cpp" />
     <ClCompile Include="src\LevelManager.cpp" />
     <ClCompile Include="src\LevelSection.cpp" />
@@ -188,6 +191,7 @@
     <ClCompile Include="src\PlatformGame.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Render.cpp" />
+    <ClCompile Include="src\SettingsUI.cpp" />
     <ClCompile Include="src\TextGenerator.cpp" />
     <ClCompile Include="src\Textures.cpp" />
     <ClCompile Include="src\Timer.cpp" />
@@ -209,6 +213,7 @@
     <ClInclude Include="src\CollisionSensor.h" />
     <ClInclude Include="src\CollisionsManager.h" />
     <ClInclude Include="src\Counter.h" />
+    <ClInclude Include="src\CreditsUI.h" />
     <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\DirtBlock.h" />
     <ClInclude Include="src\Divedrake.h" />
@@ -228,6 +233,7 @@
     <ClInclude Include="src\Input.h" />
     <ClInclude Include="src\InstaKillObject.h" />
     <ClInclude Include="src\IntroScene.h" />
+    <ClInclude Include="src\IntroUI.h" />
     <ClInclude Include="src\Item.h" />
     <ClInclude Include="src\LevelChangerArea.h" />
     <ClInclude Include="src\LevelManager.h" />
@@ -243,6 +249,7 @@
     <ClInclude Include="src\Physics.h" />
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\Render.h" />
+    <ClInclude Include="src\SettingsUI.h" />
     <ClInclude Include="src\TextGenerator.h" />
     <ClInclude Include="src\Textures.h" />
     <ClInclude Include="src\Timer.h" />

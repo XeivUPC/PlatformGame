@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Window.h"
+#include <string>
 
 Parallax::Parallax()
 {
@@ -22,10 +23,6 @@ bool Parallax::Awake()
 
 bool Parallax::Start()
 {
-    LoadTexture("CloudsParallax1",0);
-    LoadTexture("CastleParallax1",0.2);
-    LoadTexture("Trees1Parallax1",0.4);
-    LoadTexture("Trees2Parallax1",0.6);
     return true;
 }
 
@@ -88,4 +85,14 @@ void Parallax::LoadTexture(std::string path, float speed)
 {
     SDL_Texture* texture = (Engine::GetInstance().textures->GetTexture(path.c_str()));
     ParallaxLayers.push_back({ texture, speed , {0,0} });
+}
+
+float Parallax::ReloadWithLevel(int level)
+{
+    CleanUp();
+    LoadTexture("CloudsParallax"+std::to_string(level), 0);
+    LoadTexture("CastleParallax" + std::to_string(level), 0.2);
+    LoadTexture("Trees1Parallax" + std::to_string(level), 0.4);
+    LoadTexture("Trees2Parallax" + std::to_string(level), 0.6);
+    return 0.0f;
 }

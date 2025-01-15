@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <entities>
 	<player>
-		<position x="391.265442" y="-29.9524956" />
-		<health value="20" />
+		<position x="42.1926231" y="7.04750109" />
+		<health value="10" />
 		<gold value="0" />
-		<section value="23" />
+		<section value="1" />
 	</player>
 	<other>
 		<Id1-47>
-			<position x="56.971386" y="6.68061161" />
+			<position x="56.4375" y="5.75" />
 			<enabled value="true" />
 			<extraData value="-1" />
 		</Id1-47>
 		<Id1-59>
-			<position x="33.4375" y="11.4850016" />
-			<enabled value="true" />
+			<position x="29.9893932" y="11.4850016" />
+			<enabled value="false" />
 			<extraData value="-1" />
 		</Id1-59>
 		<Id2-62>
@@ -23,7 +23,7 @@
 			<extraData value="-1" />
 		</Id2-62>
 		<Id2-64>
-			<position x="112.663979" y="7.93161726" />
+			<position x="106.5" y="4.6875" />
 			<enabled value="true" />
 			<extraData value="-1" />
 		</Id2-64>
@@ -40,22 +40,22 @@
 		<Id4-43>
 			<position x="135.5" y="-1" />
 			<enabled value="true" />
-			<extraData value="1" />
+			<extraData value="0" />
 		</Id4-43>
 		<Id12-33>
 			<position x="253.5" y="38" />
 			<enabled value="true" />
-			<extraData value="1" />
+			<extraData value="0" />
 		</Id12-33>
 		<Id16-35>
 			<position x="268.5" y="-5" />
 			<enabled value="true" />
-			<extraData value="1" />
+			<extraData value="0" />
 		</Id16-35>
 		<Id23-29>
 			<position x="387.5" y="-31" />
 			<enabled value="true" />
-			<extraData value="1" />
+			<extraData value="0" />
 		</Id23-29>
 	</other>
 </entities>

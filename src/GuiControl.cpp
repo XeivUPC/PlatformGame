@@ -45,7 +45,8 @@ void GuiControl::SetObserver(Module* module)
 
 void GuiControl::NotifyObserver()
 {
-	observer->OnGuiMouseClickEvent(this);
+	if(observer != nullptr)
+		observer->OnGuiMouseClickEvent(this);
 }
 
 bool GuiControl::IsInBounds(Vector2D point)
@@ -68,6 +69,11 @@ void GuiControl::Enable()
 void GuiControl::Disable()
 {
 	isEnabled = false;
+}
+
+void GuiControl::SetState(GuiControlState state)
+{
+	this->state = state;
 }
 
 GuiControlState GuiControl::CurrentState()
