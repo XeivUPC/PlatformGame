@@ -25,9 +25,9 @@ bool Audio::Awake()
 
 	musicPath = configParameters.child("music").attribute("path").as_string();
 	sfxPath = configParameters.child("sfx").attribute("path").as_string();
-	generalVolume = configParameters.child("general_volume").attribute("value").as_int();
-	sfxVolume = configParameters.child("sfx_volume").attribute("value").as_int();
-	musicVolume = configParameters.child("music_volume").attribute("value").as_int();
+	generalVolume = configParameters.child("general_volume").attribute("value").as_float();
+	sfxVolume = configParameters.child("sfx_volume").attribute("value").as_float();
+	musicVolume = configParameters.child("music_volume").attribute("value").as_float();
 
 
 	SDL_Init(0);
@@ -143,6 +143,12 @@ bool Audio::PlayMusic(const char* path, float fadeTime)
 
 	LOG("Successfully playing %s", (musicPath + path).c_str());
 	return ret;
+}
+
+bool Audio::StopMusic()
+{
+	Mix_HaltMusic();
+	return true;
 }
 
 bool Audio::LoadParameters(xml_node parameters)

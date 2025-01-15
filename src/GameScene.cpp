@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "TitleScene.h"
+#include "Render.h"
 #include "Log.h"
 #include "Engine.h"
 #include "Audio.h"
@@ -25,7 +26,6 @@ bool GameScene::Awake()
 {
 	LOG("Loading GameScene");
 	bool ret = true;
-	
 
 	return ret;
 }
@@ -79,8 +79,12 @@ bool GameScene::CleanUp()
 	delete ui;
 	delete pause;
 	delete settings;
+	Engine::GetInstance().audio->StopMusic();
+	Engine::GetInstance().render->camera.x = 0;
+	Engine::GetInstance().render->camera.y = 0;
 	Engine::GetInstance().entityManager->CleanUp();
 	Engine::GetInstance().levelManager->CleanUp();
+
 	return true;
 }
 

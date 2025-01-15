@@ -1,8 +1,0 @@
-<entities>
-    <player>
-        <position x="5" y = "10"/>
-		<health value="20" />
-		<gold value="0" />
-		<section value="1" />
-    </player>
-</entities>

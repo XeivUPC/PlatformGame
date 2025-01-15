@@ -30,7 +30,6 @@ TitleUI::TitleUI(Module* ModuleAt) : UI(ModuleAt)
 
 
 	bg_texture = Engine::GetInstance().textures->GetTexture("MainMenu");
-	continueButton->Disable();
 }
 
 TitleUI::~TitleUI()

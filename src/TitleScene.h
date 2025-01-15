@@ -2,6 +2,7 @@
 #include "Module.h"
 #include <box2d/box2d.h>
 #include "TitleUI.h"
+#include <string>
 
 class SettingsUI;
 class CreditsUI;
@@ -39,10 +40,13 @@ public:
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
 private:
+
+	void CheckIfSaveFileExists(std::string path);
 	SettingsUI* settings = nullptr;
 	CreditsUI* credits = nullptr;
 
 	bool goToGame = false;
+	bool loadSaveFile = false;
 	bool exitGame = false;
 };
 

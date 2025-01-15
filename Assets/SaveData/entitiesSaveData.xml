@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<entities>
+	<player>
+		<position x="47.4457016" y="9.04750156" />
+		<health value="10" />
+		<gold value="100" />
+		<level value="-1" />
+		<section value="1" />
+	</player>
+	<other>
+		
+	</other>
+</entities>

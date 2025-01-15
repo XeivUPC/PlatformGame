@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "GuiManager.h"
+#include "LevelManager.h"
 #include "Window.h"
 #include "Input.h"
 #include "Engine.h"
@@ -33,7 +34,12 @@ bool TitleScene::Start()
 	ui = new TitleUI(this);
 	goToGame = false;
 	exitGame = false;
+	loadSaveFile = false;
 	settings->Init();
+
+
+	CheckIfSaveFileExists("entitiesSaveData.xml");
+
 	return true;
 }
 
@@ -47,10 +53,6 @@ bool TitleScene::Update(float dt)
 	ui->Update(dt);
 	settings->Update(dt);
 	credits->Update(dt);
-	/*if (Engine::GetInstance().input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
-		Engine::GetInstance().game_scene->Enable();
-		Disable();
-	}*/
 	return true;
 }
 
@@ -58,6 +60,8 @@ bool TitleScene::PostUpdate()
 {
 	if (goToGame) {
 		Engine::GetInstance().game_scene->Enable();
+		if(loadSaveFile)
+			Engine::GetInstance().levelManager->LoadSaveFile("entitiesSaveData.xml");
 		Disable();
 	}
 
@@ -91,6 +95,7 @@ bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 	{
 		//Load Game with SaveFile
 		goToGame = true;
+		loadSaveFile = true;
 	}
 	else if (control == (GuiControl*)ui->settingsButton)
 	{
@@ -143,4 +148,21 @@ bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 		Engine::GetInstance().audio->SetFxVolume(settings->sfxVolumeSlider->GetValue());
 	}
 	return true;
+}
+
+void TitleScene::CheckIfSaveFileExists(std::string path)
+{
+	path = "Assets/SaveData/" + path;
+	xml_document saveFile;
+	pugi::xml_parse_result result = saveFile.load_file(path.c_str());
+	if (result == NULL)
+	{
+		LOG("Could not load map xml file %s. pugi error: %s", path.c_str(), result.description());
+	}
+	else {
+		int level = saveFile.child("entities").child("player").child("level").attribute("value").as_int();
+		if (level == -1) {
+			ui->continueButton->Disable();
+		}
+	}
 }
