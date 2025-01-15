@@ -33,5 +33,9 @@ public:
 	TitleUI* ui = nullptr;
 	bool LoadParameters(xml_node parameters);
 	bool OnGuiMouseClickEvent(GuiControl* control);
+
+private:
+	bool goToGame = false;
+	bool exitGame = false;
 };
 

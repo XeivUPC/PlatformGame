@@ -23,6 +23,8 @@ bool TitleScene::Awake()
 bool TitleScene::Start()
 {
 	ui = new TitleUI(this);
+	goToGame = false;
+	exitGame = false;
 	return true;
 }
 
@@ -43,7 +45,12 @@ bool TitleScene::Update(float dt)
 
 bool TitleScene::PostUpdate()
 {
-	return true;
+	if (goToGame) {
+		Engine::GetInstance().game_scene->Enable();
+		Disable();
+	}
+
+	return !exitGame;
 }
 
 bool TitleScene::CleanUp()
@@ -61,5 +68,23 @@ bool TitleScene::LoadParameters(xml_node parameters)
 
 bool TitleScene::OnGuiMouseClickEvent(GuiControl* control)
 {
+	if (control == (GuiControl*)ui->playButton)
+	{
+		goToGame = true;
+	}
+	else if (control == (GuiControl*)ui->continueButton)
+	{
+		//Load Game with SaveFile
+		goToGame = true;
+	}
+	else if (control == (GuiControl*)ui->settingsButton)
+	{
+		// Go Settings
+	}
+	else if (control == (GuiControl*)ui->exitButton)
+	{
+		exitGame = true;
+	}
+
 	return true;
 }

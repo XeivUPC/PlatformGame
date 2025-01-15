@@ -195,8 +195,17 @@
     <ClCompile Include="src\GuiControlSlider.cpp">
       <Filter>Source Files\Game\UI</Filter>
     </ClCompile>
-    <ClCompile Include="GuiControlToggle.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\TitleUI.cpp">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameUI.cpp">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UI.cpp">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GuiControlToggle.cpp">
+      <Filter>Source Files\Game\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -347,7 +356,18 @@
     <ClInclude Include="src\GuiControlSlider.h">
       <Filter>Source Files\Game\UI</Filter>
     </ClInclude>
-    <ClInclude Include="GuiControlToggle.h" />
+    <ClInclude Include="src\GameUI.h">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TitleUI.h">
+      <Filter>Source Files\Game\UI\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UI.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiControlToggle.h">
+      <Filter>Source Files\Game\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="config.xml">

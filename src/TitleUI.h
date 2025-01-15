@@ -6,6 +6,7 @@ class TitleUI : public UI
 {
 private:
     int shovel_y = 0;
+
 public:
     TitleUI(Module* ModuleAt);
     ~TitleUI();
