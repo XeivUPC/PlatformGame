@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="64">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="100" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="66">
  <properties>
   <property name="BottomSection" type="int" value="-1"/>
   <property name="LeftSection" type="int" value="-1"/>
@@ -6589,9 +6589,15 @@
    </properties>
    <point/>
   </object>
-  <object id="59" x="535.818" y="172">
+  <object id="59" x="536" y="172">
    <properties>
     <property name="EnemyType" value="Beeto"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="64" x="408" y="172">
+   <properties>
+    <property name="EnemyType" value="Dozedrake"/>
    </properties>
    <point/>
   </object>

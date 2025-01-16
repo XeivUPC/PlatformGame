@@ -8,7 +8,7 @@
 #include "AnimationSystem.h"
 #include <string>
 #include <unordered_map>
-
+class Enemy;
 // Create a struct needed to hold the information to Map node
 struct TileSet
 {
@@ -93,6 +93,7 @@ public:
 
     bool hasSpawnPoint;
     Vector2D spawnpoint = {-1,-1};
+    Enemy* boss = nullptr;
 
     MapData mapData;
 
@@ -101,7 +102,6 @@ public:
 
 private:
     Vector2D MapToWorld(int x, int y) const;
-
     TileSet* CreateTileset(xml_node* node, std::string texturePath);
     MapLayer* CreateMapLayer(xml_node* node, int layerIndex);
     void CreateMapData(xml_document* document);

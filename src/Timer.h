@@ -10,7 +10,7 @@ public:
 	void Start();
 	int ReadSec() const;
 	float ReadMSec() const;
-
+	void SetInitTime(int time);
 private:
 	int startTime;
 };

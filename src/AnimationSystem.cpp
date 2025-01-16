@@ -71,10 +71,12 @@ void Animator::Next()
 			if (loop)
 			{
 				currentSprite = 0;
+				animationEnded = true;
 			}
 			else
 			{
 				currentSprite = animations[currentAnimation].sprites.size() - 1;
+				animationEnded = true;
 			}
 		}
 	}
@@ -124,7 +126,7 @@ void Animator::SelectAnimation(std::string animName, bool l)
 {
 	if (currentAnimation == animName)
 		return;
-
+	animationEnded = false;
 	currentAnimation = animName;
 	loop = l;
 	customSpriteRangeStart = 0;
@@ -136,6 +138,7 @@ void Animator::SelectAnimation(std::string animName, bool l, int indexInit, int 
 {
 	if (currentAnimation == animName)
 		return;
+	animationEnded = false;
 	currentAnimation = animName;
 	loop = l;
 	customSpriteRangeStart = indexInit;	
@@ -156,7 +159,6 @@ void Animator::Update(float dt)
 	{
 		timer = speed;
 		Next();
-		
 	}
 }
 
@@ -186,6 +188,21 @@ void Animator::SetIfCanDraw(bool canDraw)
 bool Animator::CanDraw()
 {
 	return canDraw;
+}
+
+bool Animator::AnimationEnded(std::string animName)
+{
+	if (currentAnimation == animName && animationEnded)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Animator::OnFrame(int id)
+{
+	if (currentSprite == id)return true;
+	return false;
 }
 
 std::string Animator::GetCurrentAnimationName()

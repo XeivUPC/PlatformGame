@@ -93,7 +93,6 @@ void Beeto::InitColliders()
 	playerDamageCheck->SetFilterData(playerDamageFilter);
 
 	playerCheckController.SetBodyToTrack(playerCheck);
-
 	playerDamageCheckController.SetBodyToTrack(playerDamageCheck);
 	directionBottomRightCheckController.SetBodyToTrack(directionBottomRightCheck);
 	directionBottomLeftCheckController.SetBodyToTrack(directionBottomLeftCheck);
@@ -119,9 +118,6 @@ void Beeto::Brain()
 		while (!Engine::GetInstance().pathfinding->HasFinished())
 		{
 			Engine::GetInstance().pathfinding->PropagateAStar(SQUARED);
-		}
-		if (Engine::GetInstance().pathfinding->HasFound())
-		{
 		}
 
 		pathData = Engine::GetInstance().pathfinding->GetData();
@@ -155,7 +151,17 @@ void Beeto::Brain()
 bool Beeto::Render()
 {
 	Engine::GetInstance().pathfinding->DrawPath(&pathData, { levelSection->sectionOffset.x, levelSection->sectionOffset.y});
+	
+	if (abs(enemyDirection.getX()) + abs(enemyDirection.getY()) > 0)
+	{
+		if (enemyHealth.GetCurrentHealth() > 0)
+			animator->SelectAnimation("Beeto_Alive", true);
+		else
+			animator->SelectAnimation("Beeto_Dead", true);
+	}
+	else
+		animator->SelectAnimation("Beeto_Idle", true);
+	
 	Enemy::Render();
-	animator->SelectAnimation("Beeto_Alive", true);
-	return true;
+
 }

@@ -51,4 +51,3 @@ private:
 	bool loadSaveFile = false;
 	bool exitGame = false;
 };
-

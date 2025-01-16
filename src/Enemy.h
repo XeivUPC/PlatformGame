@@ -15,7 +15,6 @@ private:
 	//Physics
 	float baseGravity = 1.0f;
 	int currentPathTileIndex;
-
 	int dieSoundId;
 
 protected:
@@ -27,7 +26,6 @@ protected:
 	Vector2D basePosition;
 	Timer attackCooldown;
 	Timer hurtCooldown;
-	Health enemyHealth = Health(1);
 	Player* player;
 	Vector2D enemyDirection;
 
@@ -46,7 +44,6 @@ protected:
 	LevelSection* levelSection = nullptr;
 
 	virtual void LoadParameters();
-
 	//Colliders
 	virtual void InitColliders();
 
@@ -82,9 +79,9 @@ protected:
 	//Functions
 	void Attack();
 	void Hurt();
+
 	void Die();
 	void Move();
-
 	void SetPosition(Vector2D pos);
 	Vector2D GetPosition();
 	virtual void Brain();
@@ -98,5 +95,6 @@ public:
 	bool Awake();
 	bool Start();
 	virtual bool Update(float dt);
-	bool CleanUp();
+	virtual bool CleanUp();
+	Health enemyHealth = Health(1);
 };

@@ -79,7 +79,6 @@ void Divedrake::InitColliders()
 	enemyFilter.maskBits &= ~Engine::GetInstance().ENEMY_ATTACK_LAYER;
 	enemyCollider->GetFixtureList()[0].SetFilterData(enemyFilter);
 
-
 	b2FixtureUserData playerCheckData;
 	playerCheckData.pointer = (uintptr_t)(&playerCheckController);
 	playerCheck = colliderCreator.AddBox(enemyCollider, b2Vec2(0.0f, 0.0f), PIXEL_TO_METERS(28), PIXEL_TO_METERS(12), playerCheckData);
@@ -95,7 +94,6 @@ void Divedrake::InitColliders()
 	playerDamageCheck->SetFilterData(playerDamageFilter);
 
 	playerCheckController.SetBodyToTrack(playerCheck);
-
 	playerDamageCheckController.SetBodyToTrack(playerDamageCheck);
 	directionBottomRightCheckController.SetBodyToTrack(directionBottomRightCheck);
 	directionBottomLeftCheckController.SetBodyToTrack(directionBottomLeftCheck);

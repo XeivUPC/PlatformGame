@@ -91,8 +91,11 @@
 		<path-finding-update-time-ms value="1000"/>
 		<path-detect-distance value="10"/>
 
-		<texture path="BettoTexture" x_offset="-16.0f" y_offset="-7.0f"/>
-		<animator start-with="Beeto_Alive" default-speed="100" loop ="true">
+		<texture path="BeetoTexture" x_offset="-16.0f" y_offset="-7.0f"/>
+		<animator start-with="Beeto_Idle" default-speed="100" loop ="true">
+			<anim name="Beeto_Idle" size-x ="32" size-y="16">
+				<sprite offset-x ="1" offset-y="0"/>
+			</anim>
 			<anim name="Beeto_Alive" size-x ="32" size-y="16">
 				<sprite offset-x ="0" offset-y="0"/>
 				<sprite offset-x ="1" offset-y="0"/>
@@ -138,5 +141,58 @@
 			</anim>
 		</animator>
 	</divedrake>
+	<dozedrake>
+		<speed value="240"/>
+		<attack-damage value="1"/>
+		<attack-cooldown-ms value="500"/>
+		<hurt-cooldown-ms value="500"/>
+		<health value="10"/>
+		<path-finding-update-time-ms value="1000"/>
+		<path-detect-distance value="10"/>
+		<near-distance value ="5"/>
+		<far-distance value ="10"/>
+		<texture path="DozedrakeTexture" x_offset="-90.5f" y_offset="-44.5f"/>
+		<animator start-with="Dozedrake_Sleep" default-speed="100" loop ="true">
+			<anim name="Dozedrake_Sleep" size-x ="181" size-y="89">
+				<sprite offset-x ="0" offset-y="0"/>
+				<sprite offset-x ="1" offset-y="0"/>
+				<sprite offset-x ="2" offset-y="0"/>
+				<sprite offset-x ="3" offset-y="0"/>
+				<sprite offset-x ="4" offset-y="0"/>
+				<sprite offset-x ="5" offset-y="0"/>
+				<sprite offset-x ="6" offset-y="0"/>
+				<sprite offset-x ="7" offset-y="0"/>
+				<sprite offset-x ="8" offset-y="0"/>
+				<sprite offset-x ="9" offset-y="0"/>
+				<sprite offset-x ="10" offset-y="0"/>
+				<sprite offset-x ="11" offset-y="0"/>
+			</anim>
+			<anim name="Dozedrake_Forward" size-x ="181" size-y="89">
+				<sprite offset-x ="0" offset-y="1"/>
+				<sprite offset-x ="1" offset-y="1"/>
+				<sprite offset-x ="2" offset-y="1"/>
+				<sprite offset-x ="3" offset-y="1"/>
+				<sprite offset-x ="4" offset-y="1"/>
+				<sprite offset-x ="5" offset-y="1"/>
+			</anim>
+			<anim name="Dozedrake_Backward" size-x ="181" size-y="89">
+				<sprite offset-x ="0" offset-y="2"/>
+				<sprite offset-x ="1" offset-y="2"/>
+				<sprite offset-x ="2" offset-y="2"/>
+				<sprite offset-x ="3" offset-y="2"/>
+				<sprite offset-x ="4" offset-y="2"/>
+				<sprite offset-x ="5" offset-y="2"/>
+			</anim>
+			<anim name="Dozedrake_Attack" size-x ="181" size-y="89">
+				<sprite offset-x ="0" offset-y="3"/>
+			</anim>
+			<anim name="Dozedrake_Idle" size-x ="181" size-y="89">
+				<sprite offset-x ="1" offset-y="3"/>
+			</anim>
+			<anim name="Dozedrake_Hurt" size-x ="181" size-y="89">
+				<sprite offset-x ="2" offset-y="3"/>
+			</anim>
+		</animator>
+	</dozedrake>
 </entities>
 
