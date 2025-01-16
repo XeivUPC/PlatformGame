@@ -8,7 +8,7 @@
 #include <random>
 #include "Box2DRender.h"
 
-Bubble::Bubble()
+Bubble::Bubble() : Entity(EntityType::UNKNOWN)
 {
 	animator = new Animator();
 	texture = Engine::GetInstance().textures->GetTexture("BubbleTexture");
@@ -50,10 +50,12 @@ void Bubble::Throw(Vector2D position, Player* p)
 	animator->SetSpeed(250);
 }
 
-void Bubble::Update(float dt)
+bool Bubble::Update(float dt)
 {
+	if (!inUse)
+		return true;
+
 	animator->Update(dt);
-	if (!inUse)return;
 	if (projectileTimer.ReadMSec() <= projectileLifeMS / 2 + randomVariation*10)
 	{
 		body->SetLinearVelocity(b2Vec2(-throwVelocity, 0));
@@ -68,26 +70,36 @@ void Bubble::Update(float dt)
 		if (animator->AnimationEnded("Bubble_Explosion"))
 			inUse = false;
 	}
-	Engine::GetInstance().render->SelectLayer(Render::Layer6);
-	animator->Animate(METERS_TO_PIXELS(body->GetPosition().x),METERS_TO_PIXELS(body->GetPosition().y), SDL_FLIP_NONE);
+	return true;
+}
+
+bool Bubble::Render()
+{
+	if (!inUse)
+		return true;
+	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Layer3);
+	animator->Animate(METERS_TO_PIXELS(body->GetPosition().x) - 37/2, METERS_TO_PIXELS(body->GetPosition().y) - 35/2, SDL_FLIP_NONE);
 	if (playerCheckController.IsBeingTriggered())
 	{
 		player->Damage(1);
 	}
 	if (Engine::GetInstance().debug->HasDebug(1))
 	{
-		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Enemy);
+		Engine::GetInstance().render->LockLayer(Render::RenderLayers::Layer6);
 		Box2DRender::GetInstance().RenderBody(body, { 255,0,0,255 });
 		Engine::GetInstance().render->UnlockLayer();
 	}
+	return true;
 }
 
-void Bubble::CleanUp()
+bool Bubble::CleanUp()
 {
 	LOG("Cleanup bubble");
 	delete animator;
+	animator = nullptr;
 	Engine::GetInstance().physics->world->DestroyBody(body);
 	//Engine::GetInstance().textures->UnLoad(texture);
+	return true;
 }
 
 void Bubble::InitCollisions()
@@ -102,6 +114,8 @@ void Bubble::InitCollisions()
 	body->SetFixedRotation(true);
 	body->GetFixtureList()[0].SetFilterData(playerFilter);
 	body->GetFixtureList()[0].SetSensor(true);
+	body->SetGravityScale(0);
+
 	
 
 	playerCheckController.SetBodyToTrack(&body->GetFixtureList()[0]);

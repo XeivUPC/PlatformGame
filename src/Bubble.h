@@ -2,8 +2,9 @@
 #include <box2d/box2d.h>
 #include "CollisionSensor.h"
 #include "Player.h"
+#include "Entity.h"
 class Timer;
-class Bubble
+class Bubble : public Entity
 {
 private:
 	Player* player = nullptr;
@@ -24,8 +25,9 @@ public:
 	Bubble();
 	~Bubble();
 	void Throw(Vector2D position, Player* p);
-	void Update(float dt);
-	void CleanUp();
+	bool Update(float dt);
+	bool Render();
+	bool CleanUp();
 	void InitCollisions();
 	bool InUse();
 };

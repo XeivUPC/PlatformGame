@@ -26,7 +26,7 @@ private:
 	void LoadParameters();
 	void InitColliders();
 	void Brain();
-	void Render(float dt);
+	bool Render();
 	bool CleanUp();
 	void Shoot(Bubble* b);
 	Bubble* GetBubbleToShoot();

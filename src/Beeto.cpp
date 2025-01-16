@@ -163,5 +163,5 @@ bool Beeto::Render()
 		animator->SelectAnimation("Beeto_Idle", true);
 	
 	Enemy::Render();
-
+	return true;
 }

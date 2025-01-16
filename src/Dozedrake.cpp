@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Textures.h"
 #include "Box2DFactory.h"
+#include "EntityManager.h"
 #include "Physics.h"
 
 Dozedrake::Dozedrake(Vector2D pos, LevelSection* layer, int id) : Enemy(pos, layer, id)
@@ -15,6 +16,7 @@ Dozedrake::Dozedrake(Vector2D pos, LevelSection* layer, int id) : Enemy(pos, lay
 	for (size_t i = 0; i < 4; i++)
 	{
 		Bubble* b = new Bubble();
+		Engine::GetInstance().entityManager->AddEntity((Entity*)b);
 		bubbles.emplace_back(b);
 	}
 }
@@ -177,13 +179,9 @@ void Dozedrake::Brain()
 	Enemy::Move();
 }
 
-void Dozedrake::Render(float dt)
+bool Dozedrake::Render()
 {
-	for (size_t i = 0; i < bubbles.size(); i++)
-	{
-		bubbles[i]->Update(dt);
-	}
-	animator->Update(dt);
+
 	Engine::GetInstance().render->SelectLayer(Render::RenderLayers::Enemy);
 	animator->Animate(METERS_TO_PIXELS(position.getX()) + textureOffset.getX(), METERS_TO_PIXELS(position.getY()) + textureOffset.getY(), SDL_FLIP_HORIZONTAL);
 	if (abs(enemyDirection.getX()) + abs(enemyDirection.getY()) == 0)
@@ -201,14 +199,12 @@ void Dozedrake::Render(float dt)
 		animator->SelectAnimation("Dozedrake_Backward", true);
 	else
 		animator->SelectAnimation("Dozedrake_Forward", true);
+
+	return true;
 }
 
 bool Dozedrake::CleanUp()
 {
-	for (size_t i = 0; i < bubbles.size(); i++)
-	{
-		bubbles[i]->CleanUp();
-	}
 	bubbles.clear();
 	Enemy::CleanUp();
 	return true;
@@ -216,7 +212,7 @@ bool Dozedrake::CleanUp()
 
 void Dozedrake::Shoot(Bubble* b)
 {
-	mouthPosition = Vector2D(enemyCollider->GetPosition().x-4, enemyCollider->GetPosition().y+0.5f);
+	mouthPosition = Vector2D(enemyCollider->GetPosition().x-4, enemyCollider->GetPosition().y+1.5f);
 	b->Throw(mouthPosition, player);
 }
 
