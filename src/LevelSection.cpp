@@ -12,8 +12,10 @@
 #include "EntityManager.h"
 #include "MovingPlatform.h"
 #include "InstaKillObject.h"
+#include "Enemy.h"
 #include "Beeto.h"
 #include "Divedrake.h"
+#include "Dozedrake.h"
 #include "HealthItem.h"
 #include "GoldItem.h"
 #include "LevelChangerArea.h"
@@ -424,8 +426,8 @@ void LevelSection::LoadEnemies()
             float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
 
-            Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Beeto* beeto = new Beeto(postion,  this, id);
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+            Beeto* beeto = new Beeto(position,  this, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)beeto,true);
 
             objects.emplace_back((Entity*)beeto);
@@ -434,11 +436,21 @@ void LevelSection::LoadEnemies()
             float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
             float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
 
-            Vector2D postion{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
-            Divedrake* divedrake = new Divedrake(postion, this, id);
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+            Divedrake* divedrake = new Divedrake(position, this, id);
             Engine::GetInstance().entityManager->AddEntity((Entity*)divedrake, true);
 
             objects.emplace_back((Entity*)divedrake);
+        }
+        else if (type == "Dozedrake") {
+            float x = PIXEL_TO_METERS(enemyNode.attribute("x").as_int());
+            float y = PIXEL_TO_METERS(enemyNode.attribute("y").as_int());
+            Vector2D position{ (x)+(sectionOffset.x), (y)+(sectionOffset.y) };
+            Dozedrake* dozedrake = new Dozedrake(position, this, id);
+            Engine::GetInstance().entityManager->AddEntity((Entity*)dozedrake, true);
+
+            objects.emplace_back((Entity*)dozedrake);
+            boss = dozedrake;
         }
     }
 }

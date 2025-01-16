@@ -38,4 +38,3 @@ private:
 	bool goToGame = false;
 	bool exitGame = false;
 };
-

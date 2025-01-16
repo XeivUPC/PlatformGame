@@ -24,3 +24,8 @@ float Timer::ReadMSec() const
 {
 	return (float)(SDL_GetTicks() - startTime);
 }
+
+void Timer::SetInitTime(int time)
+{
+	startTime = time;
+}

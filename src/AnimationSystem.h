@@ -46,6 +46,7 @@ private:
 	void Next();
 	bool isPlaying=true;
 	bool canDraw=true;
+	bool animationEnded = false;
 
 public:
 	Animator();
@@ -63,6 +64,8 @@ public:
 
 	void SetIfCanDraw(bool canDraw);
 	bool CanDraw();
+	bool AnimationEnded(std::string animName);
+	bool OnFrame(int id);
 
 	std::string GetCurrentAnimationName();
 	AnimationData GetCurrentAnimation();

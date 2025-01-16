@@ -12,9 +12,12 @@ AssetLoader::~AssetLoader()
 
 bool AssetLoader::Start()
 {
-	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Player/ShovelKnight_Atlas2.png", "ShovelKnightTexture");
-	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Enemies/Beeto.png", "BettoTexture");
+	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Enemies/Beeto.png", "BeetoTexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Enemies/Divedrake.png", "DivedrakeTexture");
+	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Enemies/Dozedrake.png", "DozedrakeTexture");
+	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Bubble.png", "BubbleTexture");
+
+	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Player/ShovelKnight_Atlas2.png", "ShovelKnightTexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Objects/CheckPoint.png", "CheckpointTexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Objects/DirtBlock_Small.png", "SmallDirtBlockTexture");
 	Engine::GetInstance().textures->CreateTexture("Assets/Textures/Objects/DirtBlock_Big.png", "BigDirtBlockTexture");

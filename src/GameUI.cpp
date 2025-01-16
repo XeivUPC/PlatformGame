@@ -1,8 +1,11 @@
 #include "GameUI.h"
 #include "Render.h"
 #include "Engine.h"
+#include "Enemy.h"
+#include "LevelSection.h"
 #include "Window.h"
 #include "Player.h"
+#include "LevelManager.h"
 #include "TextGenerator.h"
 
 GameUI::GameUI(Module* ModuleAt, Player* p): UI(ModuleAt)
@@ -55,8 +58,26 @@ void GameUI::Render()
 	rect = { 64,88,8,8 };
 	for (size_t i = 0; i < 10; i++)
 	{
-		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + 312 + 9 * i, -Engine::GetInstance().render->camera.y + 7, SDL_FLIP_NONE, &rect);
+		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + 309 + 9 * i, -Engine::GetInstance().render->camera.y + 7, SDL_FLIP_NONE, &rect);
 	}
+	remainingHealth = Engine::GetInstance().levelManager->GetCurrentSection()->boss->enemyHealth.GetCurrentHealth();
+	for (size_t i = 0; i < (Engine::GetInstance().levelManager->GetCurrentSection()->boss->enemyHealth.GetBaseHealth() / 2); i++)
+	{
+		if (remainingHealth >= 2)
+		{
+			rect = { 48,88,8,8 };
+			remainingHealth -= 2;
+		}
+		else if (remainingHealth == 1)
+		{
+			rect = { 56,88,8,8 };
+			remainingHealth = 0;
+		}
+		else
+			rect = { 64,88,8,8 };
+		Engine::GetInstance().render->DrawTexture(texture, -Engine::GetInstance().render->camera.x + 390 - 9 * i, -Engine::GetInstance().render->camera.y + 7, SDL_FLIP_NONE, &rect);
+	}
+	
 	Engine::GetInstance().render->UnlockLayer();
 }
 
